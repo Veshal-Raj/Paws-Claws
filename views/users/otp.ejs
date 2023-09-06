@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="<%-url%>/css/output.css">
+</head>
+<body>
+    <section class="bg-gray-50 dark:bg-gray-900">
+   <!-- component -->
+<div class="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-12">
+    <div class="relative bg-white px-6 pt-10 pb-9 shadow-xl mx-auto w-full max-w-lg rounded-2xl">
+      <div class="mx-auto flex w-full max-w-md flex-col space-y-16">
+        <div class="flex flex-col items-center justify-center text-center space-y-2">
+          <div class="font-semibold text-3xl">
+            <p>Email Verification</p>
+          </div>
+          <div class="flex flex-row text-sm font-medium text-gray-400">
+            <p>We have sent a code to your email ##**@gmail.com</p>
+          </div>
+        </div>
+  
+        <div>
+          <form action="" method="post">
+            <div class="flex flex-col space-y-4"> <!-- Increased space-y-8 -->
+              <div class="flex flex-row items-center justify-between mx-auto w-full max-w-xs">
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit1" maxlength="1" onkeyup="moveToNext(this, 'digit2')">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit2" maxlength="1" onkeyup="moveToNext(this, 'digit3')">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit3" maxlength="1" onkeyup="moveToNext(this, 'digit4')">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit4" maxlength="1" onkeyup="moveToNext(this, 'digit5')">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit5" maxlength="1" onkeyup="moveToNext(this, 'digit6')">
+                </div>
+                <div class="w-16 h-16 ">
+                  <input class="w-full h-full flex flex-col items-center justify-center text-center px-5 mx-2 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700" type="text" name="digit6" maxlength="1">
+                </div>
+              </div>
+  
+              <div class="flex flex-col space-y-5">
+                <div>
+                  <button class="flex flex-row items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm">
+                    Verify Account
+                  </button>
+                </div>
+  
+                <div class="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
+                  <p>Didn't receive code?</p> <a class="flex flex-row items-center text-blue-600" href="http://" target="_blank" rel="noopener noreferrer">Resend</a>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function moveToNext(input, nextFieldID) {
+      const maxLength = input.maxLength;
+      const inputValue = input.value;
+  
+      if (inputValue.length === maxLength) {
+        const nextField = document.getElementById(nextFieldID);
+  
+        if (nextField) {
+          nextField.focus();
+        }
+      }
+    }
+  </script>
+  
+      </section>
+</body>
+</html>
