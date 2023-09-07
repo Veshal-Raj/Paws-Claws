@@ -2,23 +2,17 @@ const express = require('express')
 const router = express.Router()
 
 
+const userController = require('../controllers/userController')
 
 
-router.get('/',(req,res)=>{
-    res.render('users/login',{url:req.protocol+"://"+req.headers.host})
-})
+router.get('/',userController.loginpage)
+router.get('/login',userController.loginpage)
+router.get('/signup',userController.signupPage)
+router.get('/otp',userController.otpPage)
+router.get('/forgotpassword',userController.forgotpasswordPage)
+router.get('/resetpassword',userController.resetpassword)
 
-router.get('/login',(req,res)=>{
-    res.render('users/login',{url:req.protocol+"://"+req.headers.host})
-})
 
-router.get('/signup',(req,res)=>{
-    res.render('users/signup',{url:req.protocol+"://"+req.headers.host})
-})
-
-router.get('/otp',(req,res)=>{
-    res.render('users/otp',{url:req.protocol+"://"+req.headers.host})
-})
-
+router.post('/register',userController.registerUser)
 
 module.exports = router

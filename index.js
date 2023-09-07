@@ -2,46 +2,48 @@ const express = require('express')
 const path = require('path');
 const userRouter = require('./routers/userRoute')
 const adminRouter = require('./routers/adminRoute')
+const cookieParser = require('cookie-parser')
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(()=>{
+    console.log('Database is connected successfully!')
+})
+.catch((error)=>{
+    console.error('Database connection error:', error);
+})
 const app = express()
 
+app.use(cookieParser())
 
-// Default Use
+// ===================== Default Use ============================== //
+
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(express.static(path.join(__dirname,'public')))
 
+// ==================== Cache Controlling========================= //
 
-//  View Engine Setup
+
+app.use((req,res,next)=>{
+    res.set("Cache-control","no-store,no-cache")
+    next()
+})
+
+// =========================== View Engine Setup ================== //
 
 app.set('views',path.join(__dirname,'views'))
 app.set('view engine','ejs')
 
 
-
-
-//  Error handler
-// app.use((req,res,next)=>{
-//     res.send('<h1 style ="color:red;">Requested Url was not found!</h1>')
-// })
-
-app.use((err, req, res, next) => {
-    if (res.headersSent) {
-        next('Already Header Sent. There was a problem.');
-    } else {
-        if (err.message) {
-            res.status(500).send(err.message);
-        } else {
-            res.send('There was an error!');
-        }
-    }
-});
-
-
+// ========================== Routers ============================= //
 app.use('/',userRouter)
 app.use('/admin',adminRouter)
 
 
-
+// =========================== Server ============================= //
 const port = process.env.PORT || 3000
 app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
