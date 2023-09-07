@@ -2,8 +2,10 @@ const express = require('express')
 const path = require('path');
 const userRouter = require('./routers/userRoute')
 const adminRouter = require('./routers/adminRoute')
+const config = require('./config/config')
 const cookieParser = require('cookie-parser')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const session = require('express-session');
 mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -17,6 +19,18 @@ mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
 const app = express()
 
 app.use(cookieParser())
+
+app.use(session({
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+}))
+
+// adminRouter.use(session({
+//     secret: config.sessionSecret,
+//     resave: true,
+//     saveUninitialized: true
+// }))
 
 // ===================== Default Use ============================== //
 
