@@ -19,5 +19,6 @@ router.get('/resend-otp',userController.resendOTP)
 
 router.post('/register',userController.registerUser)
 router.post('/verify-otp',userController.verifyOTP)
+router.post('/login',userController.userlogin)
 
 module.exports = router

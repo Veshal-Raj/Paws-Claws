@@ -40,10 +40,14 @@ const registerUser=  async (req,res)=>{
             })
         }
         console.log("stage 1")
+        console.log(password)
         // Hash the password
-        const saltRounds = 10
-        const hashedPassword = await bcrypt.hash(password, saltRounds)
+        const saltRounds = 10;
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(password, salt);
         console.log("stage 2")
+
+
         // Generate OTP
         const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
         console.log("stage 3")
@@ -54,6 +58,8 @@ const registerUser=  async (req,res)=>{
         setTimeout(()=>{
             delete req.session.registrationData.otp
         }, 2*60*1000) // 2 minutes in milliseconds
+
+
         console.log("session data stored:", req.session.registrationData)
         console.log("stage 4")
         // Send OTP via email (configure nodemailer with your email service)
@@ -208,6 +214,45 @@ const resetpassword= async (req,res)=>{
     }
 }
 
+// ========================= User Login ====================================== //
+const userlogin =async (req,res)=>{
+    const { email, password } = req.body
+    try {
+        // Find the user by email in the database
+        const user = await User.findOne({ email })
+        console.log(user,password)
+        // Check if the user exists
+        if(!user) {
+            return res.status(401).json({ message: 'User not found' })
+        }
+        // console.log(typeof password)
+        // Compare the provided with the hashed password in the database
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log("hashed password: ",hashedPassword)
+        const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
+        // const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        
+        console.log('Stored Password (Hashed):', user.password);
+        console.log('Password Comparison Result:', isPasswordValid);
+        
+        if(!isPasswordValid) {
+            return res.status(401).json({ message: 'Incorrect password' })
+        }
+
+        // User is authenticated, you can set up a session or generate a token here
+        // For example, you can set a user ID in the session
+        req.session.userId =user._id
+
+        // Redirect to a dashboard or send a sucess message
+        res.send('Everything working perfectly!')
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' })
+    }
+}
+
 module.exports={
     loginpage,
     signupPage,
@@ -216,5 +261,6 @@ module.exports={
     resetpassword,
     registerUser,
     verifyOTP,
-    resendOTP
+    resendOTP,
+    userlogin
 }
