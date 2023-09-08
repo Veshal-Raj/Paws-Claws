@@ -227,10 +227,12 @@ const userlogin =async (req,res)=>{
         }
         // console.log(typeof password)
         // Compare the provided with the hashed password in the database
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        console.log("hashed password: ",hashedPassword)
-        const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
+        // const saltRounds = 10;
+        // const hashedPassword = await bcrypt.hash(password, saltRounds);
+        // console.log("hashed password: ",hashedPassword)
+        // const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
+        const isPasswordValid = await bcrypt.compare(req.body.password,user.password );
+
         // const isPasswordValid = await bcrypt.compare(password, user.password);
 
         
