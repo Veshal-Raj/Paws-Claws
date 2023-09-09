@@ -17,6 +17,11 @@ router.get('/resetpassword',userController.resetpassword)
 router.get('/resend-otp',userController.resendOTP)
 
 
+router.get('/dashboard', userController.dashboard)
+router.get('/sidebar',userController.sidebar)
+
+
+
 router.post('/register',userController.registerUser)
 router.post('/verify-otp',userController.verifyOTP)
 router.post('/login',userController.userlogin)

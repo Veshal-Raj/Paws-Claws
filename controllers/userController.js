@@ -3,6 +3,22 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const otpGenerator = require('otp-generator')
 
+
+const dashboard = async (req,res)=>{
+    res.render('admin/dashboard',{url:req.protocol+"://"+req.headers.host})
+}
+
+const sidebar = async (req,res)=>{
+    res.render('admin/sidebar',{url:req.protocol+"://"+req.headers.host})
+}
+
+
+
+
+
+
+
+
 // ======================== Render user login page ======================= //
 const loginpage = async (req,res)=>{
     try {
@@ -32,7 +48,7 @@ const registerUser=  async (req,res)=>{
         console.log("Checking before stage 1");
         email = email.trim()
         phone = phone.trim()
-        password = password.trim()
+        // password = password.trim()
         if(fullname == "" || email == "" || phone == "" || password == ""){
             res.json({
                 status: "FAILED",
@@ -42,9 +58,10 @@ const registerUser=  async (req,res)=>{
         console.log("stage 1")
         console.log(password)
         // Hash the password
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // const saltRounds = 10;
+        // const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword)
         console.log("stage 2")
 
 
@@ -231,8 +248,8 @@ const userlogin =async (req,res)=>{
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
         // console.log("hashed password: ",hashedPassword)
         // const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
-        const isPasswordValid = await bcrypt.compare(req.body.password,user.password );
-
+        const isPasswordValid = await bcrypt.compare(password,user.password);
+        console.log(password)
         // const isPasswordValid = await bcrypt.compare(password, user.password);
 
         
@@ -264,5 +281,7 @@ module.exports={
     registerUser,
     verifyOTP,
     resendOTP,
-    userlogin
+    userlogin,
+    dashboard,
+    sidebar
 }
