@@ -17,8 +17,7 @@ router.get('/resetpassword',userController.resetpassword)
 router.get('/resend-otp',userController.resendOTP)
 
 
-router.get('/dashboard', userController.dashboard)
-router.get('/sidebar',userController.sidebar)
+
 
 
 

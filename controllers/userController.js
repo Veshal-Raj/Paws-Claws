@@ -4,13 +4,7 @@ const nodemailer = require('nodemailer')
 const otpGenerator = require('otp-generator')
 
 
-const dashboard = async (req,res)=>{
-    res.render('admin/dashboard',{url:req.protocol+"://"+req.headers.host})
-}
 
-const sidebar = async (req,res)=>{
-    res.render('admin/sidebar',{url:req.protocol+"://"+req.headers.host})
-}
 
 
 
@@ -26,6 +20,8 @@ const loginpage = async (req,res)=>{
         res.render('users/login',{url:req.protocol+"://"+req.headers.host})
     } catch (error) {
         console.error(error);
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -35,6 +31,8 @@ const signupPage =async (req,res)=>{
         res.render('users/signup',{url:req.protocol+"://"+req.headers.host})
     } catch (error) {
         console.error(error);
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -109,7 +107,8 @@ const registerUser=  async (req,res)=>{
         // await user.save()
         // res.status(201).send('User registered successfully')
     } catch (error) {
-        res.status(400).send('Registration failed')
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        console.error(error);
     }
 }
 
@@ -119,6 +118,8 @@ const otpPage =async (req,res)=>{
         res.render('users/otp',{url:req.protocol+"://"+req.headers.host})
     } catch (error) {
         console.error(error);
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -156,7 +157,7 @@ const verifyOTP= async (req,res)=>{
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error')
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
     }
 }
 
@@ -207,7 +208,8 @@ const resendOTP = async (req,res)=>{
 
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error sending OTP')
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -218,6 +220,8 @@ const forgotpasswordPage = async (req,res)=>{
         res.render('users/forgotpassword',{url:req.protocol+"://"+req.headers.host})
     } catch (error) {
         console.error(error);
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -228,6 +232,8 @@ const resetpassword= async (req,res)=>{
         res.render('users/resetPassword',{url:req.protocol+"://"+req.headers.host})
     } catch (error) {
         console.error(error);
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
+
     }
 }
 
@@ -268,7 +274,7 @@ const userlogin =async (req,res)=>{
         res.send('Everything working perfectly!')
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' })
+        res.render('error',{url:req.protocol+"://"+req.headers.host})
     }
 }
 
@@ -281,7 +287,5 @@ module.exports={
     registerUser,
     verifyOTP,
     resendOTP,
-    userlogin,
-    dashboard,
-    sidebar
+    userlogin
 }

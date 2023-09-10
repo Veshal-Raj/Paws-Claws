@@ -19,22 +19,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: Boolean,
+        default: 0,
+    },
+    // blocking and unblocking user
     isVerified: {
         type: Boolean,
         default: false,
     },
 })
 
-// ==== Hash the user's password before saving it it the database ======= //
-userSchema.pre("save", async function (next) {
-    const user = this;
-    if (user.isModified('password')){
-        const saltRounds = 10;
-        user.password = await bcrypt.hash(user.password,saltRounds)
-    }
-    next()
-})
 
+ 
 const User = mongoose.model('User',userSchema)
 
 module.exports = User
