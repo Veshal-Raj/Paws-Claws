@@ -31,10 +31,10 @@ const users = async (req,res)=>{
     try {
         const userData = await User.find({isVerified:false})
         console.log(userData) 
-        res.render('admin/users',{url:req.protocol+"://"+req.headers.host, users: userData,})
+        res.render('admin/users')
          
      } catch (error) {
-         res.render('error',{url:req.protocol+"://"+req.headers.host})
+         res.render('error')
          console.error(error);
      }
 }

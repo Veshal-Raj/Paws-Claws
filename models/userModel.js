@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
     },
     phone: {
         type: String,
@@ -20,8 +19,9 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     role: {
-        type: Boolean,
-        default: 0,
+        type: String,
+        enum: ['Admin','Customer'],
+        default:'Customer',
     },
     // blocking and unblocking user
     isVerified: {

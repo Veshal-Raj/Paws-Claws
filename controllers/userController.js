@@ -1,10 +1,12 @@
 const User = require('../models/userModel')
+const mongodb = require('mongodb')
+const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const otpGenerator = require('otp-generator')
+const dotenv = require('dotenv').config()
 
-
-
+console.log(process.env.name)
 
 
 
@@ -17,10 +19,10 @@ const otpGenerator = require('otp-generator')
 const loginpage = async (req,res)=>{
     try {
       //res.redirect('/')
-        res.render('users/login',{url:req.protocol+"://"+req.headers.host})
+        res.render('users/userLogin')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
@@ -28,10 +30,10 @@ const loginpage = async (req,res)=>{
 // ======================== Render signup page ============================ //
 const signupPage =async (req,res)=>{
     try {
-        res.render('users/signup',{url:req.protocol+"://"+req.headers.host})
+        res.render('users/signup')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
@@ -82,13 +84,13 @@ const registerUser=  async (req,res)=>{
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-              user: 'veshalbrototype@gmail.com',
-              pass: 'wshmnfigmukcwhqy',
+              user: process.env.name,
+              pass: process.env.password,
             },
           });
         console.log("stage 5")
           const mailOptions = {
-            from: 'veshalbrototype@gmail.com',
+            from: process.env.name,
             to: email,
             subject: 'OTP Verification',
             text: `Your OTP for registration: ${otp}`,
@@ -107,7 +109,7 @@ const registerUser=  async (req,res)=>{
         // await user.save()
         // res.status(201).send('User registered successfully')
     } catch (error) {
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
         console.error(error);
     }
 }
@@ -115,10 +117,10 @@ const registerUser=  async (req,res)=>{
 // ======================== Render OTP page ================================ //
 const otpPage =async (req,res)=>{
     try {
-        res.render('users/otp',{url:req.protocol+"://"+req.headers.host})
+        res.render('users/otp')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
@@ -157,7 +159,7 @@ const verifyOTP= async (req,res)=>{
         }
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
     }
 }
 
@@ -208,7 +210,7 @@ const resendOTP = async (req,res)=>{
 
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
@@ -217,10 +219,10 @@ const resendOTP = async (req,res)=>{
 // ========================= Render Forgot Password Page ==================== //
 const forgotpasswordPage = async (req,res)=>{
     try {
-        res.render('users/forgotpassword',{url:req.protocol+"://"+req.headers.host})
+        res.render('users/forgotpassword')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
@@ -229,20 +231,26 @@ const forgotpasswordPage = async (req,res)=>{
 // ========================== Render Reset Password Page ====================== //
 const resetpassword= async (req,res)=>{
     try {
-        res.render('users/resetPassword',{url:req.protocol+"://"+req.headers.host})
+        res.render('users/resetPassword')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
 
     }
 }
 
 // ========================= User Login ====================================== //
 const userlogin =async (req,res)=>{
-    const { email, password } = req.body
     try {
+        const email   = req.body.email
+        const password= req.body.password
+        console.log(email)
+        console.log(req.body.email)
+        
         // Find the user by email in the database
+        // const user = await User.aggregate([{$match: {email}}])
         const user = await User.findOne({ email })
+        console.log("user",user)
         console.log(user,password)
         // Check if the user exists
         if(!user) {
@@ -274,7 +282,7 @@ const userlogin =async (req,res)=>{
         res.send('Everything working perfectly!')
     } catch (error) {
         console.error(error);
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
     }
 }
 

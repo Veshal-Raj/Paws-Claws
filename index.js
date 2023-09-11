@@ -5,6 +5,7 @@ const adminRouter = require('./routers/adminRoute')
 const config = require('./config/config')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
+const mongodb = require('mongodb')
 const session = require('express-session');
 mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
     useNewUrlParser: true,
@@ -35,7 +36,7 @@ app.use(session({
 // ===================== Default Use ============================== //
 
 app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
 
 // ==================== Cache Controlling========================= //
@@ -58,7 +59,7 @@ app.use('/admin',adminRouter)
 
 
 // =========================== Server ============================= //
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 })
