@@ -12,6 +12,7 @@
 
 <div class="col-md-9" style="margin-top: 58px;">
     <div class="container pt-4">
+      <h1>Customers</h1><hr/>
         <table class="table table-hover">
             <thead>
               <tr>
@@ -22,39 +23,29 @@
               </tr>
             </thead>
             <tbody>
-                <% if(users.length>0){ %>
-                      <%  for(let i=0;i<users.length;i++){ %>
-                            
-                        <tr class="odd:bg-slate-300 even:bg-slate-500">
-                                <td class="px-2 py-2 sm:px-4 sm:py-2 text-center"> <%= users[i].fullname %></td>
-                                <td class="px-2 py-2 sm:px-4 sm:py-2 text-center"><%= users[i].email %></td>
-                                <td class="px-2 py-2 sm:px-4 sm:py-2 text-center"><%= users[i].phone %></td>
-                                <td class="px-2 py-2 sm:px-4 sm:py-2 text-center"><%
-                                    if(users[i].isVerified == true){
-                                    %>
-                                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                        Admin
-                                      </button>
-                                    <%
-                                    }       
-                                    else{
-                                        %>
-                                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                            User
-                                          </button>
-                                        <%
-                                    }                                 
-                                %></td>
+                <% usersList.forEach(element => { %>
+                 <tr>
+                  <td><%= element.fullname %></td>
+                  <td><%= element.email %></td>
+                  <td><%= element.phone %></td>
 
-                            </tr>
-                           
-                        <% } %>
-                        <%  } else { %>
-                        <tr>
-                            <td colspan="5">Users Not Found</td>
-                        </tr>
-                        <% } %>
-                
+                  <td>
+                    <% if (element.isVerified===true) { %>
+                      <form action="/admin/userBlocked/<%= element._id %>" method="post">
+                      <button class="btn btn-primary" data-user-id="<%= element._id %>">Active</button>
+                    </form>
+                    <% } else { %>
+                    
+                      <span>  
+                        <form action="/admin/userActive/<%= element._id %>" method="post">                   
+                         <button class="btn btn-danger" data-user-id="<%= element._id %>">Inactive</button>
+                        </form>
+                      </span>
+                    <% } %>                  
+                  </td>
+                 </tr>
+
+                <% }) %>
             </tbody>
           </table>
         <!-- Your content here -->

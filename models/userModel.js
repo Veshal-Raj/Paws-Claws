@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     // blocking and unblocking user
     isVerified: {
         type: Boolean,
-        default: false,
+        default: true,
     },
 })
 
@@ -34,4 +34,4 @@ const userSchema = new mongoose.Schema({
  
 const User = mongoose.model('User',userSchema)
 
-module.exports = User
+module.exports = {User} 

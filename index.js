@@ -6,7 +6,15 @@ const config = require('./config/config')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
 const mongodb = require('mongodb')
+const morgan = require('morgan')
 const session = require('express-session');
+const nocache = require('nocache')
+
+
+const app = express()
+
+
+const port = process.env.PORT || 4000
 mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -17,21 +25,22 @@ mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
 .catch((error)=>{
     console.error('Database connection error:', error);
 })
-const app = express()
+
+
+
+// =================== Middlewares ==================== //
 
 app.use(cookieParser())
+app.use(morgan('dev'))
 
 app.use(session({
     secret: config.sessionSecret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized:true,
 }))
 
-// adminRouter.use(session({
-//     secret: config.sessionSecret,
-//     resave: true,
-//     saveUninitialized: true
-// }))
+
+
 
 // ===================== Default Use ============================== //
 
@@ -41,7 +50,7 @@ app.use(express.static(path.join(__dirname,'public')))
 
 // ==================== Cache Controlling========================= //
 
-
+app.use(nocache())
 app.use((req,res,next)=>{
     res.set("Cache-control","no-store,no-cache")
     next()
@@ -59,7 +68,6 @@ app.use('/admin',adminRouter)
 
 
 // =========================== Server ============================= //
-const port = process.env.PORT || 4000
 app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 })

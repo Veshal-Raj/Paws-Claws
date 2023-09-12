@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const otpGenerator = require('otp-generator')
+const { render } = require('ejs')
 const dotenv = require('dotenv').config()
 
 console.log(process.env.name)
@@ -11,14 +12,36 @@ console.log(process.env.name)
 
 
 
+// ==================== No Session ============================== //
+const noSession = async (req,res,next)=>{
+    try {
+        if(!req.session.userId){
+            return res.redirect('/')
+        }
+        return next()
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
 
-
+// ======================== Yes Session =========================== //
+const yesSession =  async (req ,res,next)=> {
+    try {
+        if(req.session.userId){
+            return res.redirect('/home')
+        }
+        return next()
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
 
 
 // ======================== Render user login page ======================= //
 const loginpage = async (req,res)=>{
     try {
-      //res.redirect('/')
         res.render('users/userLogin')
     } catch (error) {
         console.error(error);
@@ -44,10 +67,7 @@ const registerUser=  async (req,res)=>{
         console.log("stage 0")
         let { fullname, email, phone, password } = req.body
         console.log("checking after stage 0")
-        fullname = fullname.trim()
-        console.log("Checking before stage 1");
-        email = email.trim()
-        phone = phone.trim()
+        
         // password = password.trim()
         if(fullname == "" || email == "" || phone == "" || password == ""){
             res.json({
@@ -55,11 +75,13 @@ const registerUser=  async (req,res)=>{
                 message: "Empty input fileds!"
             })
         }
+        
         console.log("stage 1")
+        console.log(req.body)
+        console.log(fullname)
         console.log(password)
         // Hash the password
-        // const saltRounds = 10;
-        // const salt = await bcrypt.genSalt(saltRounds);
+    
         const hashedPassword = await bcrypt.hash(password, 10);
         console.log(hashedPassword)
         console.log("stage 2")
@@ -103,11 +125,8 @@ const registerUser=  async (req,res)=>{
         // Instead of rendering the otp page, i am redirecting to the /otp
         res.redirect('/otp')
           // Render the OTP verification page
-        // res.render('users/otp',{url:req.protocol+"://"+req.headers.host}); // Adjust the view name as needed
         console.log("stage 8")
-        // const user = new User({ fullname, email, phone, password})
-        // await user.save()
-        // res.status(201).send('User registered successfully')
+        
     } catch (error) {
         res.render('error')
         console.error(error);
@@ -145,7 +164,7 @@ const verifyOTP= async (req,res)=>{
             const { fullname, email, phone, hashedPassword } = req.session.registrationData
 
             // Create a new user document and save it to the database
-            const user = new User({ fullname, email, phone, password: hashedPassword })
+            const user = new User.User({ fullname, email, phone, password: hashedPassword })
             await user.save()
 
             // Clear the registration data from the session
@@ -248,23 +267,18 @@ const userlogin =async (req,res)=>{
         console.log(req.body.email)
         
         // Find the user by email in the database
-        // const user = await User.aggregate([{$match: {email}}])
-        const user = await User.findOne({ email })
+    
+        const user = await User.User.findOne({ email })
         console.log("user",user)
         console.log(user,password)
         // Check if the user exists
         if(!user) {
             return res.status(401).json({ message: 'User not found' })
         }
-        // console.log(typeof password)
-        // Compare the provided with the hashed password in the database
-        // const saltRounds = 10;
-        // const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // console.log("hashed password: ",hashedPassword)
-        // const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
+     
         const isPasswordValid = await bcrypt.compare(password,user.password);
         console.log(password)
-        // const isPasswordValid = await bcrypt.compare(password, user.password);
+        
 
         
         console.log('Stored Password (Hashed):', user.password);
@@ -275,16 +289,42 @@ const userlogin =async (req,res)=>{
         }
 
         // User is authenticated, you can set up a session or generate a token here
-        // For example, you can set a user ID in the session
+        // For example, set a user ID in the session
         req.session.userId =user._id
 
         // Redirect to a dashboard or send a sucess message
-        res.send('Everything working perfectly!')
+        res.redirect('/home')
     } catch (error) {
         console.error(error);
         res.render('error')
     }
 }
+
+const home = async(req,res)=>{
+    try {
+        if(req.session.userId){
+
+            res.render('users/home')
+        }else{
+            res.redirect('/login')
+        }
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
+
+const userSignout = async (req,res)=>{
+    try {
+        req.session.destroy()
+        res.redirect('/')
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
+
+
 
 module.exports={
     loginpage,
@@ -295,5 +335,10 @@ module.exports={
     registerUser,
     verifyOTP,
     resendOTP,
-    userlogin
+    userlogin,
+    noSession,
+    yesSession,
+    home,
+    userSignout,
+    
 }
