@@ -106,13 +106,13 @@ const registerUser=  async (req,res)=>{
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-              user: process.env.name,
-              pass: process.env.password,
+              user: process.env.NAME,
+              pass: process.env.PASSWORD,
             },
           });
         console.log("stage 5")
           const mailOptions = {
-            from: process.env.name,
+            from: process.env.NAME,
             to: email,
             subject: 'OTP Verification',
             text: `Your OTP for registration: ${otp}`,
@@ -207,13 +207,13 @@ const resendOTP = async (req,res)=>{
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'veshalbrototype@gmail.com',
-                pass: 'wshmnfigmukcwhqy',
+                user: 'process.env.NAME',
+                pass: 'process.env.PASSWORD',
             }
         }) 
 
         var mailOptions = {
-            from: 'veshalbrototype@gmail.com',
+            from: 'process.env.NAME',
             to: email,
             subject: 'OTP Verification',
             text: `Your new OTP for registration: ${newOTP}`

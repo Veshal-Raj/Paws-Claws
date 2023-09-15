@@ -13,6 +13,7 @@ adminRoute.get('/orders',adminController.orders)
 adminRoute.get('/categories',adminController.categories)
 adminRoute.get('/products',adminController.products)
 adminRoute.get('/users',adminController.listUsers)
+adminRoute.get('/category',adminController.listCategory)
 //adminRoute.get('/userBlocked/:userId',adminController.userBlocked)
 
 adminRoute.get('/check',adminController.check)
@@ -20,6 +21,7 @@ adminRoute.get('/table',(req,res)=>{
     res.render('admin/form-elements.ejs')
 })
 
+adminRoute.post('/login',adminController.verifyAdmin)
 adminRoute.post('/userBlocked/:userId',adminController.userBlocked)
 adminRoute.post('/userActive/:userId',adminController.userActive)
 

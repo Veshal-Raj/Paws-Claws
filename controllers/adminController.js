@@ -1,7 +1,7 @@
 const User = require('../models/userModel')
 const mongodb = require('mongodb')
 const mongoose = require('mongoose')
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 
 
@@ -15,19 +15,55 @@ const loginPage = async (req,res)=>{
     }
 }
 
-// ================== Dashboard ==================== //
-const dashboard = async (req,res)=>{
+// ==================== Verify Admin =============== //
+const verifyAdmin = async (req,res)=>{
     try {
-       const userData = await User.find({isVerified:false})
-       console.log(userData) 
-       res.render('admin/dashboard',{url:req.protocol+"://"+req.headers.host, users: userData,})
-        
+        // Find a user with the provided email
+        const { email, password } = req.body;
+
+        const user = await User.User.findOne({ email })
+
+        if(!user) {
+            return  res.status(401).json({msg: 'Invalid Credentials'})
+        }
+
+        // Compare the entered password  with the hashed password in the database
+        const passwordMatch = await bcrypt.compare(password,user.password)
+
+        if(!passwordMatch) {
+            return res.status(401).json({ message: 'Authenication failed' })
+        }
+
+        // Send a sucess response or token
+        if(user.role==='Admin'){
+            
+            res.redirect('/admin/dashboard')
+            res.status(200).json({ message: 'Admin login successful', user})
+        }else{
+            res.status(400).json({message: 'not an Admin'})
+        }
+    
     } catch (error) {
-        res.render('error',{url:req.protocol+"://"+req.headers.host})
+        res.render('error')
         console.error(error);
     }
 }
 
+// ================== Dashboard ==================== //
+const dashboard = async (req,res)=>{
+    try {
+    //    const userData = await User.find({isVerified:false})
+    //    console.log(userData) 
+       res.render('admin/dashboard')
+        
+    } catch (error) {
+        res.render('error')
+        console.error(error);
+    }
+}
+
+
+// ==================== ListUsers =================== //
 const listUsers = async(req,res)=>{
     try {
         const usersList = await User.User.find()
@@ -74,7 +110,7 @@ const userBlocked =async (req,res)=>{
         const userId = req.params.userId
         console.log(userId)
         // const userFind = await User.findByIdAndUpdate(userId,{isVerified:false})
-         const userFind = await User.User.findByIdAndUpdate(userId,{$set:{isVerified:false}})
+        const userFind = await User.User.findByIdAndUpdate(userId,{$set:{isVerified:false}})
         // const userFind = await User.User.findById(userId)
         console.log(userFind)
 
@@ -106,6 +142,13 @@ const check = async (req,res)=>{
     res.render('admin/newDashboard')
 }
 
+
+
+
+// =================  listCategory   =================== //
+const listCategory = async (req,res) =>{
+    res.render('admin/category')
+}
 module.exports = {
     dashboard,
     loginPage,
@@ -115,5 +158,7 @@ module.exports = {
     listUsers,
     userBlocked,
     userActive,
-    check
+    check,
+    verifyAdmin,
+    listCategory
 }
