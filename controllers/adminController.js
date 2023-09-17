@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 
 
 
-// ================== Login Page =================== //
+// ================== Render Login Page =================== //
 const loginPage = async (req,res)=>{
     try {
         res.render('admin/adminLogin')
@@ -15,7 +15,33 @@ const loginPage = async (req,res)=>{
     }
 }
 
-// ==================== Verify Admin =============== //
+// ================== Render Dashboard ==================== //
+const dashboard = async (req,res)=>{
+    try {
+    //    const userData = await User.find({isVerified:false})
+    //    console.log(userData) 
+       res.render('admin/dashboard')
+        
+    } catch (error) {
+        res.render('error')
+        console.error(error);
+    }
+}
+
+// ==================== Render and ListUsers =================== //
+const listUsers = async(req,res)=>{
+    try {
+        const usersList = await User.User.find()
+        console.log(usersList)
+        res.render('admin/users',{usersList})
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
+
+
+// ==================== Verify Admin ===================== //
 const verifyAdmin = async (req,res)=>{
     try {
         // Find a user with the provided email
@@ -49,62 +75,7 @@ const verifyAdmin = async (req,res)=>{
     }
 }
 
-// ================== Dashboard ==================== //
-const dashboard = async (req,res)=>{
-    try {
-    //    const userData = await User.find({isVerified:false})
-    //    console.log(userData) 
-       res.render('admin/dashboard')
-        
-    } catch (error) {
-        res.render('error')
-        console.error(error);
-    }
-}
-
-
-// ==================== ListUsers =================== //
-const listUsers = async(req,res)=>{
-    try {
-        const usersList = await User.User.find()
-        console.log(usersList)
-        res.render('admin/users',{usersList})
-    } catch (error) {
-        console.error(error);
-        res.render('error')
-    }
-}
-
-
-
-// ==================== products ================== //
-const products = async (req,res)=>{
-    try {
-        res.send("Products")
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-// ===================== categories ================= //
-const categories = async (req,res)=>{
-    try {
-        res.send("categories")
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-// ===================== orders ==================== //
-const orders = async (req,res) =>{
-    try {
-        res.send("orders")
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-// =================== Blocked ====================== //
+// =================== Blocked User ======================= //
 const userBlocked =async (req,res)=>{
     try {
         const userId = req.params.userId
@@ -123,6 +94,7 @@ const userBlocked =async (req,res)=>{
     }
 }
 
+// =================== ACtivate User ====================== //
 const userActive = async (req,res)=>{
     try {
         const userId = req.params.userId
@@ -138,27 +110,13 @@ const userActive = async (req,res)=>{
     }
 }
 
-const check = async (req,res)=>{
-    res.render('admin/newDashboard')
-}
 
 
-
-
-// =================  listCategory   =================== //
-const listCategory = async (req,res) =>{
-    res.render('admin/category')
-}
 module.exports = {
     dashboard,
     loginPage,
-    products,
-    categories,
-    orders,
     listUsers,
     userBlocked,
     userActive,
-    check,
     verifyAdmin,
-    listCategory
 }

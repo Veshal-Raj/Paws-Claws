@@ -300,6 +300,8 @@ const userlogin =async (req,res)=>{
     }
 }
 
+
+// ========================= Home ========================================== //
 const home = async(req,res)=>{
     try {
         if(req.session.userId){
@@ -314,6 +316,7 @@ const home = async(req,res)=>{
     }
 }
 
+// ======================== Sign OUt ========================================== //
 const userSignout = async (req,res)=>{
     try {
         req.session.destroy()

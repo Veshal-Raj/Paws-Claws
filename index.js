@@ -40,6 +40,10 @@ app.use(session({
 }))
 
 
+// =========================== View Engine Setup ================== //
+
+app.set('views',path.join(__dirname,'views'))
+app.set('view engine','ejs')
 
 
 // ===================== Default Use ============================== //
@@ -47,6 +51,8 @@ app.use(session({
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
+
+
 
 // ==================== Cache Controlling========================= //
 
@@ -56,10 +62,6 @@ app.use((req,res,next)=>{
     next()
 })
 
-// =========================== View Engine Setup ================== //
-
-app.set('views',path.join(__dirname,'views'))
-app.set('view engine','ejs')
 
 
 // ========================== Routers ============================= //
