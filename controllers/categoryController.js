@@ -1,6 +1,6 @@
 const Category = require('../models/categoriesModel')
 
-// Create a new category
+// ===================== Create a new category ================================== //
 const CreateCategory = async (req,res)=>{
     try {
         const { categoryName } = req.body
@@ -13,11 +13,11 @@ const CreateCategory = async (req,res)=>{
     }
 }
 
-// Get all categories
+// ==================== Get all categories ====================================== //
 const getAllCategories = async (req,res)=>{
     try {
-        const categories = await Category.Category.find()
-        console.log(categories)
+        const categories = await Category.Category.find().populate('subcategories')
+      
         res.render('admin/category',{categories})
 
     } catch (error) {
@@ -26,7 +26,7 @@ const getAllCategories = async (req,res)=>{
     }
 }
 
-// Making Category Available
+// =================== Making Category Available ================================== //
 const categoryAvailable = async  (req ,res )=>{
     try {
         const categoryId = req.params.categoryId
@@ -42,7 +42,7 @@ const categoryAvailable = async  (req ,res )=>{
     }
 }
 
-// Making Category Not-Available
+// ====================== Making Category Not-Available ============================= //
 const categoryNA = async (req,res) =>{
     try {
         const categoryId = req.params.categoryId
@@ -54,22 +54,18 @@ const categoryNA = async (req,res) =>{
         }
         res.redirect('/admin/categories')
     } catch (error) {
+    res.status(500).send('Internal Error')
         console.error(error);
     }
 }
 
-// Editing Category
+// ======================= Editing Category ========================================== //
 const categoryEdit =async (req,res)=>{
     try {
         const categoryId = req.query.CatID // Extract the category ID from the URL
         console.log("category id",categoryId)
-        const updatedCategoryName = req.body.editCategoryName // Extract the updated category data from the reques body
+        const updatedCategoryName = req.body.editCategoryName // Extract the updated category data from the request body
         console.log("updatedCategoryName",updatedCategoryName)
-        // const updatedCategory = await Category.Category.findByIdAndUpdate(
-        //     categoryId,
-        //     { name: updatedCategoryName },
-        //     { new: true }
-        // )
 
         const updatedCategory = await Category.Category.updateOne({_id:categoryId},{$set:{categoryName:updatedCategoryName}})
 
@@ -81,11 +77,12 @@ const categoryEdit =async (req,res)=>{
         // res.send('Category name updated successfully')
 
     } catch (error) {
+        res.status(500).json({error: 'Internal Sever Error!'})
         console.error(error);
     }
 }
 
-// Get a Single Category
+// ======================  Get a Single Category ==================================== //
 const getCategoryById = async (req,res)=>{
     try {
         const category = await Category.Category.findById(req.params.categoryId)

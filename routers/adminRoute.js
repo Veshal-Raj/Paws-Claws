@@ -25,7 +25,6 @@ adminRoute.post('/userActive/:userId',adminController.userActive)
 adminRoute.get('/categories',categoryController.getAllCategories)   // get all categories
 adminRoute.post('/categoryAvailable/:categoryId',categoryController.categoryAvailable)  // making category Available
 adminRoute.post('/categoryNA/:categoryId',categoryController.categoryNA) // making category NA
-// adminRoute.post('/categoryEdit/:categoryId',categoryController.categoryEdit) // Editing the category
 adminRoute.post('/categoryEdit',categoryController.categoryEdit) // Editing the category
 
 
@@ -33,9 +32,16 @@ adminRoute.post('/addCategory',categoryController.CreateCategory)  // create a n
 
 
 // ============================ sub-category route =========================== //
-// adminRoute.get('/subcategories/:categoryId',subcategoryController.getSubCategoriesByCategory)  // get all subcategories for a specific category
+adminRoute.post('/subcategories/:categoryId', subcategoryController.renderSubcategoriesPage); // Render subcategory page
 adminRoute.post('/subcategories',subcategoryController.createSubCategory)  // create a new subcategory
 adminRoute.get('/categories/:categoryId/subcategories', subcategoryController.getAllCategoriesWithSubcategories);
+
+adminRoute.post('/SubcategoryEdit',subcategoryController.subcategoryEdit) // Edit subcategory form route
+adminRoute.post('/subcategoriesAvailable/:subcategoryID',subcategoryController.subcategoryAvailable) // making subcategories Available
+adminRoute.post('/subcategoriesNA/:subcategoryID',subcategoryController.subcategoryNA) // making subcategory NA
+
+
+
 
 
 
