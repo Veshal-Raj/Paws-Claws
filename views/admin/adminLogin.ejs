@@ -28,8 +28,10 @@
                         </div>
       
                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Admin Login  </h5>
-                        
                         <form class="formData" action="/admin/login" method="post">
+                          <% if (locals.alert) { %>
+                            <p class="alert alert-danger"><%= locals.alert %></p>
+                          <% } %>
                         <div class="form-outline mb-4">
                         <input type="email" name="email" class="form-control " id="email" placeholder="Enter email ID"
                             required>

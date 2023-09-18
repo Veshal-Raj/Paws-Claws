@@ -19,16 +19,23 @@ const addproduct = async (req,res) =>{
     try {
         console.log('hi')
         console.log(req.body)
+        console.log(req.body.productPrice)
+
+        // Parse productPrice and productStock as integers
+        const productPrice = parseInt(req.body.productPrice, 10);
+        const productStock = parseInt(req.body.productStock, 10);
 
         // Get product data from the form 
         const {
             productName,
-            productPrice,
+            // productPrice,
             productDescription,
-            productStock,
+            // productStock,
             productStatus,
         } = req.body
 console.log(req.body)
+console.log(req.body.productPrice)
+
         // Create a new product document
         const newProduct = new Product({
             productName,

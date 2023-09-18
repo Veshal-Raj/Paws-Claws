@@ -273,7 +273,8 @@ const userlogin =async (req,res)=>{
         console.log(user,password)
         // Check if the user exists
         if(!user) {
-            return res.status(401).json({ message: 'User not found' })
+            return res.render('users/userLogin',{alert:'User not found!'})
+            
         }
      
         const isPasswordValid = await bcrypt.compare(password,user.password);
@@ -285,7 +286,9 @@ const userlogin =async (req,res)=>{
         console.log('Password Comparison Result:', isPasswordValid);
         
         if(!isPasswordValid) {
-            return res.status(401).json({ message: 'Incorrect password' })
+            return res.render('users/userLogin',{alert:'Incorrect Password'})
+    
+            
         }
 
         // User is authenticated, you can set up a session or generate a token here

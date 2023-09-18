@@ -4,6 +4,31 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 
+// =================== No Session ========================= //
+const noSession = async (req,res,next)=>{
+    try {
+        if(!req.session.userId) {
+            return res.redirect('/admin')
+        }
+        return next()
+    } catch (error) {
+        console.error(error)
+        res.render('error')
+    }
+}
+
+// ====================== Yes Session ====================== //
+const yesSession = async(req,res,next) =>{
+    try {
+        if(req.session.userId) {
+            return res.redirect('/dashboard')
+        }
+        return next()
+    } catch (error) {
+        console.error(error)
+        res.render('error')
+    }
+}
 
 // ================== Render Login Page =================== //
 const loginPage = async (req,res)=>{
@@ -50,19 +75,24 @@ const verifyAdmin = async (req,res)=>{
         const user = await User.User.findOne({ email })
 
         if(!user) {
-            return  res.status(401).json({msg: 'Invalid Credentials'})
+         return res.render('admin/adminLogin',{alert: 'Invalid Credentials'})
+    
+            // return  res.status(401).json({msg: 'Invalid Credentials'})
         }
 
         // Compare the entered password  with the hashed password in the database
         const passwordMatch = await bcrypt.compare(password,user.password)
 
         if(!passwordMatch) {
-            return res.status(401).json({ message: 'Authenication failed' })
+            return res.render('admin/adminLogin',{alert: 'Invalid Credentials'})
+
         }
 
         // Send a sucess response or token
         if(user.role==='Admin'){
             
+            // session 
+            req.session.userId = user._id
             res.redirect('/admin/dashboard')
             res.status(200).json({ message: 'Admin login successful', user})
         }else{
@@ -110,6 +140,16 @@ const userActive = async (req,res)=>{
     }
 }
 
+// ==================== Admin Logout ====================== //
+const signout = async (req,res) =>{
+    try {
+        req.session.destroy()
+        res.redirect('/admin')
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
 
 
 module.exports = {
@@ -119,4 +159,7 @@ module.exports = {
     userBlocked,
     userActive,
     verifyAdmin,
+    noSession,
+    yesSession,
+    signout
 }
