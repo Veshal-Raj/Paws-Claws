@@ -5,10 +5,25 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    productDescription: String,
-    price: Number,
-    cost: Number,
-    quantityInStock: Number,
+    productDescription: {
+        type: String,
+        // required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+        default: 0, // Set a default value
+    },
+    cost: {
+        type: Number,
+        required: true,
+        default: 0, // Set a default value
+    },
+    quantityInStock: {
+        type: Number,
+        required: true,
+        default: 0, // Set a default value
+    },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
@@ -19,6 +34,13 @@ const productSchema = new mongoose.Schema({
     },
     productImages: [String], // Array of URLs or file references
     weight: String,
+    lastupdated: {
+        type : Date ,
+    },
+    isAvailable: {
+        type: Boolean,
+        default: true,
+    }
 })
 
 const Product = mongoose.model('Product', productSchema)

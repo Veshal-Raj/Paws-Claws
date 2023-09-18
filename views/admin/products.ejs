@@ -1,0 +1,115 @@
+<%- include('../layouts/header') %>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Products</h1>
+      
+    </div><!-- End Page Title -->
+    <section class="section d-flex justify-content-end ">
+
+            <!-- Button to Trigger the Modal -->
+<div class="col-auto px-2 py-2">
+    <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
+      <i class="bi bi-plus-lg"></i>
+      Add Product
+    </button>
+  </div>
+  
+  <!-- Modal for Adding a Product -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <!-- //enctype="multipart/form-data" -->
+            <form  id="productForm" method="post" action="/admin/addproduct" > 
+          <!-- Product Form Goes Here -->
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="productName" name="productName" required>
+                </div>
+            
+                <div class="mb-3">
+                    <label for="productPrice" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="productPrice" name="productPrice" required>
+                </div>
+                <div class="mb-3">
+                    <label for="productDescription" class="form-label">Product Description</label>
+                    <textarea class="form-control" id="productDescription" name="productDescription" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="productStock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="productStock" name="productStock" required>
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="productImage" class="form-label">Product Image</label>
+                    <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" required>
+                </div> -->
+                <div class="mb-3">
+                    <label for="productStatus" class="form-label">Status</label>
+                    <select class="form-select" id="productStatus" name="productStatus" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit"  class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+         
+      </section>
+    <section>
+        <table id="example" class="table datatable" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Stock</th>
+                    <th>Last Updated</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product) { %>
+                    <tr>
+                        <td><%= product._id %></td>
+                        <td><%= product.productImages %></td>
+                        <td><%= product.productName %></td>
+                        <td><%= product.productDescription
+                         %></td>
+                        <td><%= product.quantityInStock %></td>
+                        <td><%= product.lastupdated %></td>
+                        <td><%= product.isAvailable %></td>
+                        <td><%= product.price %></td>
+                        <td>
+                            <button>Edit</button>
+                            <button>Delete</button>
+                        </td>
+                    </tr>
+               <%  }) %>
+                                      
+            </tfoot>
+        </table>
+    </section>
+  
+
+  </main><!-- End #main -->
+
+<%- include('../layouts/footer') %>

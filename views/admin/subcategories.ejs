@@ -1,100 +1,111 @@
 <%- include('../layouts/header') %>
 
-    <!-- Add any additional content or forms here -->
+  <!-- Add any additional content or forms here -->
 
-   
-    <main id="main" class="main">
-        <!-- ... Other page content ... -->
-      
-        <section class="section">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Subcategories of <%= categoryName %> </h5>
-      
-                  <table id="example" class="table datatable" style="width:100%">
-                    <thead>
-                      <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Edit</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% subcategories.forEach(function(subcategory) { %>
-                        <tr>
-                          <td><%= subcategory._id %></td>
-                          <td><%= subcategory.subcategoryName %></td>
-                          <td>  
-                            <!-- Edit Subcategory Button -->
-                            <form action="/admin/subcategories/edit/<%= subcategory._id %>" method="post" >
-                              <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                data-bs-target="#editSubcategoryModal<%= subcategory._id %>">Edit</button>
-                            </form>
 
-                            <!-- Modal for editing subcategory -->
-                            <div class="modal fade" id="editSubcategoryModal<%= subcategory._id %>" tabindex="-1"
-                                aria-labelledby="editSubcategoryModalLabel" aria-hidden="true" data-bs-backdrop="static"
-                                data-bs-keyboard="false">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editSubcategoryModalLabel">Edit Subcategory</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                        </div>
-                                        <form id="editSubcategoryForm<%= subcategory._id %>" 
-                                            action="/admin/SubcategoryEdit?SubID=<%= subcategory._id %>" method="post">
-                                            <div class="modal-body">
-                                                <!-- Subcategory edit form goes here -->
-                                                <div class="mb-3">
-                                                    <label for="editSubcategoryName" class="form-label">Subcategory Name</label>
-                                                    <input type="text" class="form-control" id="editSubcategoryName<%= subcategory._id %>"
-                                                        name="editSubcategoryName" value="<%= subcategory.subcategoryName %>" required>
-                                                </div>
-                                                <!-- Add more form fields as needed for editing -->
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
+  <main id="main" class="main">
+    <!-- ... Other page content ... -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Subcategories of <%= categoryName %>
+              </h5>
+
+              <table id="example" class="table datatable" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Edit</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% subcategories.forEach(function(subcategory) { %>
+                    <tr>
+                      <td>
+                        <%= subcategory._id %>
+                      </td>
+                      <td>
+                        <%= subcategory.subcategoryName %>
+                      </td>
+                      <td>
+                        <!-- Edit Subcategory Button -->
+                        <form action="/admin/subcategories/edit/<%= subcategory._id %>" method="post">
+                          <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#editSubcategoryModal<%= subcategory._id %>">Edit</button>
+                        </form>
+
+                        <!-- Modal for editing subcategory -->
+                        <div class="modal fade" id="editSubcategoryModal<%= subcategory._id %>" tabindex="-1"
+                          aria-labelledby="editSubcategoryModalLabel" aria-hidden="true" data-bs-backdrop="static"
+                          data-bs-keyboard="false">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="editSubcategoryModalLabel">Edit Subcategory</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <form id="editSubcategoryForm<%= subcategory._id %>"
+                                action="/admin/SubcategoryEdit?SubID=<%= subcategory._id %>&CatID=<%= categoryId %>"
+                                method="post">
+                                <div class="modal-body">
+                                  <!-- Subcategory edit form goes here -->
+                                  <div class="mb-3">
+                                    <label for="editSubcategoryName" class="form-label">Subcategory Name</label>
+                                    <input type="text" class="form-control"
+                                      id="editSubcategoryName<%= subcategory._id %>" name="editSubcategoryName"
+                                      value="<%= subcategory.subcategoryName %>" required>
+                                  </div>
+                                  <!-- Add more form fields as needed for editing -->
                                 </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                              </form>
                             </div>
-                          </td>
-                          <td>
-                            <% if (subcategory.isBlocked) { %>
-                              <!-- Unblock Subcategory Button -->
-                                <form action="/admin/subcategoriesAvailable/<%= subcategory._id %>" method="post">
-                                    <button type="submit" class="btn btn-danger"
-                                         data-bs-target="#activeModal<%= subcategory._id %>">NA</button>
-                                </form>
-                            <% } else { %>
-                              <!-- Block Subcategory Button -->
-                                <form action="/admin/subcategoriesNA/<%= subcategory._id %>" method="post">
-                                    <button type="submit" class="btn btn-primary"
-                                         data-bs-target="#activeModal<%= subcategory._id %>"> Available</button>
-                                </form>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <% if (subcategory.isBlocked) { %>
+                          <!-- Unblock Subcategory Button -->
+                          <form action="/admin/subcategoriesAvailable?CatID=<%= categoryId %>" method="post">
+                            <input type="hidden" name="SubCatID" value="<%= subcategory._id %>">
+                            <button type="submit" class="btn btn-danger"
+                              data-bs-target="#activeModal<%= subcategory._id %>">NA</b utton>
+                          </form>
+                          <% } else { %>
+                            <!-- Block Subcategory Button -->
+                            <form action="/admin/subcategoriesNA?CatID=<%= categoryId %>&SubCatID=<%= subcategory._id %>" method="post">
+                              <button type="submit" class="btn btn-primary" data-bs-target="#activeModal<%= subcategory._id %>">Available</button>
+                            </form>
+                            
+                            
+                            
+                            
                             <% } %>
-                          </td>
-                        </tr>
-                      <% }); %>
-                    </tbody>
-                    <tfoot>
-                      <!-- Footer content if needed -->
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
+                      </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+                <tfoot>
+                  <!-- Footer content if needed -->
+                </tfoot>
+              </table>
             </div>
           </div>
-        </section>
-      </main>
-      
- <!-- Back to Categories Button -->
- <a href="/admin/categories" class="btn btn-secondary">Back to Categories</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
- <%- include('../layouts/footer') %>
+  <!-- Back to Categories Button -->
+  <a href="/admin/categories" class="btn btn-secondary">Back to Categories</a>
+
+  <%- include('../layouts/footer') %>
