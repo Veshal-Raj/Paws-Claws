@@ -94,7 +94,7 @@ const verifyAdmin = async (req,res)=>{
             // session 
             req.session.userId = user._id
             res.redirect('/admin/dashboard')
-            res.status(200).json({ message: 'Admin login successful', user})
+            // res.status(200).json({ message: 'Admin login successful', user})
         }else{
             res.status(400).json({message: 'not an Admin'})
         }

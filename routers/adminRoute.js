@@ -54,6 +54,9 @@ adminRoute.post('/subcategoriesNA',adminController.noSession, subcategoryControl
 // =============================== Product route ========================================= //
 adminRoute.get('/products',adminController.noSession,productController.renderProductpage)
 adminRoute.post('/addproduct',adminController.noSession,productController.addproduct)
+adminRoute.post('/productSubcategories',adminController.noSession,productController.fetchSucategories)
+
+
 
 
 

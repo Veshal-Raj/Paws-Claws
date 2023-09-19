@@ -31,7 +31,7 @@ mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
 // =================== Middlewares ==================== //
 
 app.use(cookieParser())
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 
 app.use(session({
     secret: config.sessionSecret,
