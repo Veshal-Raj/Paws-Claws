@@ -1,141 +1,191 @@
 <%- include('../layouts/header') %>
 
-<main id="main" class="main">
+    <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Products</h1>
-      
-    </div><!-- End Page Title -->
-    <section class="section d-flex justify-content-end ">
+        <div class="pagetitle">
+            <h1>Products</h1>
+
+        </div><!-- End Page Title -->
+        <section class="section d-flex justify-content-end ">
 
             <!-- Button to Trigger the Modal -->
-<div class="col-auto px-2 py-2">
-    <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addProductModal">
-      <i class="bi bi-plus-lg"></i>
-      Add Product
-    </button>
-  </div>
-  
-  <!-- Modal for Adding a Product -->
-  <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+            <div class="col-auto px-2 py-2">
+                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                    data-bs-target="#addProductModal">
+                    <i class="bi bi-plus-lg"></i>
+                    Add Product
+                </button>
+            </div>
 
-            <!-- //enctype="multipart/form-data" -->
-            <form  id="productForm" method="post" action="/admin/addproduct" > <!--enctype="multipart/form-data" --> 
-          <!-- Product Form Goes Here -->
-                <div class="mb-3">
-                    <label for="productName" class="form-label">Product Name</label>
-                    <input type="text" class="form-control" id="productName" name="productName" required>
-                </div>
-            
-                <div class="mb-3">
-                    <label for="productPrice" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="productPrice" name="price" required>
-                </div>
-                <div class="mb-3">
-                    <label for="productDescription" class="form-label">Product Description</label>
-                    <textarea class="form-control" id="productDescription" name="productDescription" required></textarea>
-                </div>
-                <div class="mb-3">
+            <!-- Modal for Adding a Product -->
+            <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
 
-                </div>
-                <div class="mb-3">
-                    <label for="productCategory" class="form-label">Category</label>
-                    <select class="form-select" id="productCategory" name="category"  required>
-                        <option value="" disabled>Available Categories</option>
+                            <!-- //enctype="multipart/form-data" -->
+                            <form id="productForm" method="post" action="/admin/addproduct"
+                                enctype="multipart/form-data">
+                                <!-- Product Form Goes Here -->
+                                <div class="mb-3">
+                                    <label for="productName" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="productName" name="productName"
+                                        required>
+                                </div>
 
-                        <% categories.forEach((category)=> { %> 
-                            <option value="<%= category._id %>"><%= category.categoryName  %></option>
-                        <%}) %>
-                    </select>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="productSubcategory" class="form-label">Subcategory</label>
-                    <select class="form-select" id="productSubcategory" name="subcategory" required>
-                     
-                        <option value="" disabled>Available Sub Categories</option>
+                                <div class="mb-3">
+                                    <label for="productPrice" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="productPrice" name="price" required>
+                                </div>
 
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="productStock" class="form-label">Stock</label>
-                    <input type="number" class="form-control" id="productStock" name="quantityInStock" required>
-                </div>
-                <!-- <div class="mb-3">
-                    <label for="productImage" class="form-label">Product Image</label>
-                    <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" multiple>
-                  
-                </div> -->
-                <div class="mb-3">
-                    <label for="productStatus" class="form-label">Status</label>
-                    <select class="form-select" id="productStatus" name="productStatus" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit"  class="btn btn-primary">Save Product</button>
-                </div>
-            </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-         
-      </section>
-    <section>
-        <table id="example" class="table datatable" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Stock</th>
-                    <th>Last Updated</th>
-                    <th>Status</th>
-                    <th>Price</th>
-                    <th>Actions</th>
+                                <div class="mb-3">
+                                    <label for="productDescription" class="form-label">Product Description</label>
+                                    <textarea class="form-control" id="productDescription" name="productDescription"
+                                        required></textarea>
+                                </div>
 
-                </tr>
-            </thead>
-            <tbody>
-                <% products.forEach(function(product) { %>
+                                <div class="mb-3">
+                                    <label for="productCategory" class="form-label">Category</label>
+                                    <select class="form-select" id="productCategory" name="category" required>
+                                        <option value="" disabled>Available Categories</option>
+                                        <% categories.forEach((category)=> { %>
+                                            <option value="<%= category._id %>">
+                                                <%= category.categoryName %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="productSubcategory" class="form-label">Subcategory</label>
+                                    <select class="form-select" id="productSubcategory" name="subcategory" required>
+                                        <option value="" disabled>Available Sub Categories</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="productStock" class="form-label">Stock</label>
+                                    <input type="number" class="form-control" id="productStock" name="quantityInStock"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="productImages" class="form-label">Product Images</label>
+                                    <input type="file" class="form-control" id="productImages" name="productImages"
+                                        accept="image/*" multiple>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="productStatus" class="form-label">Status</label>
+                                    <select class="form-select" id="productStatus" name="productStatus" required>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Product</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        <section>
+            <table id="example" class="table datatable" style="width:100%">
+                <thead>
                     <tr>
-                        <td><%= product._id %></td>
-                        <td><%= product.productImages %></td>
-                        <td><%= product.productName %></td>
-                        <td><%= product.productDescription %></td>
-                        <td><%= product.quantityInStock %></td> 
-                        <td><%= product.updatedAt %></td>
-                        <td><%= product.isAvailable %></td>
-                        <td><%= product.price %></td> 
-                        <td>
-                            <button>Edit</button>
-                           
-                        </td>
+                        <th>Id</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Stock</th>
+                        <th>Last Updated</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+
                     </tr>
-               <%  }) %>
-                                      
-            </tfoot>
-        </table>
-    </section>
-  
+                </thead>
+                <tbody>
+                    <% products.forEach(function(product) { %>
+                        <tr>
+                            <td>
+                                <%= product._id %>
+                            </td>
+                            <td>
+                                <img src='http://localhost:3000/uploads/<%= product.productImages[0] %>' style="width:80px; height:80px;"
+                                    data-bs-toggle="modal" data-bs-target="#myModal<%= product._id %>">
 
-  </main><!-- End #main -->
 
-  <script>
-    // Function to populate subcategories based on the selected category
-    
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal<%= product._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Product Images</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <% product.productImages.forEach(function(imageUrl, index) { %>
+                                                    <img src='http://localhost:3000/uploads/<%= imageUrl %>' class="img-fluid" alt="Image <%= index + 1 %>" style="width:1800px; height:auto"><h3></h3>
+                                                <% }); %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <%= product.productName %>
+                            </td>
+                            <td>
+                                <%= product.productDescription %>
+                            </td>
+                            <td>
+                                <%= product.quantityInStock %>
+                            </td>
+                            <td>
+                                <%= product.updatedAt %>
+                            </td>
+                            <td>
+                                <% if (product.isAvailable) { %>
+                                    <button class="btn btn-secondary">Active</button>
+                                    <% } else { %>
+                                        <button class="btn btn-danger">Inactive</button>
+                                        <% } %>
+                            </td>
+                            <td>
+                                <%= product.price %>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning">Edit</button>
+
+                            </td>
+                        </tr>
+                        <% }) %>
+
+                            </tfoot>
+            </table>
+        </section>
+
+
+    </main><!-- End #main -->
+
+    <script>
+        // Function to populate subcategories based on the selected category
+
         const categorySelect = document.getElementById('productCategory');
         const subcategorySelect = document.getElementById('productSubcategory');
 
@@ -147,11 +197,11 @@
             subcategorySelect.innerHTML = '';
 
             // Fetch subcategories from the server based on the selected category ID
-           await fetch(`/admin/productSubcategories`,{
-            method: 'POST',
-            headers:{'Content-Type':'application/json'},
-            body : JSON.stringify({selectedCategoryId})
-           })
+            await fetch(`/admin/productSubcategories`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selectedCategoryId })
+            })
                 .then((response) => response.json())
                 .then((subcategories) => {
                     subcategories.forEach((subcategory) => {
@@ -165,8 +215,8 @@
                     console.error(error);
                 });
         });
-    
 
-  </script>
 
-<%- include('../layouts/footer') %>
+    </script>
+
+    <%- include('../layouts/footer') %>

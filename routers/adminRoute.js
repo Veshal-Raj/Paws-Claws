@@ -2,6 +2,32 @@ const express = require('express')
 const adminRoute = express.Router()
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const multer = require('multer')
+const path = require('path')
+
+// Define storage and upload settings
+const storage = multer.diskStorage({
+    destination: function (req,file,cb) {
+        cb(null,path.join(__dirname,"../public/uploads"),
+        function(error,success) {
+            if(error) {
+                console.log("Error in file uploading",error)
+            }
+            
+        }) 
+    },
+    filename: function (req,file,cb) {
+        const name = Date.now() + "-" + file.originalname
+        cb(null,name,function(error,success) {
+            if (error) {
+                console.log(error)
+            }
+        }) 
+    }
+})
+
+const upload = multer({storage:storage})
+
 
 
 const adminController = require('../controllers/adminController')
@@ -53,8 +79,9 @@ adminRoute.post('/subcategoriesNA',adminController.noSession, subcategoryControl
 
 // =============================== Product route ========================================= //
 adminRoute.get('/products',adminController.noSession,productController.renderProductpage)
-adminRoute.post('/addproduct',adminController.noSession,productController.addproduct)
+adminRoute.post('/addproduct',adminController.noSession,upload.array('productImages',6),productController.addproduct)
 adminRoute.post('/productSubcategories',adminController.noSession,productController.fetchSucategories)
+
 
 
 

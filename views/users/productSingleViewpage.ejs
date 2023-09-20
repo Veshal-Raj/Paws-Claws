@@ -1,0 +1,40 @@
+<%- include('../layouts/userHeader') %>
+    <div class="main-container">
+
+        <div class="product-details-container">
+            <div class="product-image-card">
+                <!-- Product image -->
+                <img src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %>Image" class="product-image">
+            </div>
+            <div class="product-details-card">
+                <!-- Product details -->
+                <h1> <%= product.productName %> </h1>
+                <hr>
+                <p><b>Description:</b> <%= product.productDescription %></p>
+                <p><b>Category:</b> <%= product.productCategory %></p>
+                <p><b>Subcategory:</b> <%= product.productSubcategory %></p>
+                <p><b>Price:</b> $<%= product.price.toFixed(2) %></p>
+                <div class="d-flex ">
+                    <form class="d-flex px-2 ">
+                        <button class="btn btn-outline-dark" type="submit">
+                           Add to Wishlist
+                            <i class="bi bi-heart-fill me-1"></i>
+                           
+                        </button>
+                    </form>
+                    <form class="d-flex px-2">
+                        <button class="btn btn-outline-dark" type="submit">
+                           Add to Cart
+                            <i class="bi-cart-fill me-1"></i>
+                           
+                        </button>
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+
+<%- include('../layouts/userFooter') %>

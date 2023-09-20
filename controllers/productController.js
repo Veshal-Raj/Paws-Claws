@@ -22,25 +22,27 @@ const renderProductpage = async (req,res)=>{
 
 const addproduct = async (req,res) =>{
     try {
-        console.log('hi')
-        console.log(req.body)
-        console.log(req.body.price)
-
-        // Parse productPrice and productStock as integers
-       // const price = parseInt(req.body.productPrice, 10);
-        // const productStock = parseInt(req.body.productStock, 10);
-
-        // Get product data from the form 
+         // Get product data from the form 
         const {
             productName,
             price,
             productDescription,
-            quantityInStock,
-            // productStock,
+            quantityInStock,            
             productStatus,
         } = req.body
+
+
+        const categoryId = req.body.category
+        const subcategoryId = req.body.subcategory
+
             console.log(req.body)
             console.log(req.body.price)
+
+            // Extract uploaded files and create an array of filenames
+            const productImages = []
+            req.files.forEach((file) => {
+                productImages.push(file.filename)
+            })
 
         // Create a new product document
         const newProduct = new Product({
@@ -48,7 +50,10 @@ const addproduct = async (req,res) =>{
             price,
             productDescription,
             quantityInStock,
-            productStatus
+            productStatus,
+            productImages,
+            category:categoryId,
+            subcategory:subcategoryId
         })
 
 // Save it to MongoDB
@@ -68,7 +73,7 @@ const fetchSucategories = async (req,res) =>{
         console.log(req.body)
         const categoryId = req.body.selectedCategoryId;
         const subcategories = await Subcategory.find({category:categoryId})
-        console.log('hikkkkk')
+        // console.log('hikkkkk')
         console.log(subcategories)
         res.json(subcategories)
     } catch (error) {
