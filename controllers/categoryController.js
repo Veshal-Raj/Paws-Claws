@@ -8,7 +8,7 @@ const CreateCategory = async (req,res)=>{
         const savedCategory = await category.save()
         res.redirect('/admin/categories')
     } catch (error) {
-        res.status(500).json({ error:'Internal Server Error! '})
+        res.render('error')
         console.error(error);
     }
 }
@@ -21,7 +21,7 @@ const getAllCategories = async (req,res)=>{
         res.render('admin/category',{categories})
 
     } catch (error) {
-        res.status(500).json({ error:'Internal Server Error! '})
+        res.render('error')
         console.error(error);
     }
 }
@@ -38,6 +38,7 @@ const categoryAvailable = async  (req ,res )=>{
         }
         res.redirect('/admin/categories')
     } catch (error) {
+        res.render('error')
         console.error(error);
     }
 }
@@ -54,7 +55,7 @@ const categoryNA = async (req,res) =>{
         }
         res.redirect('/admin/categories')
     } catch (error) {
-    res.status(500).send('Internal Error')
+        res.render('error')
         console.error(error);
     }
 }
@@ -74,10 +75,10 @@ const categoryEdit =async (req,res)=>{
         }
 
         res.redirect('/admin/categories')
-        // res.send('Category name updated successfully')
+        
 
     } catch (error) {
-        res.status(500).json({error: 'Internal Sever Error!'})
+        res.render('error')
         console.error(error);
     }
 }
@@ -91,8 +92,8 @@ const getCategoryById = async (req,res)=>{
         }
         res.status(201).json(category)
     } catch (error) {
+        res.render('error')
         console.error(error);
-        res.status(500).json({error: 'Internal Sever Error!'})
     }
 }
 

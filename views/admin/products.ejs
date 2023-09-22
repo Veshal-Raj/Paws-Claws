@@ -160,12 +160,30 @@
                                 <%= product.updatedAt %>
                             </td>
                             <td>
-                                <% if (product.isAvailable) { %>
-                                    <button class="btn btn-secondary">Active</button>
-                                    <% } else { %>
-                                        <button class="btn btn-danger">Inactive</button>
-                                        <% } %>
+                               
+                                    <% if (product.isAvailable == true){%>
+                                       
+                                        <button class="btn btn-dark toggle-availability" 
+                                    data-product-id="<%= product._id %>" 
+                                    data-is-available="<%= product.isAvailable %>"
+                                   onclick="toggleAvailability(this)">
+                                   <%= product.isAvailable ? 'Active' : 'Inactive' %>
+                                </button> 
+
+
+                                        <% } else {%>
+                                           
+                                            <button class="btn btn-dark toggle-availability" 
+                                            data-product-id="<%= product._id %>" 
+                                            data-is-available="<%= product.isAvailable %>"
+                                           onclick="toggleAvailability(this)">
+                                           <%= product.isAvailable ? 'Active' : 'Inactive' %>
+                                        </button>
+
+                                            <%}%>
+                                   
                             </td>
+                            
                             <td>
                                 <%= product.price %>
                             </td>
@@ -215,6 +233,69 @@
                     console.error(error);
                 });
         });
+
+        async function test(productId,availability){
+            console.log(productId)
+            console.log(availability)
+            const response = await fetch(`admin/updateAvailabilty`,{
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body :JSON.stringify ({ 
+                        isAvailable: availability,
+                        productId : productId,
+                    })
+            }).then((value) => {
+                return value.json()
+            })
+            alert(response.msg)
+        }
+
+
+        async function toggleAvailability(button) {
+
+            
+            const confirm = window.confirm('Do you want to change the status?')
+            if (confirm == true ) {
+            const productId = button.getAttribute('data-product-id')
+            const isAvailable = button.getAttribute('data-is-available') === 'true'
+            
+            try {
+                console.log(productId,isAvailable)
+                // Send a POST request to the server to update the product's availabilty
+                const response = await fetch(`/admin/update-availability`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body :JSON.stringify ({ isAvailable: !isAvailable,productId })
+                    
+                })
+                .then((response)=>{
+                    if (response.ok) {
+                        return response.json()
+                    } else {
+                        console.error('failed to update availability');
+                        throw new Error('failed to upadate availability')
+                    }
+                })
+                .then((data) => {
+                    button.textContent = !isAvailable ? 'Active' : 'Inactive';
+                    button.setAttribute('data-is-available', String(!isAvailable));
+                    alert(data.ok)
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+                              
+            } catch (error) {
+                console.error(error);
+            }
+        }else {
+            return
+        }
+        }   
 
 
     </script>

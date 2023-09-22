@@ -4,32 +4,6 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 
-// =================== No Session ========================= //
-const noSession = async (req,res,next)=>{
-    try {
-        if(!req.session.userId) {
-            return res.redirect('/admin')
-        }
-        return next()
-    } catch (error) {
-        console.error(error)
-        res.render('error')
-    }
-}
-
-// ====================== Yes Session ====================== //
-const yesSession = async(req,res,next) =>{
-    try {
-        if(req.session.userId) {
-            return res.redirect('/dashboard')
-        }
-        return next()
-    } catch (error) {
-        console.error(error)
-        res.render('error')
-    }
-}
-
 // ================== Render Login Page =================== //
 const loginPage = async (req,res)=>{
     try {
@@ -43,8 +17,6 @@ const loginPage = async (req,res)=>{
 // ================== Render Dashboard ==================== //
 const dashboard = async (req,res)=>{
     try {
-    //    const userData = await User.find({isVerified:false})
-    //    console.log(userData) 
        res.render('admin/dashboard')
         
     } catch (error) {
@@ -60,8 +32,8 @@ const listUsers = async(req,res)=>{
         console.log(usersList)
         res.render('admin/users',{usersList})
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -76,8 +48,6 @@ const verifyAdmin = async (req,res)=>{
 
         if(!user) {
          return res.render('admin/adminLogin',{alert: 'Invalid Credentials'})
-    
-            // return  res.status(401).json({msg: 'Invalid Credentials'})
         }
 
         // Compare the entered password  with the hashed password in the database
@@ -94,7 +64,7 @@ const verifyAdmin = async (req,res)=>{
             // session 
             req.session.userId = user._id
             res.redirect('/admin/dashboard')
-            // res.status(200).json({ message: 'Admin login successful', user})
+            
         }else{
             res.status(400).json({message: 'not an Admin'})
         }
@@ -110,9 +80,9 @@ const userBlocked =async (req,res)=>{
     try {
         const userId = req.params.userId
         console.log(userId)
-        // const userFind = await User.findByIdAndUpdate(userId,{isVerified:false})
+        
         const userFind = await User.User.findByIdAndUpdate(userId,{$set:{isVerified:false}})
-        // const userFind = await User.User.findById(userId)
+        
         console.log(userFind)
 
         if(!userFind){
@@ -120,6 +90,7 @@ const userBlocked =async (req,res)=>{
         }
         res.redirect('/admin/users')
     } catch (error) {
+        res.render('error')
         console.error(error);
     }
 }
@@ -136,6 +107,7 @@ const userActive = async (req,res)=>{
         }
         res.redirect('/admin/users')
     } catch (error) {
+        res.render('error')
         console.error(error);
     }
 }
@@ -146,8 +118,8 @@ const signout = async (req,res) =>{
         req.session.destroy()
         res.redirect('/admin')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -159,7 +131,5 @@ module.exports = {
     userBlocked,
     userActive,
     verifyAdmin,
-    noSession,
-    yesSession,
     signout
 }

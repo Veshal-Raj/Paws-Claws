@@ -170,12 +170,12 @@
                 <% if (category.isDisabled) { %>
                   <form action="/admin/categoryAvailable/<%= category._id %>" method="post">
                     <button type="submit" class="btn btn-danger"
-                      data-bs-target="#activateModal<%= category._id %>">NA</button>
+                      data-bs-target="#activateModal<%= category._id %>">Block</button>
                   </form>
                   <% } else { %>
                     <form action="/admin/categoryNA/<%= category._id %>" method="post">
                       <button type="submit" class="btn btn-dark"
-                        data-bs-target="#activateModal<%= category._id %>">Available</button>
+                        data-bs-target="#activateModal<%= category._id %>">Unblock</button>
                     </form>
                     <% } %>
                       <!-- Edit Button -->

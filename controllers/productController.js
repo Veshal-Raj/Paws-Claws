@@ -82,8 +82,35 @@ const fetchSucategories = async (req,res) =>{
     }
 }
 
+const productAvailability = async (req,res) => {
+    try {
+    
+        const productId = req.body.productId;
+        const isAvailable = req.body.isAvailable;
+
+        console.log(productId,isAvailable)
+        // Find the product by Id
+        const product = await Product.findById(productId)
+
+        if (!product) {
+            return res.status(404).json({ fail: 'Product not found'})
+        }
+
+        // Toggle the availability
+        product.isAvailable = !isAvailable;
+
+        //Save the updated product to the database
+        await product.save()
+
+        res.json({ ok: 'Product availability updated successfully' });
+    } catch (error) {
+        console.error(error)
+        res.json({fail:'It is not updated'})
+    }
+}
 module.exports ={
     renderProductpage,
     addproduct,
-    fetchSucategories
+    fetchSucategories,
+    productAvailability
 }

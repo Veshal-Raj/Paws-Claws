@@ -12,40 +12,13 @@ console.log(process.env.name)
 
 
 
-// ==================== No Session ============================== //
-const noSession = async (req,res,next)=>{
-    try {
-        if(!req.session.userId){
-            return res.redirect('/')
-        }
-        return next()
-    } catch (error) {
-        console.error(error);
-        res.render('error')
-    }
-}
-
-// ======================== Yes Session =========================== //
-const yesSession =  async (req ,res,next)=> {
-    try {
-        if(req.session.userId){
-            return res.redirect('/home')
-        }
-        return next()
-    } catch (error) {
-        console.error(error);
-        res.render('error')
-    }
-}
-
-
 // ======================== Render user login page ======================= //
 const loginpage = async (req,res)=>{
     try {
         res.render('users/userLogin')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -55,8 +28,8 @@ const signupPage =async (req,res)=>{
     try {
         res.render('users/signup')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -138,8 +111,8 @@ const otpPage =async (req,res)=>{
     try {
         res.render('users/otp')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -177,8 +150,8 @@ const verifyOTP= async (req,res)=>{
             res.status(400).send('OTP verification failed')
         }
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -189,6 +162,7 @@ const resendOTP = async (req,res)=>{
         // Check if req.session.registrationData exists and contains the email proprely
         if (!req.session.registrationData || !req.session.registrationData.email){
             return res.status(400).send('Session data is missing or incomplete ')
+
         }
 
         // Generate a new OTP
@@ -228,8 +202,8 @@ const resendOTP = async (req,res)=>{
          res.redirect('/otp')
 
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -240,8 +214,8 @@ const forgotpasswordPage = async (req,res)=>{
     try {
         res.render('users/forgotpassword')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -252,8 +226,8 @@ const resetpassword= async (req,res)=>{
     try {
         res.render('users/resetPassword')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
 
     }
 }
@@ -291,6 +265,13 @@ const userlogin =async (req,res)=>{
             
         }
 
+        // Check if the user is blocked
+        if (!user.isVerified) {
+            return res.render('users/userLogin', { alert: 'User is blocked. Please contact support.' });
+        }
+
+
+
         // User is authenticated, you can set up a session or generate a token here
         // For example, set a user ID in the session
         req.session.userId =user._id
@@ -298,8 +279,8 @@ const userlogin =async (req,res)=>{
         // Redirect to a dashboard or send a sucess message
         res.redirect('/home')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -314,8 +295,8 @@ const home = async(req,res)=>{
             res.redirect('/login')
         }
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -325,8 +306,8 @@ const userSignout = async (req,res)=>{
         req.session.destroy()
         res.redirect('/')
     } catch (error) {
-        console.error(error);
         res.render('error')
+        console.error(error);
     }
 }
 
@@ -342,8 +323,6 @@ module.exports={
     verifyOTP,
     resendOTP,
     userlogin,
-    noSession,
-    yesSession,
     home,
     userSignout,
     

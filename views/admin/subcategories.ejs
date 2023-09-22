@@ -78,12 +78,12 @@
                           <form action="/admin/subcategoriesAvailable?CatID=<%= categoryId %>" method="post">
                             <input type="hidden" name="SubCatID" value="<%= subcategory._id %>">
                             <button type="submit" class="btn btn-danger"
-                              data-bs-target="#activeModal<%= subcategory._id %>">NA</b utton>
+                              data-bs-target="#activeModal<%= subcategory._id %>">Unblock</button>
                           </form>
                           <% } else { %>
                             <!-- Block Subcategory Button -->
                             <form action="/admin/subcategoriesNA?CatID=<%= categoryId %>&SubCatID=<%= subcategory._id %>" method="post">
-                              <button type="submit" class="btn btn-primary" data-bs-target="#activeModal<%= subcategory._id %>">Available</button>
+                              <button type="submit" class="btn btn-primary" data-bs-target="#activeModal<%= subcategory._id %>">Block</button>
                             </form>
                             
                             

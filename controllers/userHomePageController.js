@@ -43,11 +43,11 @@ const showHomepageProducts = async (req,res) => {
             // Define your conditions herer (e.g., show product if none are blocked)
             return isProductBlocked && !isCategoryBlocked && !isSubcategoryBlocked
         })
-        // console.log('filtered products',filteredProducts)
+        
 
         res.render('users/home', {products: filteredProducts})
     } catch (error) {
-        res.status(500).send('Internal Error')
+        res.render('error')
         console.error(error);
     }
 }

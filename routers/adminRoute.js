@@ -34,13 +34,16 @@ const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
 const subcategoryController = require('../controllers/subCategories')
 const productController = require('../controllers/productController')
+const adminAuth = require('../middlewares/adminAuth')
 
 
 
-adminRoute.get('/',adminController.yesSession,adminController.loginPage)
+
+adminRoute.get('/',adminAuth.yesSession,adminController.loginPage)
 adminRoute.get('/signout',adminController.signout)
-adminRoute.get('/dashboard',adminController.noSession,adminController.dashboard)
-adminRoute.get('/users',adminController.noSession,adminController.listUsers)
+adminRoute.get('/dashboard',adminAuth.noSession,adminController.dashboard)
+adminRoute.get('/users',adminAuth.noSession,adminController.listUsers)
+
 
 
 adminRoute.post('/login',adminController.verifyAdmin)
@@ -50,26 +53,26 @@ adminRoute.post('/userActive/:userId',adminController.userActive)
 
 // =========================== Category route ====================== //
 
-adminRoute.get('/categories',adminController.noSession,categoryController.getAllCategories)   // get all categories
-adminRoute.post('/categoryAvailable/:categoryId',adminController.noSession,categoryController.categoryAvailable)  // making category Available
-adminRoute.post('/categoryNA/:categoryId',adminController.noSession,categoryController.categoryNA) // making category NA
-adminRoute.post('/categoryEdit',adminController.noSession,categoryController.categoryEdit) // Editing the category
+adminRoute.get('/categories',adminAuth.noSession,categoryController.getAllCategories)   // get all categories
+adminRoute.post('/categoryAvailable/:categoryId',adminAuth.noSession,categoryController.categoryAvailable)  // making category Available
+adminRoute.post('/categoryNA/:categoryId',adminAuth.noSession,categoryController.categoryNA) // making category NA
+adminRoute.post('/categoryEdit',adminAuth.noSession,categoryController.categoryEdit) // Editing the category
 
 
-adminRoute.post('/addCategory',adminController.noSession,categoryController.CreateCategory)  // create a new category
+adminRoute.post('/addCategory',adminAuth.noSession,categoryController.CreateCategory)  // create a new category
 
 
 // ============================ sub-category route =========================== //
-adminRoute.post('/subcategories/:categoryId',adminController.noSession, subcategoryController.renderSubcategoriesPage); // Render subcategory page
-adminRoute.get('/subcategories/:categoryId',adminController.noSession, subcategoryController.renderSubcategoriesPage); // Render subcategory page
+adminRoute.post('/subcategories/:categoryId',adminAuth.noSession, subcategoryController.renderSubcategoriesPage); // Render subcategory page
+adminRoute.get('/subcategories/:categoryId',adminAuth.noSession, subcategoryController.renderSubcategoriesPage); // Render subcategory page
 
-adminRoute.get('/subcategories',adminController.noSession, subcategoryController.renderSubcategoriesPage)
-adminRoute.post('/subcategories',adminController.noSession, subcategoryController.createSubCategory)  // create a new subcategory
-adminRoute.get('/categories/:categoryId/subcategories',adminController.noSession, subcategoryController.getAllCategoriesWithSubcategories);
-adminRoute.post('/SubcategoryEdit',adminController.noSession, subcategoryController.subcategoryEdit) // Edit subcategory form route
+adminRoute.get('/subcategories',adminAuth.noSession, subcategoryController.renderSubcategoriesPage)
+adminRoute.post('/subcategories',adminAuth.noSession, subcategoryController.createSubCategory)  // create a new subcategory
+adminRoute.get('/categories/:categoryId/subcategories',adminAuth.noSession, subcategoryController.getAllCategoriesWithSubcategories);
+adminRoute.post('/SubcategoryEdit',adminAuth.noSession, subcategoryController.subcategoryEdit) // Edit subcategory form route
 // adminRoute.post('/subcategoriesAvailable',subcategoryController.subcategoryAvailable) // making subcategories Available
 // adminRoute.post('/subcategoriesNA/:subcategoryID', subcategoryController.subcategoryNA);
-adminRoute.post('/subcategoriesNA',adminController.noSession, subcategoryController.subcategoryNA);
+adminRoute.post('/subcategoriesNA',adminAuth.noSession, subcategoryController.subcategoryNA);
 
 
 // adminRoute.post('/subcategoriesNA/:categoryID/:subcategoryID', subcategoryController.subcategoryNA);// making subcategory NA
@@ -78,10 +81,10 @@ adminRoute.post('/subcategoriesNA',adminController.noSession, subcategoryControl
 
 
 // =============================== Product route ========================================= //
-adminRoute.get('/products',adminController.noSession,productController.renderProductpage)
-adminRoute.post('/addproduct',adminController.noSession,upload.array('productImages',6),productController.addproduct)
-adminRoute.post('/productSubcategories',adminController.noSession,productController.fetchSucategories)
-
+adminRoute.get('/products',adminAuth.noSession,productController.renderProductpage)
+adminRoute.post('/addproduct',adminAuth.noSession,upload.array('productImages',6),productController.addproduct)
+adminRoute.post('/productSubcategories',adminAuth.noSession,productController.fetchSucategories)
+adminRoute.post('/update-availability', adminAuth.noSession, productController.productAvailability);
 
 
 

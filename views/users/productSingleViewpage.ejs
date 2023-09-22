@@ -1,40 +1,48 @@
 <%- include('../layouts/userHeader') %>
-    <div class="main-container">
-
-        <div class="product-details-container">
-            <div class="product-image-card">
-                <!-- Product image -->
-                <img src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %>Image" class="product-image">
-            </div>
-            <div class="product-details-card">
-                <!-- Product details -->
-                <h1> <%= product.productName %> </h1>
-                <hr>
-                <p><b>Description:</b> <%= product.productDescription %></p>
-                <p><b>Category:</b> <%= product.productCategory %></p>
-                <p><b>Subcategory:</b> <%= product.productSubcategory %></p>
-                <p><b>Price:</b> $<%= product.price.toFixed(2) %></p>
-                <div class="d-flex ">
-                    <form class="d-flex px-2 ">
-                        <button class="btn btn-outline-dark" type="submit">
-                           Add to Wishlist
-                            <i class="bi bi-heart-fill me-1"></i>
-                           
-                        </button>
-                    </form>
-                    <form class="d-flex px-2">
-                        <button class="btn btn-outline-dark" type="submit">
-                           Add to Cart
-                            <i class="bi-cart-fill me-1"></i>
-                           
-                        </button>
-                    </form>
-                    
+<div class="main-container">
+    <div class="product-details-container">
+        <div class="row">
+            <!-- Small images column -->
+            <div class="col-6 col-md-3 col-lg-1">
+                <div class="small-images-column">
+                    <% product.productImages.forEach((image, index) => { %>
+                        <div class="small-image-container mb-2 "  style="margin-left: 10px;">
+                            <img src="/uploads/<%= image %>" alt="Product Image <%= index + 1 %>" class="small-image img-fluid">
+                        </div>
+                    <% }) %>
                 </div>
             </div>
-            
+
+            <!-- Main product image -->
+            <div class="col-lg-9">
+                <img src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %> Image" class="product-image img-fluid zoom-image"  style="margin-left: 10px;">
+            </div>
         </div>
         
+        <div class="product-details-card">
+            <!-- Product details -->
+            <h1><%= product.productName %></h1>
+            <hr>
+            <p><b>Description:</b> <%= product.productDescription %></p>
+            <p><b>Category:</b> <%= product.productCategory %></p>
+            <p><b>Subcategory:</b> <%= product.productSubcategory %></p>
+            <p><b>Price:</b> $<%= product.price.toFixed(2) %></p>
+            <div class="d-flex">
+                <form class="d-flex px-2">
+                    <button class="btn btn-outline-dark" type="submit">
+                        Add to Wishlist
+                        <i class="bi bi-heart-fill me-1"></i>
+                    </button>
+                </form>
+                <form class="d-flex px-2">
+                    <button class="btn btn-outline-dark" type="submit">
+                        Add to Cart
+                        <i class="bi bi-cart-fill me-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 
 <%- include('../layouts/userFooter') %>
