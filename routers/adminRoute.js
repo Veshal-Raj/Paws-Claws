@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
         cb(null,path.join(__dirname,"../public/uploads"),
         function(error,success) {
             if(error) {
-                console.log("Error in file uploading",error)
+                console.error("Error in file uploading",error)
             }
             
         }) 
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
         const name = Date.now() + "-" + file.originalname
         cb(null,name,function(error,success) {
             if (error) {
-                console.log(error)
+                console.error(error)
             }
         }) 
     }

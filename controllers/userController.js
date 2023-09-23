@@ -7,7 +7,7 @@ const otpGenerator = require('otp-generator')
 const { render } = require('ejs')
 const dotenv = require('dotenv').config()
 
-console.log(process.env.name)
+
 
 
 
@@ -37,9 +37,9 @@ const signupPage =async (req,res)=>{
 // ========================= Register User ================================= //
 const registerUser=  async (req,res)=>{
     try {
-        console.log("stage 0")
+        
         let { fullname, email, phone, password } = req.body
-        console.log("checking after stage 0")
+        
         
         // password = password.trim()
         if(fullname == "" || email == "" || phone == "" || password == ""){
@@ -49,20 +49,15 @@ const registerUser=  async (req,res)=>{
             })
         }
         
-        console.log("stage 1")
-        console.log(req.body)
-        console.log(fullname)
-        console.log(password)
+        
         // Hash the password
     
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword)
-        console.log("stage 2")
+        
 
 
         // Generate OTP
         const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
-        console.log("stage 3")
         // Store data in session
         req.session.registrationData = { fullname, email, phone, hashedPassword, otp }
         
@@ -72,8 +67,7 @@ const registerUser=  async (req,res)=>{
         }, 2*60*1000) // 2 minutes in milliseconds
 
 
-        console.log("session data stored:", req.session.registrationData)
-        console.log("stage 4")
+        
         // Send OTP via email (configure nodemailer with your email service)
         // first i made transporter as const but it shows error like block scope variable for transporter not allowed so i used var
         var transporter = nodemailer.createTransport({
@@ -83,22 +77,22 @@ const registerUser=  async (req,res)=>{
               pass: process.env.PASSWORD,
             },
           });
-        console.log("stage 5")
+        
           const mailOptions = {
             from: process.env.NAME,
             to: email,
             subject: 'OTP Verification',
             text: `Your OTP for registration: ${otp}`,
           };
-        console.log("stage 6")
+
         
           await transporter.sendMail(mailOptions);
 
-        console.log("stage 7")
+        
         // Instead of rendering the otp page, i am redirecting to the /otp
         res.redirect('/otp')
           // Render the OTP verification page
-        console.log("stage 8")
+        
         
     } catch (error) {
         res.render('error')
@@ -120,15 +114,14 @@ const otpPage =async (req,res)=>{
 // ======================== OTP Verification =============================== //
 const verifyOTP= async (req,res)=>{
     try {
-        // console.log(req.body)
+        
         
         const enteredOTP = req.body.digit1+req.body.digit2+req.body.digit3+req.body.digit4+req.body.digit5+req.body.digit6
         
         // Get the stored OTP from the session
         const storedOTP = req.session.registrationData.otp
 
-        console.log('Entered otp:', enteredOTP)
-        console.log('Stored otp:',storedOTP )
+        
 
 
         //Compare the entered OTP with the stored OTP
@@ -158,7 +151,7 @@ const verifyOTP= async (req,res)=>{
 // ========================= Resend Otp ===================================== //
 const resendOTP = async (req,res)=>{
     try {
-        console.log(req.session.registrationData)
+        
         // Check if req.session.registrationData exists and contains the email proprely
         if (!req.session.registrationData || !req.session.registrationData.email){
             return res.status(400).send('Session data is missing or incomplete ')
@@ -173,7 +166,7 @@ const resendOTP = async (req,res)=>{
             lowerCaseAlphabets: false,
             specialChars: false,
         })
-        console.log(req.session.registrationData)
+        
         // Get the user's email from the session (assuming it's strored there)
         const email = req.session.registrationData.email
 
@@ -221,6 +214,31 @@ const forgotpasswordPage = async (req,res)=>{
 }
 
 
+// ======================== Forgot password ============================= //
+const forgotpasswordOTP = async (req,res)=>{
+    try {
+        const userEmail = req.body.email
+
+        // Generate OTP
+        const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
+        
+
+        // Store data in session
+        req.session.forgotpasswordOTP = otp
+
+          // Set a timeout to clear the OTP from the session after 2 minutes
+          setTimeout(()=>{
+            delete req.session.forgotpasswordOTP
+        }, 2*60*1000) // 2 minutes in milliseconds
+
+        res.redirect('/forgotpassword?otpGenerated=true');
+
+    } catch (error) {
+        res.render('error')
+        console.error(error)
+    }
+}
+
 // ========================== Render Reset Password Page ====================== //
 const resetpassword= async (req,res)=>{
     try {
@@ -237,14 +255,12 @@ const userlogin =async (req,res)=>{
     try {
         const email   = req.body.email
         const password= req.body.password
-        console.log(email)
-        console.log(req.body.email)
+     
         
         // Find the user by email in the database
     
         const user = await User.User.findOne({ email })
-        console.log("user",user)
-        console.log(user,password)
+        
         // Check if the user exists
         if(!user) {
             return res.render('users/userLogin',{alert:'User not found!'})
@@ -252,12 +268,7 @@ const userlogin =async (req,res)=>{
         }
      
         const isPasswordValid = await bcrypt.compare(password,user.password);
-        console.log(password)
-        
-
-        
-        console.log('Stored Password (Hashed):', user.password);
-        console.log('Password Comparison Result:', isPasswordValid);
+      
         
         if(!isPasswordValid) {
             return res.render('users/userLogin',{alert:'Incorrect Password'})
@@ -289,10 +300,13 @@ const userlogin =async (req,res)=>{
 const home = async(req,res)=>{
     try {
         if(req.session.userId){
-
-            res.render('users/home')
+            console.log('hi')
+            console.log("checking session on new update: ",req.session.userId)
+            res.render('users/home',{
+                userId:req.session.userId
+            })
         }else{
-            res.redirect('/login')
+            res.render('users/home')
         }
     } catch (error) {
         res.render('error')
@@ -304,6 +318,7 @@ const home = async(req,res)=>{
 const userSignout = async (req,res)=>{
     try {
         req.session.destroy()
+        console.log('session is destroyed')
         res.redirect('/')
     } catch (error) {
         res.render('error')
@@ -325,5 +340,6 @@ module.exports={
     userlogin,
     home,
     userSignout,
+    forgotpasswordOTP
     
 }

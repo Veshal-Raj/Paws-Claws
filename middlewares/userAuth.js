@@ -2,32 +2,27 @@ const User = require('../models/userModel')
 const mongodb = require('mongodb')
 const mongoose = require('mongoose')
 const { render } = require('ejs')
-const bcrypt = require('bcrypt')
+// const bcrypt = require('bcrypt')
 
 
 
 // ==================== No Session ============================== //
-const noSession = async (req,res,next)=>{
+const noSession = async (req, res, next) => {
     try {
-        if(!req.session.userId){
+        if (!req.session.userId) {
             return res.redirect('/')
         }
 
-        if (!User.isVerified) {
-            // Display a SweetAlert message for a blocked user
-            Swal.fire({
-                icon: 'error',
-                title: 'Account Blocked',
-                text: 'Your account has been blocked. Please contact support.',
-                showCancelButton: false,
-                confirmButtonText: 'OK'
-            }).then(() => {
-                // Redirect to the login page
-                res.redirect('/login');
-            });
-            return; // Prevent further execution of the middleware
-        }
+        // Fetch the user from the database based on req.session.userId
+        const user = await User.User.findById(req.session.userId);
 
+        if (!user || !user.isVerified) {
+            // If the user doesn't exist or is not verified, set userIsBlocked to true
+            res.locals.userIsBlocked = true;
+        } else {
+            // Otherwise, set userIsBlocked to false
+            res.locals.userIsBlocked = false;
+        }
         return next()
     } catch (error) {
         res.render('error')
@@ -36,9 +31,9 @@ const noSession = async (req,res,next)=>{
 }
 
 // ======================== Yes Session =========================== //
-const yesSession =  async (req ,res,next)=> {
+const yesSession = async (req, res, next) => {
     try {
-        if(req.session.userId){
+        if (req.session.userId) {
             return res.redirect('/home')
         }
         return next()
@@ -48,8 +43,27 @@ const yesSession =  async (req ,res,next)=> {
     }
 }
 
+// ===================== if user is blocked ======================== //
+const userBlockedByAdmin = async (req, res, next) => {
+    try {
+
+        // Destroy the user's session
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.render('error');
+            }
+            // Redirect to the login page or any other appropriate action
+            res.redirect('/login');
+        });
+    } catch (error) {
+        console.error(error);
+        res.render('error');
+    }
+}
 
 module.exports = {
     yesSession,
-    noSession
+    noSession,
+    userBlockedByAdmin
 }

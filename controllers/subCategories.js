@@ -10,7 +10,7 @@ const createSubCategory = async (req,res)=>{
 
         // Fetch all categories from the database
         const categories = await Category.Category.find()
-        // console.log(categories);
+        
         
         // Create a new subcategory
         const subcategory = new Subcategory({subcategoryName,category})
@@ -81,14 +81,14 @@ const getCategoryNameByCategoryId = async (categoryId) => {
 const subcategoryEdit = async (req,res) =>{
   try {
     const subcategoryID = req.query.SubID // Extract the subcategory ID from the URL
-    console.log("subcategory Id",subcategoryID)
+    
    
     const categoryID = req.query.CatID 
-    console.log("cat id ",categoryID )
+    
 
     const updatedSubcategoryName = req.body.editSubcategoryName // Extract the updated subcategory data from the request body
     
-    console.log("UpadatedSubCategoryName: ",updatedSubcategoryName)
+    
 
     const updatedSubcategory = await Subcategory.updateOne({_id:subcategoryID},{$set:{subcategoryName:updatedSubcategoryName}})
     
@@ -103,29 +103,10 @@ const subcategoryEdit = async (req,res) =>{
 
   } catch (error) {
     res.status(500).send('Internal Error')
-    console.log("Error",error)
+    console.error("Error",error)
   }
 }
 
-// ====================== Making subcategory Available =========================== //
-// const subcategoryAvailable = async (req,res) =>{
-//   try {
-//     const subcategoryID = req.query.SubCatID
-//     const categoryID = req.query.CatID
-
-//     console.log(subcategoryID)
-//     const subCategoryFind = await Subcategory.findByIdAndUpdate(subcategoryID,{$set:{isDisabled:true}})
-//     console.log("updated data is ",subCategoryFind)
-//     if(!subCategoryFind){
-//       return  res.status(400).json({message:"No category found"})
-//     }
-//     res.redirect(`/admin/subcategories/${categoryID}`)
-
-//   } catch (error) {
-//     res.status(500).send('Internal Error')
-//     console.log("Error",error)
-//   }
-// }
 
 const subcategoryAvailable = async (req, res) => {
   try {
@@ -137,7 +118,7 @@ const subcategoryAvailable = async (req, res) => {
     res.redirect(`/admin/subcategories/${categoryId}`);
   } catch (error) {
     res.status(500).send('Internal Error');
-    console.log("Error", error);
+    console.error("Error", error);
   }
 }
 
@@ -146,7 +127,7 @@ const subcategoryNA = async (req, res) => {
   try {
     const subcategoryID = req.query.SubCatID;
     const categoryID = req.query.CatID;
-    console.log(categoryID)
+    
 
     const category = await Category.Category.findOne({_id:categoryID});
 
@@ -169,7 +150,7 @@ const subcategoryNA = async (req, res) => {
     res.render('admin/subcategories', { subCategoryFind, categoryID , categoryName });
   } catch (error) {
     res.status(500).send('Internal Error');
-    console.log('Error', error);
+    console.error('Error', error);
   }
 };
 

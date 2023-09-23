@@ -7,7 +7,6 @@
       <h1>Categories</h1>
     </div><!-- End Page Title -->
     <section class="section d-flex justify-content-end ">
-
       <!-- Button to trigger the modal -->
       <div class="col-auto px-2 py-2">
         <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
@@ -15,7 +14,6 @@
           Add Category
         </button>
       </div>
-
       <!-- Modal for adding a category -->
       <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
         aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -33,11 +31,11 @@
                   <input type="text" class="form-control" id="categoryName" name="categoryName" required>
                 </div>
                 <!-- Add more form fields as needed -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary" id="saveCategoryBtn">Save</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary" id="saveCategoryBtn">Save</button>
+                </div>
             </form>
           </div>
         </div>
@@ -118,19 +116,19 @@
                 <%= category.categoryName %>
               </td>
               <td>
-                
+
 
                 <!--------------------- Sub-Category Details modal -------------------->
                 <!-- Button to trigger the modal -->
 
                 <button type="button" class="btn btn-info" data-bs-toggle="modal"
                   data-bs-target="#showSubcategoryModal<%= category._id %>">View </button>
-                 <form action="/admin/subcategories/<%= category._id %>" method="post">
-                   <button type="submit" class="btn btn-secondary">Customise</button>
-                 </form>
+                <form action="/admin/subcategories/<%= category._id %>" method="post">
+                  <button type="submit" class="btn btn-secondary">Customise</button>
+                </form>
                 <!-- Modal -->
-                <div class="modal fade" id="showSubcategoryModal<%= category._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
-                  aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal fade" id="showSubcategoryModal<%= category._id %>" tabindex="-1"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -158,14 +156,7 @@
                     </div>
                   </div>
                 </div>
-
-
-
-
-
               </td>
-
-
               <td>
                 <% if (category.isDisabled) { %>
                   <form action="/admin/categoryAvailable/<%= category._id %>" method="post">
@@ -214,20 +205,12 @@
                           </div>
                         </div>
                       </div>
-
               </td>
-
             </tr>
             <% }) %>
-
-
         </tbody>
-        <tfoot>
-
-        </tfoot>
       </table>
     </section>
-
   </main>
 
 

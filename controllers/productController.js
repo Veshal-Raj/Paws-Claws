@@ -35,8 +35,7 @@ const addproduct = async (req,res) =>{
         const categoryId = req.body.category
         const subcategoryId = req.body.subcategory
 
-            console.log(req.body)
-            console.log(req.body.price)
+           
 
             // Extract uploaded files and create an array of filenames
             const productImages = []
@@ -69,12 +68,11 @@ const addproduct = async (req,res) =>{
 
 const fetchSucategories = async (req,res) =>{
     try {
-        console.log("fetching categories")
-        console.log(req.body)
+ 
         const categoryId = req.body.selectedCategoryId;
         const subcategories = await Subcategory.find({category:categoryId})
-        // console.log('hikkkkk')
-        console.log(subcategories)
+        
+        
         res.json(subcategories)
     } catch (error) {
         console.error(error)
@@ -88,7 +86,7 @@ const productAvailability = async (req,res) => {
         const productId = req.body.productId;
         const isAvailable = req.body.isAvailable;
 
-        console.log(productId,isAvailable)
+        
         // Find the product by Id
         const product = await Product.findById(productId)
 

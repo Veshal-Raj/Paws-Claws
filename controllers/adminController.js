@@ -29,7 +29,7 @@ const dashboard = async (req,res)=>{
 const listUsers = async(req,res)=>{
     try {
         const usersList = await User.User.find()
-        console.log(usersList)
+        
         res.render('admin/users',{usersList})
     } catch (error) {
         res.render('error')
@@ -79,11 +79,11 @@ const verifyAdmin = async (req,res)=>{
 const userBlocked =async (req,res)=>{
     try {
         const userId = req.params.userId
-        console.log(userId)
+        
         
         const userFind = await User.User.findByIdAndUpdate(userId,{$set:{isVerified:false}})
         
-        console.log(userFind)
+        
 
         if(!userFind){
             res.status(400).json({ message: 'User not Found' });
@@ -99,7 +99,7 @@ const userBlocked =async (req,res)=>{
 const userActive = async (req,res)=>{
     try {
         const userId = req.params.userId
-        console.log(userId)
+        
         const userFind = await User.User.findByIdAndUpdate(userId,{$set:{isVerified:true}})
 
         if(!userFind){

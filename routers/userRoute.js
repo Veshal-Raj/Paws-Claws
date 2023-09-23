@@ -18,16 +18,18 @@ router.get('/otp',userController.otpPage)
 router.get('/forgotpassword',userController.forgotpasswordPage)
 router.get('/resetpassword',userController.resetpassword)
 router.get('/resend-otp',userController.resendOTP)
-router.get('/home',userAuth.noSession,userHomePageController.showHomepageProducts)
-router.get('/product',userAuth.noSession, userProductController.productSinglePageView);
+router.get('/home',userHomePageController.showHomepageProducts)
+router.get('/product', userProductController.productSinglePageView);
 
 
 
-
+router.get('/userBlockedByAdmin',userAuth.userBlockedByAdmin)
 
 router.post('/signout',userController.userSignout)
 router.post('/register',userController.registerUser)
 router.post('/verify-otp',userController.verifyOTP)
+router.post('/forgotpasswordOTP',userController.forgotpasswordOTP)
 router.post('/login',userController.userlogin)
+
 
 module.exports = router

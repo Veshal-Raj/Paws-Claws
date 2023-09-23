@@ -235,8 +235,6 @@
         });
 
         async function test(productId,availability){
-            console.log(productId)
-            console.log(availability)
             const response = await fetch(`admin/updateAvailabilty`,{
                 method: 'POST',
                     headers: {
@@ -262,7 +260,6 @@
             const isAvailable = button.getAttribute('data-is-available') === 'true'
             
             try {
-                console.log(productId,isAvailable)
                 // Send a POST request to the server to update the product's availabilty
                 const response = await fetch(`/admin/update-availability`,{
                     method: 'POST',
@@ -299,5 +296,7 @@
 
 
     </script>
+<!-- Add this to your HTML template -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <%- include('../layouts/footer') %>

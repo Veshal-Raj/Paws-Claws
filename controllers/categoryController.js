@@ -30,9 +30,9 @@ const getAllCategories = async (req,res)=>{
 const categoryAvailable = async  (req ,res )=>{
     try {
         const categoryId = req.params.categoryId
-        console.log(categoryId)
+        
         const categoryFind = await Category.Category.findByIdAndUpdate(categoryId,{$set:{isDisabled:false}})
-        console.log("updated data is",categoryFind)
+        
         if(!categoryFind){
             res.status(400).json({message: 'Category not Found'})
         }
@@ -47,9 +47,9 @@ const categoryAvailable = async  (req ,res )=>{
 const categoryNA = async (req,res) =>{
     try {
         const categoryId = req.params.categoryId
-        console.log("checking category id",categoryId)
+
         const categoryFind = await Category.Category.findByIdAndUpdate(categoryId,{$set:{isDisabled:true}}) 
-        console.log("updated data is ",categoryFind)
+        
         if(!categoryFind) {
             res.status(400).json({ message: 'Category not found'})
         }
@@ -64,9 +64,9 @@ const categoryNA = async (req,res) =>{
 const categoryEdit =async (req,res)=>{
     try {
         const categoryId = req.query.CatID // Extract the category ID from the URL
-        console.log("category id",categoryId)
+        
         const updatedCategoryName = req.body.editCategoryName // Extract the updated category data from the request body
-        console.log("updatedCategoryName",updatedCategoryName)
+        
 
         const updatedCategory = await Category.Category.updateOne({_id:categoryId},{$set:{categoryName:updatedCategoryName}})
 
