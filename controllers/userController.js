@@ -217,27 +217,75 @@ const forgotpasswordPage = async (req,res)=>{
 // ======================== Forgot password ============================= //
 const forgotpasswordOTP = async (req,res)=>{
     try {
-        const userEmail = req.body.email
+
 
         // Generate OTP
         const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
-        
+        console.log(otp)
 
         // Store data in session
         req.session.forgotpasswordOTP = otp
-
-          // Set a timeout to clear the OTP from the session after 2 minutes
-          setTimeout(()=>{
-            delete req.session.forgotpasswordOTP
-        }, 2*60*1000) // 2 minutes in milliseconds
-
-        res.redirect('/forgotpassword?otpGenerated=true');
+        req.session.save()
+        // req.session.abcd=123
+        console.log("req append",req.session.forgotpasswordOTP)
+        // console.log("req session",req.session)
 
     } catch (error) {
         res.render('error')
         console.error(error)
     }
 }
+
+
+// ============================== confirmforgotpasswordotp ======================== //
+const confirmforgotpasswordotp = async (req,res) =>{
+    try {
+        const enteredOTP = req.body.digit1+req.body.digit2+req.body.digit3+req.body.digit4+req.body.digit5+req.body.digit6
+        console.log("reached",req.session.forgotpasswordOTP)
+        const storedOtp = req.session.forgotpasswordOTP
+        if (storedOtp === enteredOTP){
+
+            return res.render('users/newPassword')
+        }else {
+
+            res.render('enterOtp')
+        }
+    } catch (error) {
+        res.render('error')
+        console.error(error);
+    }
+}
+
+// ================================== newPasswordUpdate =========================================== //
+const newPasswordUpdate = async (req,res) =>{
+    try {
+        console.log("inside update")
+        const { email, newPassword, repeatPassword } = req.body
+
+        // Check if the email exists in the database
+        const user = await User.User.findOne({email})
+
+        if (!user) {
+            return res.render('somethingwentwrong')        }
+
+        if (newPassword === repeatPassword) {
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+            // Update the user's password  in the database
+            user.password = hashedPassword
+            await user.save()
+            return res.redirect('/login')
+        } else {
+            return res.render('somethingwentwrong')
+        }
+    } catch (error) {
+        res.render('error')
+        console.error(error);
+    }
+}
+
+
 
 // ========================== Render Reset Password Page ====================== //
 const resetpassword= async (req,res)=>{
@@ -340,6 +388,8 @@ module.exports={
     userlogin,
     home,
     userSignout,
-    forgotpasswordOTP
+    forgotpasswordOTP,
+    confirmforgotpasswordotp,
+    newPasswordUpdate
     
 }

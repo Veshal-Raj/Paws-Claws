@@ -14,10 +14,10 @@ const userAuth = require('../middlewares/userAuth')
 router.get('/',userAuth.yesSession,userController.loginpage)
 router.get('/login',userAuth.yesSession,userController.loginpage)
 router.get('/signup',userAuth.yesSession,userController.signupPage)
-router.get('/otp',userController.otpPage)
-router.get('/forgotpassword',userController.forgotpasswordPage)
-router.get('/resetpassword',userController.resetpassword)
-router.get('/resend-otp',userController.resendOTP)
+router.get('/otp',userAuth.yesSession,userController.otpPage)
+router.get('/forgotpassword',userAuth.yesSession,userController.forgotpasswordPage)
+router.get('/resetpassword',userAuth.yesSession,userController.resetpassword)
+router.get('/resend-otp',userAuth.yesSession,userController.resendOTP)
 router.get('/home',userHomePageController.showHomepageProducts)
 router.get('/product', userProductController.productSinglePageView);
 
@@ -29,6 +29,11 @@ router.post('/signout',userController.userSignout)
 router.post('/register',userController.registerUser)
 router.post('/verify-otp',userController.verifyOTP)
 router.post('/forgotpasswordOTP',userController.forgotpasswordOTP)
+router.post('/confirmForgotpasswordOTP',userController.confirmforgotpasswordotp)
+router.post('/newPasswordUpdate',userController.newPasswordUpdate)
+
+
+
 router.post('/login',userController.userlogin)
 
 

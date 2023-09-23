@@ -8,6 +8,7 @@ const { render } = require('ejs')
 
 // ==================== No Session ============================== //
 const noSession = async (req, res, next) => {
+    
     try {
         if (!req.session.userId) {
             return res.redirect('/')
@@ -45,6 +46,7 @@ const yesSession = async (req, res, next) => {
 
 // ===================== if user is blocked ======================== //
 const userBlockedByAdmin = async (req, res, next) => {
+
     try {
 
         // Destroy the user's session
