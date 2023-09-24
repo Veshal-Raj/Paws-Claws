@@ -125,23 +125,28 @@
                                 <%= product._id %>
                             </td>
                             <td>
-                                <img src='http://localhost:3000/uploads/<%= product.productImages[0] %>' style="width:80px; height:80px;"
-                                    data-bs-toggle="modal" data-bs-target="#myModal<%= product._id %>">
+                                <img src='http://localhost:3000/uploads/<%= product.productImages[0] %>'
+                                    style="width:80px; height:80px;" data-bs-toggle="modal"
+                                    data-bs-target="#myModal<%= product._id %>">
 
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="myModal<%= product._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                    aria-hidden="true">
+                                <div class="modal fade" id="myModal<%= product._id %>" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable modal-md">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title">Product Images</h4>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <% product.productImages.forEach(function(imageUrl, index) { %>
-                                                    <img src='http://localhost:3000/uploads/<%= imageUrl %>' class="img-fluid" alt="Image <%= index + 1 %>" style="width:1800px; height:auto"><h3></h3>
-                                                <% }); %>
+                                                    <img src='http://localhost:3000/uploads/<%= imageUrl %>'
+                                                        class="img-fluid" alt="Image <%= index + 1 %>"
+                                                        style="width:1800px; height:auto">
+                                                    <h3></h3>
+                                                    <% }); %>
                                             </div>
                                         </div>
                                     </div>
@@ -160,110 +165,149 @@
                                 <%= product.updatedAt %>
                             </td>
                             <td>
-                               
-                                    <% if (product.isAvailable == true){%>
-                                       
-                                        <button class="btn btn-dark toggle-availability" 
-                                    data-product-id="<%= product._id %>" 
-                                    data-is-available="<%= product.isAvailable %>"
-                                   onclick="toggleAvailability(this)">
-                                   <%= product.isAvailable ? 'Active' : 'Inactive' %>
-                                </button> 
+
+                                <% if (product.isAvailable==true){%>
+
+                                    <button class="btn btn-dark toggle-availability"
+                                        data-product-id="<%= product._id %>"
+                                        data-is-available="<%= product.isAvailable %>"
+                                        onclick="toggleAvailability(this)">
+                                        <%= product.isAvailable ? 'Active' : 'Inactive' %>
+                                    </button>
 
 
-                                        <% } else {%>
-                                           
-                                            <button class="btn btn-dark toggle-availability" 
-                                            data-product-id="<%= product._id %>" 
+                                    <% } else {%>
+
+                                        <button class="btn btn-dark toggle-availability"
+                                            data-product-id="<%= product._id %>"
                                             data-is-available="<%= product.isAvailable %>"
-                                           onclick="toggleAvailability(this)">
-                                           <%= product.isAvailable ? 'Active' : 'Inactive' %>
+                                            onclick="toggleAvailability(this)">
+                                            <%= product.isAvailable ? 'Active' : 'Inactive' %>
                                         </button>
 
-                                            <%}%>
-                                   
+                                        <%}%>
+
                             </td>
-                            
+
                             <td>
                                 <%= product.price %>
                             </td>
                             <td>
-                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductModal<%= product._id %>">Edit</button>
-                                
+                                <button class="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#editProductModal<%= product._id %>">Edit</button>
+
                             </td>
                         </tr>
-                            <!-- Modal for editing a product -->
-                            <div class="modal fade" id="editProductModal<%= product._id %>" tabindex="-1"
-                                aria-labelledby="editProductModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+
+
+                        <!-- Modal for editing a product -->
+                        <div class="modal fade" id="editProductModal<%= product._id %>" tabindex="-1"
+                            aria-labelledby="editProductModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <!-- Form for editing a product (add form fields as needed) -->
-                                            <form id="editProductForm<%= product._id %>" enctype="multipart/form-data" method="post"
-                                                action="/admin/editProduct/<%= product._id %>">
-                                                <!-- Product name -->
-                                                <div class="mb-3">
-                                                    <label for="editProductName" class="form-label">Product Name</label>
-                                                    <input type="text" class="form-control" id="editProductName<%= product._id %>"
-                                                        name="editProductName" value="<%= product.productName %>" required>
-                                                </div>
-                                                <!-- Product description -->
-                                                <div class="mb-3">
-                                                    <label for="editProductDescription" class="form-label">Product Description</label>
-                                                    <textarea class="form-control" id="editProductDescription<%= product._id %>"
-                                                        name="editProductDescription" required><%= product.productDescription %></textarea>
-                                                </div>
-                                                <!-- Stock quantity -->
-                                                <div class="mb-3">
-                                                    <label for="editProductStock" class="form-label">Stock Quantity</label>
-                                                    <input type="number" class="form-control" id="editProductStock<%= product._id %>"
-                                                        name="editProductStock" value="<%= product.quantityInStock %>" required>
-                                                </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Form for editing a product (add form fields as needed) -->
+                                        <form id="editProductForm<%= product._id %>" enctype="multipart/form-data"
+                                            method="post" action="/admin/editProduct/<%= product._id %>">
+                                            <!-- Product name -->
+                                            <div class="mb-3">
+                                                <label for="editProductName" class="form-label">Product Name</label>
+                                                <input type="text" class="form-control"
+                                                    id="editProductName<%= product._id %>" name="editProductName"
+                                                    value="<%= product.productName %>" required>
+                                            </div>
+                                            <!-- Product description -->
+                                            <div class="mb-3">
+                                                <label for="editProductDescription" class="form-label">Product
+                                                    Description</label>
+                                                <textarea class="form-control"
+                                                    id="editProductDescription<%= product._id %>"
+                                                    name="editProductDescription"
+                                                    required><%= product.productDescription %></textarea>
+                                            </div>
+                                            <!-- Stock quantity -->
+                                            <div class="mb-3">
+                                                <label for="editProductStock" class="form-label">Stock Quantity</label>
+                                                <input type="number" class="form-control"
+                                                    id="editProductStock<%= product._id %>" name="editProductStock"
+                                                    value="<%= product.quantityInStock %>" required>
+                                            </div>
 
-                                                <!-- Product image (You can choose to edit or delete existing images) -->
-                                                <div class="mb-3">
-                                                    <label for="editProductImages" class="form-label">Product Images</label>
-                                                    <input type="file" class="form-control" id="editProductImages<%= product._id %>"
-                                                        name="editProductImages" accept="image/*" multiple>
-                                                </div>
-                                                <!-- Product price -->
-                                                <div class="mb-3">
-                                                    <label for="editProductPrice" class="form-label">Price</label>
-                                                    <input type="number" class="form-control" id="editProductPrice<%= product._id %>"
-                                                        name="editProductPrice" value="<%= product.price %>" required>
-                                                </div>
+                                            <!-- Category select field -->
+                                            <div class="mb-3">
+                                                <label for="editProductCategory" class="form-label">Category</label>
+                                                <select class="form-select" id="editProductCategory<%= product._id %>" name="editProductCategory" required>
+                                                    <option value="" disabled>Select a category</option>
+                                                    <% categories.forEach(category => { %>
+                                                        <option value="<%= category._id %>" <%= category._id.toString() === product.category.toString() ? 'selected' : '' %>>
+                                                            <%= category.categoryName %>
+                                                        </option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
 
-                                                <!-- Display existing images -->
-                                                <div class="mb-3">
-                                                    <label for="existingProductImages<%= product._id %>" class="form-label">Existing Product Images</label>
-                                                    <div id="existingProductImages<%= product._id %>">
-                                                        <% product.productImages.forEach(function(imageUrl,index) { %>
-                                                            <img src="/uploads/<%= imageUrl %>" alt="Product Image" class="img-thumbnail">
-                                                            <button type="button" class="btn btn-danger delete-image-button"
-                                                                    onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
-                                                                Delete
-                                                            </button>
-                                                            <button type="button" class="btn btn-secondary update-image-button"
-                                                                    onclick="updateImage('<%= product._id %>','<%= imageUrl %>')">
-                                                                Update
-                                                            </button>
+                                            <!-- Subcategory select field -->
+                                            <div class="mb-3">
+                                                <label for="editProductSubcategory" class="form-label">Subcategory</label>
+                                                <select class="form-select" id="editProductSubcategory" name="editProductSubcategory" required
+                                                        data-product-id="<%= product._id %>">
+                                                    <option value="" disabled>Select a subcategory</option>
+                                                </select>
+                                            </div>
+
+
+                                           
+
+                                            <!-- Product image (You can choose to edit or delete existing images) -->
+                                            <div class="mb-3">
+                                                <label for="editProductImages" class="form-label">Product Images</label>
+                                                <input type="file" class="form-control"
+                                                    id="editProductImages<%= product._id %>" name="editProductImages"
+                                                    accept="image/*" multiple>
+                                            </div>
+                                            <!-- Product price -->
+                                            <div class="mb-3">
+                                                <label for="editProductPrice" class="form-label">Price</label>
+                                                <input type="number" class="form-control"
+                                                    id="editProductPrice<%= product._id %>" name="editProductPrice"
+                                                    value="<%= product.price %>" required>
+                                            </div>
+
+                                            <!-- Display existing images -->
+                                            <div class="mb-3">
+                                                <label for="existingProductImages<%= product._id %>"
+                                                    class="form-label">Existing Product Images</label>
+                                                <div id="existingProductImages<%= product._id %>">
+                                                    <% product.productImages.forEach(function(imageUrl,index) { %>
+                                                        <img src="/uploads/<%= imageUrl %>" alt="Product Image"
+                                                            class="img-thumbnail">
+                                                        <button type="button" class="btn btn-danger delete-image-button"
+                                                            onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
+                                                            Delete
+                                                        </button>
+                                                        <button type="button"
+                                                            class="btn btn-secondary update-image-button"
+                                                            onclick="updateImage('<%= product._id %>','<%= imageUrl %>')">
+                                                            Update
+                                                        </button>
                                                         <% }); %>
-                                                    </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save Changes</button>
-                                        </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <% }) %>
 
                             </tfoot>
@@ -274,7 +318,7 @@
     </main><!-- End #main -->
 
     <script>
-        // Function to populate subcategories based on the selected category
+        // Function to populate subcategories based on the selected category (This is for adding product)
 
         const categorySelect = document.getElementById('productCategory');
         const subcategorySelect = document.getElementById('productSubcategory');
@@ -306,120 +350,116 @@
                 });
         });
 
-        async function test(productId,availability){
-            const response = await fetch(`admin/updateAvailabilty`,{
-                method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body :JSON.stringify ({ 
-                        isAvailable: availability,
-                        productId : productId,
-                    })
-            }).then((value) => {
-                return value.json()
-            })
-            alert(response.msg)
-        }
 
+        // =========================================================================== //        
 
         async function toggleAvailability(button) {
 
-            
+
             const confirm = window.confirm('Do you want to change the status?')
-            if (confirm == true ) {
-            const productId = button.getAttribute('data-product-id')
-            const isAvailable = button.getAttribute('data-is-available') === 'true'
-            
-            try {
-                // Send a POST request to the server to update the product's availabilty
-                const response = await fetch(`/admin/update-availability`,{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body :JSON.stringify ({ isAvailable: !isAvailable,productId })
-                    
-                })
-                .then((response)=>{
-                    if (response.ok) {
-                        return response.json()
-                    } else {
-                        console.error('failed to update availability');
-                        throw new Error('failed to upadate availability')
-                    }
-                })
-                .then((data) => {
-                    button.textContent = !isAvailable ? 'Active' : 'Inactive';
-                    button.setAttribute('data-is-available', String(!isAvailable));
-                    alert(data.ok)
-                })
-                .catch((error) => {
+            if (confirm == true) {
+                const productId = button.getAttribute('data-product-id')
+                const isAvailable = button.getAttribute('data-is-available') === 'true'
+
+                try {
+                    // Send a POST request to the server to update the product's availabilty
+                    const response = await fetch(`/admin/update-availability`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ isAvailable: !isAvailable, productId })
+
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                return response.json()
+                            } else {
+                                console.error('failed to update availability');
+                                throw new Error('failed to upadate availability')
+                            }
+                        })
+                        .then((data) => {
+                            button.textContent = !isAvailable ? 'Active' : 'Inactive';
+                            button.setAttribute('data-is-available', String(!isAvailable));
+                            alert(data.ok)
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        })
+
+                } catch (error) {
                     console.error(error);
-                })
-                              
-            } catch (error) {
-                console.error(error);
+                }
+            } else {
+                return
             }
-        }else {
-            return
         }
-        }   
+        
+        
+        // =================================================================== //
+
+      
+
 
         // ========================  delete Image ============================ // 
+
         function deleteImage(productId, imageUrl) {
-        // Use SweetAlert for confirmation
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to delete this image.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // User confirmed the deletion
-                // Make an AJAX/Fetch request to your server
-                fetch('/admin/deleteImage', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        productId: productId,
-                        imageUrl: imageUrl,
-                    }),
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Remove the image from the HTML
-                        
-                        Swal.fire({
-                        icon: 'success',
-                        title: 'Image Deleted',
-                        text: 'The Image has been Deleted Successfully.',
-                        showCancelButton: false,
-                        confirmButtonText: 'Ok',
-                        timer: 2000,
-                    }).then(() => {
-                        // Redirect to the login page
-                        window.location.reload()
-                    });
-                    } else {
-                        Swal.fire('Failed', 'Failed to delete the image.', 'error');
-                    }
-                })         
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire('Error', 'An error occurred while deleting the image.', 'error');
-                });
-            }
-        });
-    }
+            // Use SweetAlert for confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to delete this image.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User confirmed the deletion
+                    // Make an AJAX/Fetch request to your server
+                    fetch('/admin/deleteImage', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            productId: productId,
+                            imageUrl: imageUrl,
+                        }),
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Remove the image from the HTML
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Image Deleted',
+                                    text: 'The Image has been Deleted Successfully.',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                    timer: 2000,
+                                }).then(() => {
+                                    // Redirect to the login page
+                                    window.location.reload()
+                                });
+                            } else {
+                                Swal.fire('Failed', 'Failed to delete the image.', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire('Error', 'An error occurred while deleting the image.', 'error');
+                        });
+                }
+            });
+        }
 
 
     </script>
-<!-- Add this to your HTML template -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+    <!-- Add this to your HTML template -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <%- include('../layouts/footer') %>

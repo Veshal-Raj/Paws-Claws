@@ -35,8 +35,7 @@ const addproduct = async (req,res) =>{
 
         const categoryId = req.body.category
         const subcategoryId = req.body.subcategory
-
-           
+         
 
             // Extract uploaded files and create an array of filenames
             const productImages = []
@@ -108,6 +107,19 @@ const productAvailability = async (req,res) => {
     }
 }
 
+const getSubcategories = async (req,res) => {
+    try {
+        const categoryId = req.query.categoryId // Get the category id from the query for showing subcategories
+
+        // Find subcategories that belong to the selected category.
+        const subcategories = await Subcategory.find({categoryId})
+
+        res.json(subcategories)
+    } catch (error) {
+        console.error(error)
+        res.render('error')
+    }
+}
 
 const deleteImage = async (req,res) => {
     try {
@@ -121,12 +133,10 @@ const deleteImage = async (req,res) => {
         }
 
         // Check if the index is within valid bounds
-        // if (imageUrl < 0 || index >= product.productImages.length) {
-        //     return res.status(400).json({ message: 'Invalid image index' });
-        // }
+       
 
         // Get image file name to delete
-        // const imageNameToDelete= product.productImages[index]
+       
         let indexToDelete =-1
         for(let i=0;i<product.productImages.length;i++) {
             if (product.productImages[i] === imageUrl ) {
@@ -166,5 +176,6 @@ module.exports ={
     addproduct,
     fetchSucategories,
     productAvailability,
-    deleteImage
+    deleteImage,
+    getSubcategories
 }
