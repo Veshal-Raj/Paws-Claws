@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema({
     productImages: [String], // Array of URLs or file references
     weight: String,
     lastupdated: {
-        type : Date ,
+        type : Date,
     },
     isAvailable: {
         type: Boolean,

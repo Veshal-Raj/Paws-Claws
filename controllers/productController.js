@@ -1,6 +1,7 @@
 const Product = require('../models/productsModel')
 const Subcategory  = require('../models/subcategoriesModel')
 const Category = require('../models/categoriesModel');
+const fs = require('fs').promises
 
 const renderProductpage = async (req,res)=>{
     try {
@@ -100,15 +101,70 @@ const productAvailability = async (req,res) => {
         //Save the updated product to the database
         await product.save()
 
-        res.json({ ok: 'Product availability updated successfully' });
+        res.status(200).json({ response: 'ok' });
     } catch (error) {
         console.error(error)
-        res.json({fail:'It is not updated'})
+        res.render('error')
     }
 }
+
+
+const deleteImage = async (req,res) => {
+    try {
+        const {productId,imageUrl} = req.body // sending product id and the index from the client
+
+        // Fetch the product document from the database
+        const product = await Product.findById(productId)
+
+        if (!product) {
+            return res.status(404).json({message: 'Product not found'})
+        }
+
+        // Check if the index is within valid bounds
+        // if (imageUrl < 0 || index >= product.productImages.length) {
+        //     return res.status(400).json({ message: 'Invalid image index' });
+        // }
+
+        // Get image file name to delete
+        // const imageNameToDelete= product.productImages[index]
+        let indexToDelete =-1
+        for(let i=0;i<product.productImages.length;i++) {
+            if (product.productImages[i] === imageUrl ) {
+                indexToDelete = i
+                break
+            }
+        }
+
+        console.log(indexToDelete)
+
+        if (indexToDelete === -1) {
+            return res.status(404).json({message:'Image is not found'})
+        }
+
+         // Construct the path to the image file
+         const imagePath = `./public/uploads/${imageUrl}`;
+
+         // Delete the file from the server's file system
+        await fs.unlink(imagePath);
+
+        // Remove the image name from the product's array
+        product.productImages.splice(indexToDelete, 1);
+
+        // Save the updated product document
+        await product.save();
+
+        return res.status(200).json({message:'Image delete successfully'})
+
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
+
 module.exports ={
     renderProductpage,
     addproduct,
     fetchSucategories,
-    productAvailability
+    productAvailability,
+    deleteImage
 }
