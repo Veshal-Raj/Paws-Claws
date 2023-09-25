@@ -86,10 +86,12 @@ adminRoute.post('/addproduct',adminAuth.noSession,upload.array('productImages',6
 adminRoute.post('/productSubcategories',adminAuth.noSession,productController.fetchSucategories)
 adminRoute.post('/update-availability', adminAuth.noSession, productController.productAvailability);
 
-adminRoute.get('/getSubcategories',adminAuth.noSession,productController.getSubcategories)
+adminRoute.post('/getSubcategories',adminAuth.noSession,productController.getSubcategories)
+adminRoute.post('/loadSubcategories',adminAuth.noSession,productController.getSubcategories)
 
 adminRoute.post('/deleteImage',adminAuth.noSession,productController.deleteImage)
 
+adminRoute.post('/editproduct/:productId',adminAuth.noSession,productController.editproductsave)
 
 
 

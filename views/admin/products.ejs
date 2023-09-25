@@ -1,4 +1,8 @@
 <%- include('../layouts/header') %>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+  >
 
     <main id="main" class="main">
 
@@ -7,7 +11,24 @@
 
         </div><!-- End Page Title -->
         <section class="section d-flex justify-content-end ">
+            
+            
+            <input type="file" id="inputImage" accept="image/*">
 
+<!-- Create a container for the Cropper.js instance -->
+<div id="imageContainer">
+  <img id="image" src="" alt="Preview" style="max-width: 100%;">
+</div>
+
+<!-- Add buttons for crop actions -->
+<button id="cropButton">Crop</button>
+<button id="zoomInButton">Zoom In</button>
+<button id="zoomOutButton">Zoom Out</button>
+<button id="rotateLeftButton">Rotate Left</button>
+<button id="rotateRightButton">Rotate Right</button>
+
+            
+            
             <!-- Button to Trigger the Modal -->
             <div class="col-auto px-2 py-2">
                 <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
@@ -51,7 +72,7 @@
 
                                 <div class="mb-3">
                                     <label for="productCategory" class="form-label">Category</label>
-                                    <select class="form-select" id="productCategory" name="category" required>
+                                    <select class="form-select" id="productAddCategory" name="category" required>
                                         <option value="" disabled>Available Categories</option>
                                         <% categories.forEach((category)=> { %>
                                             <option value="<%= category._id %>">
@@ -63,7 +84,7 @@
 
                                 <div class="mb-3">
                                     <label for="productSubcategory" class="form-label">Subcategory</label>
-                                    <select class="form-select" id="productSubcategory" name="subcategory" required>
+                                    <select class="form-select" id="productAddSubcategory"  name="subcategory" required>
                                         <option value="" disabled>Available Sub Categories</option>
                                     </select>
                                 </div>
@@ -119,7 +140,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% products.forEach(function(product) { %>
+                    
+                    <% let i =0; products.forEach(function(product) { %>
                         <tr>
                             <td>
                                 <%= product._id %>
@@ -212,103 +234,107 @@
                                     </div>
                                     <div class="modal-body">
                                         <!-- Form for editing a product (add form fields as needed) -->
-                                        <form id="editProductForm<%= product._id %>" enctype="multipart/form-data"
-                                            method="post" action="/admin/editProduct/<%= product._id %>">
+                                       
+                                        <form id="editProductForm<%= product._id %>" enctype="multipart/form-data"   method="post" action="/admin/editProduct/<%= product._id %>">
+                                               
                                             <!-- Product name -->
-                                            <div class="mb-3">
-                                                <label for="editProductName" class="form-label">Product Name</label>
-                                                <input type="text" class="form-control"
-                                                    id="editProductName<%= product._id %>" name="editProductName"
-                                                    value="<%= product.productName %>" required>
-                                            </div>
+                                                <div class="mb-3">
+                                                    <label for="editProductName" class="form-label">Product Name</label>
+                                                        <input type="text" class="form-control"
+                                                            id="editProductName<%= product._id %>" name="editProductName"
+                                                            value="<%= product.productName %>" required>
+                                                </div>
+
                                             <!-- Product description -->
-                                            <div class="mb-3">
-                                                <label for="editProductDescription" class="form-label">Product
-                                                    Description</label>
-                                                <textarea class="form-control"
-                                                    id="editProductDescription<%= product._id %>"
-                                                    name="editProductDescription"
-                                                    required><%= product.productDescription %></textarea>
-                                            </div>
+                                                <div class="mb-3">
+                                                    <label for="editProductDescription" class="form-label">Product
+                                                        Description</label>
+                                                        <textarea class="form-control"
+                                                            id="editProductDescription<%= product._id %>"
+                                                            name="editProductDescription"
+                                                            required><%= product.productDescription %></textarea>
+                                                </div>
+                                        
                                             <!-- Stock quantity -->
-                                            <div class="mb-3">
-                                                <label for="editProductStock" class="form-label">Stock Quantity</label>
-                                                <input type="number" class="form-control"
-                                                    id="editProductStock<%= product._id %>" name="editProductStock"
-                                                    value="<%= product.quantityInStock %>" required>
-                                            </div>
+                                                <div class="mb-3">
+                                                    <label for="editProductStock" class="form-label">Stock Quantity</label>
+                                                        <input type="number" class="form-control"
+                                                            id="editProductStock<%= product._id %>" name="editProductStock"
+                                                            value="<%= product.quantityInStock %>" required>
+                                                </div>
 
-                                            <!-- Category select field -->
-                                            <div class="mb-3">
-                                                <label for="editProductCategory" class="form-label">Category</label>
-                                                <select class="form-select" id="editProductCategory<%= product._id %>" name="editProductCategory" required>
-                                                    <option value="" disabled>Select a category</option>
-                                                    <% categories.forEach(category => { %>
-                                                        <option value="<%= category._id %>" <%= category._id.toString() === product.category.toString() ? 'selected' : '' %>>
-                                                            <%= category.categoryName %>
-                                                        </option>
-                                                    <% }); %>
-                                                </select>
-                                            </div>
+                                                <!-- Category select field -->
+                                                    <div class="mb-3">
+                                                        <label for="editProductCategory" class="form-label">Category</label>
+                                                            <select class="form-select" id="editProductCategory<%= product._id %>" name="editProductCategory" required
+                                                                onchange="loadSubcategories(value,'<%= i%>')">
+                                                                <option value="" disabled>Select a category</option>
+                                                                <% categories.forEach(category => { %>
+                                                                    <option value="<%= category._id %>" <%= category._id.toString() === product.category.toString() ? 'selected' : '' %>>
+                                                                        <%= category.categoryName %>
+                                                                    </option>
+                                                                <% }); %>
+                                                            </select>
+                                                    </div>
 
-                                            <!-- Subcategory select field -->
-                                            <div class="mb-3">
-                                                <label for="editProductSubcategory" class="form-label">Subcategory</label>
-                                                <select class="form-select" id="editProductSubcategory" name="editProductSubcategory" required
-                                                        data-product-id="<%= product._id %>">
-                                                    <option value="" disabled>Select a subcategory</option>
-                                                </select>
-                                            </div>
-
-
+                                                <!-- Subcategory select field -->
+                                                    <div class="mb-3">
+                                                        <label for="editProductSubcategory" class="form-label">Subcategory</label>
+                                                            <select class="editProductSubcategory form-select" name="editProductSubcategory" required
+                                                                    data-product-id="<%= product._id %>">
+                                                                <option value="" disabled>Select a subcategory</option>
+                                                        </select>
+                                                    </div>
                                            
 
-                                            <!-- Product image (You can choose to edit or delete existing images) -->
-                                            <div class="mb-3">
-                                                <label for="editProductImages" class="form-label">Product Images</label>
-                                                <input type="file" class="form-control"
-                                                    id="editProductImages<%= product._id %>" name="editProductImages"
-                                                    accept="image/*" multiple>
-                                            </div>
-                                            <!-- Product price -->
-                                            <div class="mb-3">
-                                                <label for="editProductPrice" class="form-label">Price</label>
-                                                <input type="number" class="form-control"
-                                                    id="editProductPrice<%= product._id %>" name="editProductPrice"
-                                                    value="<%= product.price %>" required>
-                                            </div>
+                                                <!-- Product image (You can choose to edit or delete existing images) -->
+                                                    <div class="mb-3">
+                                                        <label for="editProductImages" class="form-label">Product Images</label>
+                                                            <input type="file" class="form-control"
+                                                                id="editProductImages<%= product._id %>" name="editProductImages"
+                                                                accept="image/*" multiple>
+                                                    </div>
+                                          
+                                                <!-- Product price -->
+                                                    <div class="mb-3">
+                                                        <label for="editProductPrice" class="form-label">Price</label>
+                                                            <input type="number" class="form-control"
+                                                                id="editProductPrice<%= product._id %>" name="editProductPrice"
+                                                                value="<%= product.price %>" required>
+                                                    </div>
 
-                                            <!-- Display existing images -->
-                                            <div class="mb-3">
-                                                <label for="existingProductImages<%= product._id %>"
-                                                    class="form-label">Existing Product Images</label>
-                                                <div id="existingProductImages<%= product._id %>">
-                                                    <% product.productImages.forEach(function(imageUrl,index) { %>
-                                                        <img src="/uploads/<%= imageUrl %>" alt="Product Image"
-                                                            class="img-thumbnail">
-                                                        <button type="button" class="btn btn-danger delete-image-button"
-                                                            onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
-                                                            Delete
-                                                        </button>
-                                                        <button type="button"
-                                                            class="btn btn-secondary update-image-button"
-                                                            onclick="updateImage('<%= product._id %>','<%= imageUrl %>')">
-                                                            Update
-                                                        </button>
-                                                        <% }); %>
-                                                </div>
+                                                <!-- Display existing images -->
+                                                    <div class="mb-3">
+                                                        <label for="existingProductImages<%= product._id %>"
+                                                            class="form-label">Existing Product Images</label>
+                                                            <div id="existingProductImages<%= product._id %>">
+                                                                <% product.productImages.forEach(function(imageUrl,index) { %>
+                                                                    <img src="/uploads/<%= imageUrl %>" alt="Product Image"
+                                                                        class="img-thumbnail">
+                                                                        <button type="button" class="btn btn-danger delete-image-button"
+                                                                            onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
+                                                                            Delete
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            class="btn btn-secondary update-image-button"
+                                                                            onclick="updateImage('<%= product._id %>','<%= imageUrl %>')">
+                                                                            Update
+                                                                        </button>
+                                                                    <% }); %>
+                                                            </div>
+                                                    </div>
+
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <% }) %>
+                        <% i++ }) %>
 
                             </tfoot>
             </table>
@@ -320,21 +346,21 @@
     <script>
         // Function to populate subcategories based on the selected category (This is for adding product)
 
-        const categorySelect = document.getElementById('productCategory');
-        const subcategorySelect = document.getElementById('productSubcategory');
+        const addCategorySelect = document.getElementById('productAddCategory');
+        const addSubcategorySelect = document.getElementById('productAddSubcategory');
+        console.log("category select value",addCategorySelect.value)
+        addCategorySelect.addEventListener('change', async () => {
 
-        categorySelect.addEventListener('change', async () => {
-
-            const selectedCategoryId = categorySelect.value;
-
+            const addSelectedCategoryId = addCategorySelect.value;
+            
+            console.log(addSelectedCategoryId)
             // Clear previous subcategory options
-            subcategorySelect.innerHTML = '';
-
+            addSubcategorySelect.innerHTML = '';
             // Fetch subcategories from the server based on the selected category ID
             await fetch(`/admin/productSubcategories`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ selectedCategoryId })
+                body: JSON.stringify({ categoryId:addSelectedCategoryId })
             })
                 .then((response) => response.json())
                 .then((subcategories) => {
@@ -342,7 +368,7 @@
                         const option = document.createElement('option');
                         option.value = subcategory._id;
                         option.text = subcategory.subcategoryName;
-                        document.getElementById('productSubcategory').appendChild(option);
+                        document.getElementById('productAddSubcategory').appendChild(option);
                     });
                 })
                 .catch((error) => {
@@ -397,9 +423,35 @@
         }
         
         
-        // =================================================================== //
+        // =============================== Edit category ==================================== //
 
-      
+       async function loadSubcategories (id,j) {
+            // console.log(id)
+        const subList = await fetch(`/admin/loadSubcategories`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({categoryId:id})
+            })
+
+            .then((value) => {
+                return value.json()
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+
+            let editProductSubcategory = document.getElementsByClassName("editProductSubcategory")[j].innerHTML
+            console.log(subList)
+            document.getElementsByClassName("editProductSubcategory")[j].innerHTML=''
+            for (let i=0;i<subList.length;i++) {
+                let option = document.createElement("option");
+                option.value = subList[i]._id
+                option.text = subList[i].subcategoryName
+                document.getElementsByClassName("editProductSubcategory")[j].appendChild(option);
+            }
+        }
 
 
         // ========================  delete Image ============================ // 
@@ -457,7 +509,68 @@
 
     </script>
 
+<script>
+    // Function to initialize Cropper.js
+function initCropper(imageUrl) {
+  const image = document.getElementById('image');
+  const cropper = new Cropper(image, {
+    aspectRatio: 1, // Set the aspect ratio you want
+    viewMode: 1, // Set the view mode (0, 1, 2, 3)
+    crop(event) {
+      // Access cropping data here
+      console.log('Cropped Data:', event.detail);
+    },
+  });
 
+  // Add event listeners for zoom and rotate buttons
+  const zoomInButton = document.getElementById('zoomInButton');
+  zoomInButton.addEventListener('click', () => {
+    cropper.zoom(0.1); // Adjust zoom factor as needed
+  });
+
+  const zoomOutButton = document.getElementById('zoomOutButton');
+  zoomOutButton.addEventListener('click', () => {
+    cropper.zoom(-0.1); // Adjust zoom factor as needed
+  });
+
+  const rotateLeftButton = document.getElementById('rotateLeftButton');
+  rotateLeftButton.addEventListener('click', () => {
+    cropper.rotate(-90); // Rotate counterclockwise
+  });
+
+  const rotateRightButton = document.getElementById('rotateRightButton');
+  rotateRightButton.addEventListener('click', () => {
+    cropper.rotate(90); // Rotate clockwise
+  });
+
+  // Set the initial image URL
+  image.src = imageUrl;
+}
+
+// Handle file input change event
+const inputImage = document.getElementById('inputImage');
+inputImage.addEventListener('change', function () {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const imageUrl = e.target.result;
+      initCropper(imageUrl); // Initialize Cropper.js with the selected image
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Handle crop button click event
+const cropButton = document.getElementById('cropButton');
+cropButton.addEventListener('click', function () {
+  // Get the cropped data (coordinates) and use it as needed
+  const cropper = document.getElementById('image').cropper;
+  const croppedData = cropper.getData();
+  console.log('Cropped Data:', croppedData);
+});
+
+</script>
 
     <!-- Add this to your HTML template -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

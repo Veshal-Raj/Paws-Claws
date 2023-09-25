@@ -68,10 +68,12 @@ const addproduct = async (req,res) =>{
 
 const fetchSucategories = async (req,res) =>{
     try {
- 
-        const categoryId = req.body.selectedCategoryId;
+        console.log('hi')
+        console.log(req.body)
+        const categoryId = req.body.categoryId;
+        console.log(categoryId)
         const subcategories = await Subcategory.find({category:categoryId})
-        
+        console.log(subcategories)
         
         res.json(subcategories)
     } catch (error) {
@@ -109,11 +111,11 @@ const productAvailability = async (req,res) => {
 
 const getSubcategories = async (req,res) => {
     try {
-        const categoryId = req.query.categoryId // Get the category id from the query for showing subcategories
-
+        const categoryId = req.body.categoryId // Get the category id from the query for showing subcategories
+        // console.log(req.body.categoryId)
         // Find subcategories that belong to the selected category.
-        const subcategories = await Subcategory.find({categoryId})
-
+        const subcategories = await Subcategory.find({category:categoryId})
+        // console.log(subcategories)
         res.json(subcategories)
     } catch (error) {
         console.error(error)
@@ -171,11 +173,65 @@ const deleteImage = async (req,res) => {
     }
 }
 
+const editproductsave = async (req,res) => {
+    try {
+        const productId = req.params.productId
+
+        // Fetch the existing product by its ID
+        const existingProduct = await Product.findById(productId)
+        console.log(existingProduct)
+        // console.log(existingProduct)
+
+        if (!existingProduct) {
+            return res.status(404).json({error:'Product not found'})
+        }
+        // console.log(req.body)
+         // Update the product details with data from the form
+         existingProduct.productName = req.body.editProductName;
+        // console.log(existingProduct.productName)
+
+         existingProduct.productDescription = req.body.editProductDescription;
+        // console.log(existingProduct.productDescription)
+
+         existingProduct.quantityInStock = req.body.editProductStock;
+        // console.log(existingProduct.quantityInStock)
+
+         existingProduct.category = req.body.editProductCategory;
+        // console.log(existingProduct.category)
+
+         existingProduct.subcategory = req.body.editProductSubcategory;
+        // console.log(existingProduct.subcategory)
+
+         existingProduct.price = req.body.editProductPrice;
+        // console.log(existingProduct.price)
+
+
+
+         // Add validation logic here for other required fields if needed
+         if (!existingProduct.productName || !existingProduct.quantityInStock || !existingProduct.price) {
+            return res.status(400).json({ error: 'Required fields are missing' });
+        }
+
+        // Handle product images updates here if needed
+
+        // Save the updated product
+        await existingProduct.save()
+
+        // Redirect back to the product list page or return a success response
+        // You can customize this part based on your needs
+        res.redirect('/admin/products')
+    } catch (error) {
+        console.error(error)
+        res.render('error')
+    }
+}
+
 module.exports ={
     renderProductpage,
     addproduct,
     fetchSucategories,
     productAvailability,
     deleteImage,
-    getSubcategories
+    getSubcategories,
+    editproductsave
 }
