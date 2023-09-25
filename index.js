@@ -54,7 +54,7 @@ app.set('view engine','ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname,'public')))
-app.use(upload.any()); // This allows handling both files and form data
+// app.use(upload.any()); // This allows handling both files and form data
 
 
 

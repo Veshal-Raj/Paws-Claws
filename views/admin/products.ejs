@@ -1,8 +1,4 @@
 <%- include('../layouts/header') %>
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
-  >
 
     <main id="main" class="main">
 
@@ -11,23 +7,6 @@
 
         </div><!-- End Page Title -->
         <section class="section d-flex justify-content-end ">
-            
-            
-            <input type="file" id="inputImage" accept="image/*">
-
-<!-- Create a container for the Cropper.js instance -->
-<div id="imageContainer">
-  <img id="image" src="" alt="Preview" style="max-width: 100%;">
-</div>
-
-<!-- Add buttons for crop actions -->
-<button id="cropButton">Crop</button>
-<button id="zoomInButton">Zoom In</button>
-<button id="zoomOutButton">Zoom Out</button>
-<button id="rotateLeftButton">Rotate Left</button>
-<button id="rotateRightButton">Rotate Right</button>
-
-            
             
             <!-- Button to Trigger the Modal -->
             <div class="col-auto px-2 py-2">
@@ -41,84 +20,84 @@
             <!-- Modal for Adding a Product -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
 
-                            <!-- //enctype="multipart/form-data" -->
-                            <form id="productForm" method="post" action="/admin/addproduct"
-                                enctype="multipart/form-data">
-                                <!-- Product Form Goes Here -->
-                                <div class="mb-3">
-                                    <label for="productName" class="form-label">Product Name</label>
-                                    <input type="text" class="form-control" id="productName" name="productName"
-                                        required>
-                                </div>
+                                <!-- //enctype="multipart/form-data" -->
+                                <form id="productForm" method="post" action="/admin/addproduct"
+                                    enctype="multipart/form-data">
+                                    <!-- Product Form Goes Here -->
+                                    <div class="mb-3">
+                                        <label for="productName" class="form-label">Product Name</label>
+                                        <input type="text" class="form-control" id="productName" name="productName"
+                                            required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productPrice" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="productPrice" name="price" required>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productPrice" class="form-label">Price</label>
+                                        <input type="number" class="form-control" id="productPrice" name="price" required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productDescription" class="form-label">Product Description</label>
-                                    <textarea class="form-control" id="productDescription" name="productDescription"
-                                        required></textarea>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productDescription" class="form-label">Product Description</label>
+                                        <textarea class="form-control" id="productDescription" name="productDescription"
+                                            required></textarea>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productCategory" class="form-label">Category</label>
-                                    <select class="form-select" id="productAddCategory" name="category" required>
-                                        <option value="" disabled>Available Categories</option>
-                                        <% categories.forEach((category)=> { %>
-                                            <option value="<%= category._id %>">
-                                                <%= category.categoryName %>
-                                            </option>
-                                            <% }) %>
-                                    </select>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productCategory" class="form-label">Category</label>
+                                        <select class="form-select" id="productAddCategory" name="category" required>
+                                            <option value="" disabled>Available Categories</option>
+                                            <% categories.forEach((category)=> { %>
+                                                <option value="<%= category._id %>">
+                                                    <%= category.categoryName %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productSubcategory" class="form-label">Subcategory</label>
-                                    <select class="form-select" id="productAddSubcategory"  name="subcategory" required>
-                                        <option value="" disabled>Available Sub Categories</option>
-                                    </select>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productSubcategory" class="form-label">Subcategory</label>
+                                        <select class="form-select" id="productAddSubcategory"  name="subcategory" required>
+                                            <option value="" disabled>Available Sub Categories</option>
+                                        </select>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productStock" class="form-label">Stock</label>
-                                    <input type="number" class="form-control" id="productStock" name="quantityInStock"
-                                        required>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productStock" class="form-label">Stock</label>
+                                        <input type="number" class="form-control" id="productStock" name="quantityInStock"
+                                            required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productImages" class="form-label">Product Images</label>
-                                    <input type="file" class="form-control" id="productImages" name="productImages"
-                                        accept="image/*" multiple>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productImages" class="form-label">Product Images</label>
+                                        <input type="file" class="form-control" id="productImages" name="productImages"
+                                            accept="image/*" multiple>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="productStatus" class="form-label">Status</label>
-                                    <select class="form-select" id="productStatus" name="productStatus" required>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                    </select>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="productStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="productStatus" name="productStatus" required>
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save Product</button>
-                                </div>
-                            </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save Product</button>
+                                    </div>
+                                </form>
 
+                            </div>
                         </div>
                     </div>
-                </div>
             </div>
 
 
@@ -509,68 +488,7 @@
 
     </script>
 
-<script>
-    // Function to initialize Cropper.js
-function initCropper(imageUrl) {
-  const image = document.getElementById('image');
-  const cropper = new Cropper(image, {
-    aspectRatio: 1, // Set the aspect ratio you want
-    viewMode: 1, // Set the view mode (0, 1, 2, 3)
-    crop(event) {
-      // Access cropping data here
-      console.log('Cropped Data:', event.detail);
-    },
-  });
 
-  // Add event listeners for zoom and rotate buttons
-  const zoomInButton = document.getElementById('zoomInButton');
-  zoomInButton.addEventListener('click', () => {
-    cropper.zoom(0.1); // Adjust zoom factor as needed
-  });
-
-  const zoomOutButton = document.getElementById('zoomOutButton');
-  zoomOutButton.addEventListener('click', () => {
-    cropper.zoom(-0.1); // Adjust zoom factor as needed
-  });
-
-  const rotateLeftButton = document.getElementById('rotateLeftButton');
-  rotateLeftButton.addEventListener('click', () => {
-    cropper.rotate(-90); // Rotate counterclockwise
-  });
-
-  const rotateRightButton = document.getElementById('rotateRightButton');
-  rotateRightButton.addEventListener('click', () => {
-    cropper.rotate(90); // Rotate clockwise
-  });
-
-  // Set the initial image URL
-  image.src = imageUrl;
-}
-
-// Handle file input change event
-const inputImage = document.getElementById('inputImage');
-inputImage.addEventListener('change', function () {
-  const file = this.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageUrl = e.target.result;
-      initCropper(imageUrl); // Initialize Cropper.js with the selected image
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-// Handle crop button click event
-const cropButton = document.getElementById('cropButton');
-cropButton.addEventListener('click', function () {
-  // Get the cropped data (coordinates) and use it as needed
-  const cropper = document.getElementById('image').cropper;
-  const croppedData = cropper.getData();
-  console.log('Cropped Data:', croppedData);
-});
-
-</script>
 
     <!-- Add this to your HTML template -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

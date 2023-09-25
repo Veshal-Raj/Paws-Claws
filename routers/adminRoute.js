@@ -91,7 +91,7 @@ adminRoute.post('/loadSubcategories',adminAuth.noSession,productController.getSu
 
 adminRoute.post('/deleteImage',adminAuth.noSession,productController.deleteImage)
 
-adminRoute.post('/editproduct/:productId',adminAuth.noSession,productController.editproductsave)
+adminRoute.post('/editproduct/:productId',adminAuth.noSession,upload.any(),productController.editproductsave)
 
 
 
