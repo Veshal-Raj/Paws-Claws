@@ -1,9 +1,20 @@
 <%- include('../layouts/userHeader') %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+ <!-- Include jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+
+
+
+
+<!-- Include ElevateZoom library from CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
 
     <style>
         body {
-            background-color: #FFFAF0
+            background-color: #FFF
         }
 
         .card {
@@ -11,7 +22,7 @@
         }
 
         .product {
-            background-color: ##fff
+            background-color: #FFFAF0
         }
 
         .brand {
@@ -59,7 +70,9 @@
         label.radio input:checked+span {
             border-color: #ff0000;
             background-color: #ff0000;
-            color: #fff
+            /* color: #fff */
+            color: #FFFAF0
+
         }
 
         .btn-danger {
@@ -85,99 +98,64 @@
     
 
     
-    <div class="container mt-5 mb-5 ">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="images p-3">
-                                <!-- Small images -->
-                                <div class="thumbnail text-center">
-                                    <% product.productImages.forEach((image, index) => { %>
-                                        <img onclick="change_image(this)" src="/uploads/<%= image %>"
-                                            alt="Product Image <%= index + 1 %>" width="70">
-                                    <% }); %>
-                                </div>
-                                <!-- Main product image -->
-                                <div class="text-center p-4 img-zoom-container">
-                                    <img id="main-image" src="/uploads/<%= product.productImages[0] %>"
-                                    alt="<%= product.productName %>" width="250" />
-                                    <div id="myresult" class="img-zoom-result"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="product p-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <!-- <div class="d-flex align-items-center">
-                                        <i class="fa fa-long-arrow-left"></i>
-                                        <span class="ml-1">Back</span>
-                                    </div> -->
-                                    
-                                </div>
-                                <div class="mt-4 mb-3">
-                                    <!-- <span class="text-uppercase text-muted brand">Orianz</span> -->
-                                    <h3 class="text-uppercase"><%= product.productName %></h3>
-                                    <div class="price d-flex flex-row align-items-center">
-                                        <span class="act-price">$<%= product.price.toFixed(2) %></span>
-                                        <div class="ml-2">
-                                            <small class="dis-price">$59</small>
-                                            <span>40% OFF</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="about"><%= product.productDescription %></p>
-                                <!-- <div class="sizes mt-5">
-                                    <h6 class="text-uppercase">Size</h6>
-                                    <label class="radio">
-                                        <input type="radio" name="size" value="S" checked>
-                                        <span>S</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="size" value="M">
-                                        <span>M</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="size" value="L">
-                                        <span>L</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="size" value="XL">
-                                        <span>XL</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="size" value="XXL">
-                                        <span>XXL</span>
-                                    </label>
-                                </div> -->
-                                <div class="cart mt-4 align-items-center">
-                                    
-                                    <form class="d-flex p-2 ">
-                                        <button class="btn btn-outline-dark" type="submit">
-                                            <i class="bi-cart-fill me-1"></i>
-                                            Cart
-                                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                                        </button>
-                                        <button class="btn btn-outline-dark ms-2" type="submit">
-                                            <i class="bi bi-heart-fill me-1"></i>
-                                            Wishlist
-                                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                                        </button>
-                                    </form>
-                                    
-                                    
-
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
+<div class="container mt-5 mb-5 ">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="images p-3">
+                <!-- Small images -->
+                <div class="thumbnail text-center">
+                    <% product.productImages.forEach((image, index) => { %>
+                        <img onclick="change_image(this)" src="/uploads/<%= image %>"
+                          alt="Product Image <%= index + 1 %>" width="70">
+                          <% }); %>
                 </div>
+                <!-- Main product image -->
+                <div class="text-center p-4 img-zoom-container">            
+                    <img id="main-image" src="/uploads/<%= product.productImages[0] %>"
+                    alt="<%= product.productName %>" width="250" />             
+                    <div id="myresult" class="img-zoom-result"></div>
+                  </div>
             </div>
+            </div>
+            <div class="col-md-6">
+              <div class="product p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                </div>
+                <div class="mt-4 mb-3">
+                  <h3 class="text-uppercase"><%= product.productName %></h3>
+                  <div class="price d-flex flex-row align-items-center">
+                    <span class="act-price">$<%= product.price.toFixed(2) %></span>
+                    <div class="ml-2">
+                      <small class="dis-price">$59</small>
+                      <span>40% OFF</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="about"><%= product.productDescription %></p>
+                <div class="cart mt-4 align-items-center">
+                  <form class="d-flex p-2 ">
+                    <button class="btn btn-outline-dark" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </button>
+                    <button class="btn btn-outline-dark ms-2" type="submit">
+                        <i class="bi bi-heart-fill me-1"></i>
+                        Wishlist
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-   
+  </div>
     
     <script>
         function change_image(image) {
@@ -185,20 +163,14 @@
             var container = document.getElementById("main-image");
 
             container.src = image.src;
+            $(container).elevateZoom();
         }
-
-
-
         document.addEventListener("DOMContentLoaded", function (event) {
-
-
-
-
-
-
-
+            $("#main-image").elevateZoom();
         });
     </script>
+
+
    <footer class="py-5 bg-dark footer fixed-bottom ">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
@@ -208,8 +180,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+
 </body>
 
 </html>
