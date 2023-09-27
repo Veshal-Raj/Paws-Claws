@@ -28,6 +28,32 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    address: [{
+        first_address: {type:String},
+        country: {type:String},
+        state: {type:String},
+        district: {type:String},
+        town: {type:String},
+        locality: {type:String},
+        pincode: {type:Number}
+    }],
+    cart: [{
+        product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        },
+        product_name: {type: String},
+        price: {type: String},
+        quantity: {
+            type: Number,
+            default: 1,
+        },
+        totalPrice: {type:Number}
+    }],
+    order: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order"
+    }]
 })
 
 

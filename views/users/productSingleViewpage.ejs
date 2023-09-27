@@ -1,104 +1,99 @@
 <%- include('../layouts/userHeader') %>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
- <!-- Include jQuery -->
- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Include ElevateZoom library from CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+
+  <style>
+    body {
+      background-color: #FFF
+    }
+
+    .card {
+      border: none
+    }
+
+    .product {
+      background-color: #FFFAF0
+    }
+
+    .brand {
+      font-size: 15px
+    }
+
+    .act-price {
+      color: red;
+      font-weight: 700
+    }
+
+    .dis-price {
+      text-decoration: line-through
+    }
+
+    .about {
+      font-size: 17px
+    }
+
+    .color {
+      margin-bottom: 10px
+    }
+
+    label.radio {
+      cursor: pointer
+    }
+
+    label.radio input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      visibility: hidden;
+      pointer-events: none
+    }
+
+    label.radio span {
+      padding: 2px 9px;
+      border: 2px solid #ff0000;
+      display: inline-block;
+      color: #ff0000;
+      border-radius: 3px;
+      text-transform: uppercase
+    }
+
+    label.radio input:checked+span {
+      border-color: #ff0000;
+      background-color: #ff0000;
+      /* color: #fff */
+      color: #FFFAF0
+    }
+
+    .btn-danger {
+      background-color: #ff0000 !important;
+      border-color: #ff0000 !important
+    }
+
+    .btn-danger:hover {
+      background-color: #da0606 !important;
+      border-color: #da0606 !important
+    }
+
+    .btn-danger:focus {
+      box-shadow: none
+    }
+
+    .cart i {
+      margin-right: 10px
+    }
+  </style>
 
 
 
 
-<!-- Include ElevateZoom library from CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
-
-    <style>
-        body {
-            background-color: #FFF
-        }
-
-        .card {
-            border: none
-        }
-
-        .product {
-            background-color: #FFFAF0
-        }
-
-        .brand {
-            font-size: 15px
-        }
-
-        .act-price {
-            color: red;
-            font-weight: 700
-        }
-
-        .dis-price {
-            text-decoration: line-through
-        }
-
-        .about {
-            font-size: 17px
-        }
-
-        .color {
-            margin-bottom: 10px
-        }
-
-        label.radio {
-            cursor: pointer
-        }
-
-        label.radio input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            visibility: hidden;
-            pointer-events: none
-        }
-
-        label.radio span {
-            padding: 2px 9px;
-            border: 2px solid #ff0000;
-            display: inline-block;
-            color: #ff0000;
-            border-radius: 3px;
-            text-transform: uppercase
-        }
-
-        label.radio input:checked+span {
-            border-color: #ff0000;
-            background-color: #ff0000;
-            /* color: #fff */
-            color: #FFFAF0
-
-        }
-
-        .btn-danger {
-            background-color: #ff0000 !important;
-            border-color: #ff0000 !important
-        }
-
-        .btn-danger:hover {
-            background-color: #da0606 !important;
-            border-color: #da0606 !important
-        }
-
-        .btn-danger:focus {
-            box-shadow: none
-        }
-
-        .cart i {
-            margin-right: 10px
-        }
-    </style>
-
-
-    
-
-    
-<div class="container mt-5 mb-5 ">
+  <div class="container mt-5 mb-5 ">
     <div class="row d-flex justify-content-center">
       <div class="col-md-10">
         <div class="card">
@@ -107,25 +102,27 @@
               <div class="images p-3">
                 <!-- Small images -->
                 <div class="thumbnail text-center">
-                    <% product.productImages.forEach((image, index) => { %>
-                        <img onclick="change_image(this)" src="/uploads/<%= image %>"
-                          alt="Product Image <%= index + 1 %>" width="70">
-                          <% }); %>
+                  <% product.productImages.forEach((image, index)=> { %>
+                    <img onclick="change_image(this)" src="/uploads/<%= image %>" alt="Product Image <%= index + 1 %>"
+                      width="70">
+                    <% }); %>
                 </div>
                 <!-- Main product image -->
-                <div class="text-center p-4 img-zoom-container">            
-                    <img id="main-image" src="/uploads/<%= product.productImages[0] %>"
-                    alt="<%= product.productName %>" width="250" />             
-                    <div id="myresult" class="img-zoom-result"></div>
-                  </div>
-            </div>
+                <div class="text-center p-4 img-zoom-container">
+                  <img id="main-image" src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %>"
+                    width="250" />
+                  <div id="myresult" class="img-zoom-result"></div>
+                </div>
+              </div>
             </div>
             <div class="col-md-6">
               <div class="product p-4">
                 <div class="d-flex justify-content-between align-items-center">
                 </div>
                 <div class="mt-4 mb-3">
-                  <h3 class="text-uppercase"><%= product.productName %></h3>
+                  <h3 class="text-uppercase">
+                    <%= product.productName %>
+                  </h3>
                   <div class="price d-flex flex-row align-items-center">
                     <span class="act-price">$<%= product.price.toFixed(2) %></span>
                     <div class="ml-2">
@@ -134,21 +131,44 @@
                     </div>
                   </div>
                 </div>
-                <p class="about"><%= product.productDescription %></p>
+                <p class="about">
+                  <%= product.productDescription %>
+                </p>
+                <% if(!userId){ %>
+                  <div class="cart mt-4 align-items-center">
+                    <form class="d-flex p-2 ">
+                      <a href="/login">
+                        
+                        <button class="btn btn-outline-dark" type="button">
+                          <i class="bi-cart-fill me-1"></i>
+                          Cart
+    
+                        </button>
+                        <button class="btn btn-outline-dark ms-2" type="submit">
+                          <i class="bi bi-heart-fill me-1"></i>
+                          Wishlist
+    
+                        </button>
+                      </a>
+                    </form>
+                  </div>
+
+                <%}else{ %>
                 <div class="cart mt-4 align-items-center">
                   <form class="d-flex p-2 ">
-                    <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <button class="btn btn-outline-dark" type="button" data-productid="<%= product._id %>">
+                      <i class="bi-cart-fill me-1"></i>
+                      Cart
+
                     </button>
                     <button class="btn btn-outline-dark ms-2" type="submit">
-                        <i class="bi bi-heart-fill me-1"></i>
-                        Wishlist
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                      <i class="bi bi-heart-fill me-1"></i>
+                      Wishlist
+
                     </button>
                   </form>
                 </div>
+                <% } %>
               </div>
             </div>
           </div>
@@ -156,31 +176,68 @@
       </div>
     </div>
   </div>
-    
-    <script>
-        function change_image(image) {
 
-            var container = document.getElementById("main-image");
+  <script>
+    function change_image(image) {
 
-            container.src = image.src;
-            $(container).elevateZoom();
+      var container = document.getElementById("main-image");
+
+      container.src = image.src;
+      $(container).elevateZoom();
+    }
+    document.addEventListener("DOMContentLoaded", function (event) {
+      $("#main-image").elevateZoom();
+    });
+  </script>
+
+  <script>
+    // Select the 'Add to Cart' button
+    const addToCartButton = document.querySelector('.btn-outline-dark[data-productid]')
+
+    if (addToCartButton) {
+      addToCartButton.addEventListener('click', () => {
+        const productId = addToCartButton.getAttribute('data-productid')
+
+        // Constructing the request headers
+        const headers = {
+          'Content-Type': 'application/json'
         }
-        document.addEventListener("DOMContentLoaded", function (event) {
-            $("#main-image").elevateZoom();
-        });
-    </script>
+
+        // Example fetch request with headers
+        fetch(`/addToCart/${productId}`, {
+          method: 'POST',
+          headers: headers, // Include the headers in the request
+        })
+        .then(response => {
+          if (response.ok) {
+            // Product added to cart Successfully, show SweetAlert success message
+            Swal.fire('Success','Product  added to cart!','success')
+          } else {
+            // Product could not be added to cart, show SweetAlert error message
+            Swal.fire('Error','Product could not be added to cart','error')
+          }
+        })
+        .catch(error => {
+          // Handle any network errors or exceptions
+          console.error('Error:',error)
+          // Show SweetAlert error message
+          Swal.fire('Error','An error occurred while adding the product to cart','error')
+        })
+      })
+    }
+  </script>
 
 
-   <footer class="py-5 bg-dark footer fixed-bottom ">
+  <footer class="py-5 bg-dark footer fixed-bottom ">
     <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
+      <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
     </div>
-</footer>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </footer>
+  <!-- Bootstrap core JS-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-</body>
+  </body>
 
-</html>
+  </html>

@@ -9,6 +9,7 @@ const userController = require('../controllers/userController')
 const userHomePageController = require('../controllers/userHomePageController')
 const userProductController = require('../controllers/userProductController')
 const userAuth = require('../middlewares/userAuth')
+const userAddtoCart = require('../controllers/userAddtoCart')
 
 
 router.get('/',userAuth.yesSession,userController.loginpage)
@@ -36,5 +37,8 @@ router.post('/newPasswordUpdate',userController.newPasswordUpdate)
 
 router.post('/login',userController.userlogin)
 
+
+// ========================= Add to Cart ================================== //
+router.post('/addToCart/:productId',userAuth.noSession,userAddtoCart.addToCart)
 
 module.exports = router

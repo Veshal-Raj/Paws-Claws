@@ -58,6 +58,7 @@ const registerUser=  async (req,res)=>{
 
         // Generate OTP
         const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
+       console.log(otp)
         // Store data in session
         req.session.registrationData = { fullname, email, phone, hashedPassword, otp }
         
@@ -166,7 +167,7 @@ const resendOTP = async (req,res)=>{
             lowerCaseAlphabets: false,
             specialChars: false,
         })
-        
+        console.log(newOTP)
         // Get the user's email from the session (assuming it's strored there)
         const email = req.session.registrationData.email
 
