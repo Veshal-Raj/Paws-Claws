@@ -12,7 +12,7 @@ const userAuth = require('../middlewares/userAuth')
 const userAddtoCart = require('../controllers/userAddtoCart')
 
 
-router.get('/',userAuth.yesSession,userController.loginpage)
+router.get('/',userAuth.yesSession,userHomePageController.showHomepageProducts)
 router.get('/login',userAuth.yesSession,userController.loginpage)
 router.get('/signup',userAuth.yesSession,userController.signupPage)
 router.get('/otp',userAuth.yesSession,userController.otpPage)
@@ -39,6 +39,9 @@ router.post('/login',userController.userlogin)
 
 
 // ========================= Add to Cart ================================== //
+router.post('/showCart',userAuth.noSession,userAddtoCart.showCart)
 router.post('/addToCart/:productId',userAuth.noSession,userAddtoCart.addToCart)
+router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession,userAddtoCart.updateQuantity)
+
 
 module.exports = router

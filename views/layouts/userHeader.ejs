@@ -128,20 +128,40 @@
                         </li> -->
                 </ul>
                 <div class="d-flex ">
-                    <form class="d-flex px-2 ">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi bi-heart-fill me-1"></i>
-                            Wishlist
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
-                    </form>
-                    <form class="d-flex px-2">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </button>
-                    </form>
+                    <% if(locals.userId){ %>
+                        <form class="d-flex px-2 " action="/showWishlist" method="post">
+                             <button class="btn btn-outline-dark" type="submit">
+                                <i class="bi bi-heart-fill me-1"></i>
+                                Wishlist
+                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            </button>
+                        </form>
+                        <form class="d-flex px-2" action="/showCart" method="post">
+                            <button class="btn btn-outline-dark" type="submit">
+                                <i class="bi-cart-fill me-1"></i>
+                                Cart
+                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            </button>
+                        </form>
+                
+                    <% }else { %> 
+                        <form class="d-flex px-2 " action="/login">
+                            <button class="btn btn-outline-dark" type="submit">
+                               <i class="bi bi-heart-fill me-1"></i>
+                               Wishlist
+                               <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                           </button>
+                       </form>
+                       <form class="d-flex px-2" action="/login">
+                           <button class="btn btn-outline-dark" type="submit">
+                               <i class="bi-cart-fill me-1"></i>
+                               Cart
+                               <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                           </button>
+                       </form>
+                    
+                    <% } %> 
+                   
 
                     <% if (locals.userId) { %>
                         <!-- User is authenticated, show the "Sign Out" button -->

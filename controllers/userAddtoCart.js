@@ -6,8 +6,6 @@ const User = require('../models/userModel')
 const addToCart = async (req,res) => {
     try {
         const { productId } = req.params
-        
-       
 
         // Retrieve the product details based on the productId
         const product = await Product.findById(productId)
@@ -64,6 +62,61 @@ const addToCart = async (req,res) => {
     }
 }
 
+const showCart = async (req,res) => {
+    try {
+        // Get the user ID from the session
+        const userId = req.session.userId
+
+        // Finding the user with their cart data populated
+        const user = await User.User.findById(userId).populate('cart.product_id')
+
+        if (!user) {
+            return res.status(404).render('error',{message: 'User is not found'})
+        }
+
+        // Render the cart page and pass the user's cart data to the cart page
+         res.render('users/cart',{ user, userId:req.session.userId })
+    } catch (error) {   
+        console.error(error)
+        res.status(500).render('error')
+    }
+}
+
+const updateQuantity = async (req,res) => {
+    try {
+        const { productId, newQuantity } = req.params
+        const userId = req.session.userId
+
+        // Finding the user and their cart
+        const user = await User.User.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({error: 'User not found'})
+        }
+
+        // Find the cart item with the matching product ID
+        const cartItem = user.cart.find((item) => item.product_id.toString() === productId)
+        
+        if (!cartItem) {
+            return res.status(404).json({error: 'Product not found in the cart'})
+        } 
+
+        // Update the quantity and total price
+        cartItem.quantity = parseInt(newQuantity)
+        cartItem.totalPrice = cartItem.price * cartItem.quantity
+
+        // Save the user with the updated cart
+        await user.save()
+
+        // Respond with the updated total price
+        res.json({updatedTotalPrice: cartItem.totalPrice})
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     addToCart,
+    showCart,
+    updateQuantity
 }
