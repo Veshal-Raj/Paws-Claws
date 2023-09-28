@@ -74,8 +74,13 @@ const showCart = async (req,res) => {
             return res.status(404).render('error',{message: 'User is not found'})
         }
 
+
+        // Calculating total sum of the  product in cart
+        const totalSum = user.cart.reduce((sum,cartItem)=>{
+            return sum + cartItem.totalPrice
+        },0)
         // Render the cart page and pass the user's cart data to the cart page
-         res.render('users/cart',{ user, userId:req.session.userId })
+         res.render('users/cart',{ user, userId:req.session.userId, totalSum })
     } catch (error) {   
         console.error(error)
         res.status(500).render('error')
@@ -93,7 +98,7 @@ const updateQuantity = async (req,res) => {
         if (!user) {
             return res.status(404).json({error: 'User not found'})
         }
-
+       
         // Find the cart item with the matching product ID
         const cartItem = user.cart.find((item) => item.product_id.toString() === productId)
         
@@ -105,13 +110,20 @@ const updateQuantity = async (req,res) => {
         cartItem.quantity = parseInt(newQuantity)
         cartItem.totalPrice = cartItem.price * cartItem.quantity
 
+         // Calculating total sum of the  product in cart
+         const totalSum = user.cart.reduce((sum,cartItem)=>{
+            return sum + cartItem.totalPrice
+        },0)
+
+
         // Save the user with the updated cart
         await user.save()
 
         // Respond with the updated total price
-        res.json({updatedTotalPrice: cartItem.totalPrice})
+        console.log(totalSum)
+        res.json({updatedTotalPrice: cartItem.totalPrice,totalSum})
     } catch (error) {
-        
+        console.error('Error:',error)
     }
 }
 
