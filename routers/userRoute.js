@@ -43,5 +43,8 @@ router.post('/showCart',userAuth.noSession,userAddtoCart.showCart)
 router.post('/addToCart/:productId',userAuth.noSession,userAddtoCart.addToCart)
 router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession,userAddtoCart.updateQuantity)
 
+// Delete from cart also in userAddtoCart controller
+router.delete('/removeFromCart/:productId',userAuth.noSession,userAddtoCart.removeFromCart)
+
 
 module.exports = router

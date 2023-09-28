@@ -120,15 +120,53 @@ const updateQuantity = async (req,res) => {
         await user.save()
 
         // Respond with the updated total price
-        console.log(totalSum)
+        // console.log(totalSum)
         res.json({updatedTotalPrice: cartItem.totalPrice,totalSum})
     } catch (error) {
         console.error('Error:',error)
     }
 }
 
+const removeFromCart = async (req,res) => {
+    try {
+        const { productId } = req.params
+        const userId = req.session.userId
+
+        // Find the user and their cart
+        let user = await User.User.findById(userId)
+
+        if (!user) {
+            return res.status(404).json({error: 'User not found '})
+        }
+
+        // Remove the cart item wiht the matching product ID
+        await user.cart.pull({ product_id: productId})
+
+        await user.save()
+
+         user = await User.User.findById(userId)
+
+
+        // Calculate the updated total sum
+        const totalSum = user.cart.reduce((sum,cartItem) => {
+            return sum + cartItem.totalPrice
+        },0)
+
+        // save the user with the updated cart
+        await user.save()
+        // console.log(totalSum)
+        // respond with the updated total sum
+        res.json({ updatedTotalSum: totalSum})
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({error: 'Internal server error '})
+    }
+}
+
 module.exports = {
     addToCart,
     showCart,
-    updateQuantity
+    updateQuantity,
+    removeFromCart
 }

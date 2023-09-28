@@ -16,7 +16,7 @@
                         <p>Your cart is empty.</p>
                         <% } else { %>
                             <% user.cart.forEach((cartItem)=> { %>
-                                <div class="card rounded-3 mb-4">
+                                <div id="item<%= cartItem.product_id._id %>" class="card rounded-3 mb-4">
                                     <div class="card-body p-4">
                                         <div class="row d-flex justify-content-between align-items-center">
                                             <div class="col-md-2 col-lg-2 col-xl-2">
@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                 <!-- Add a button to remove the item from the cart -->
-                                                <button class="btn btn-link px-2"
+                                                <button class="btn btn-link px-2 delete-button"
                                                     onclick="removeFromCart('<%= cartItem.product_id._id %>')">
                                                     <i class="fas fa-trash fa-lg"></i>
                                                 </button>
@@ -97,6 +97,71 @@
 
 
     <script>
+
+           // Function to remove an item from the cart
+           const removeFromCart = async (productId) => {
+            // Show a confirmation dialog using Swal
+            Swal.fire({
+                title: 'Are you sure?',
+                text:'Do you really want to delete?',
+                icon:'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#4BB543',
+                cancelButtonColor: '#FF0000',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    // if the user confirms, send a request to remove the item from the cart
+                    const response = await fetch(`/removeFromCart/${productId}`,{
+                        method: 'DELETE',
+                       
+                    }).then(res => res.json())
+                    .then((response) => {
+
+                        if (response) {
+                        // Handle success
+                        // const { updatedTotalSum } = await response.json()
+
+                        // Update the UI, for example, by removing the item from the cart display
+                        const itemToRemove = document.querySelector(`#item${productId}`)
+                        if (itemToRemove) {
+                            itemToRemove.remove()
+                        }
+                        console.log(response.updatedTotalSum)
+                        // Update the total sum
+                        updateTotalSum(response.updatedTotalSum)
+                        updateUI(null,null,null,response.updatedTotalSum )
+
+
+                        Swal.fire({
+                            position: 'bottom',
+                            title: '<i class="fas fa-check-circle"></i> Item Removed Successfully',
+                            customClass: {
+                                title: 'text-success',
+                            },
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                    }
+
+                    })
+                    
+                   
+                }
+            })
+        }
+
+      
+
+        // Function to update the total sum in the UI
+        const updateTotalSum =  (newTotalSum) => {
+            const totalSumElement = document.getElementById('newTotalSumejs')
+            if (totalSumElement) {
+                totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`
+            }
+        }
+
+
         // Handling Plus or Minus button
         const plusButtons = document.querySelectorAll('.plus-button')
         const minusButtons = document.querySelectorAll('.minus-button')
@@ -111,7 +176,7 @@
                 quantityInput.value = newQuantity;
                 totalPriceElement.innerHTML = `$${newTotalPrice.toFixed(2)}`;
 
-                console.log('is it there?',newTotalSum)
+                
 
                 if (newTotalSum !== undefined){
                     totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`; // Update total sum
@@ -145,7 +210,7 @@
                         if (response) {
                             // parse the response JSON to get the updated total price
                             // const { updatedTotalPrice, updatedTotalSum  } = await response.json()
-                            console.log('checking',response.totalSum)
+                           
                             // Update the UI with the new quantity and total price
                             updateUI(productId,newQuantity,response.updatedTotalPrice,response.totalSum )
     
@@ -212,5 +277,7 @@
                 }
             })
         })
+
+
     </script>
     <%- include('../layouts/userFooter') %>
