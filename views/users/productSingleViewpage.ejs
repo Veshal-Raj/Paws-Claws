@@ -138,37 +138,37 @@
                   <div class="cart mt-4 align-items-center">
                     <form class="d-flex p-2 ">
                       <a href="/login">
-                        
+
                         <button class="btn btn-outline-dark" type="button">
                           <i class="bi-cart-fill me-1"></i>
                           Cart
-    
+
                         </button>
                         <button class="btn btn-outline-dark ms-2" type="submit">
                           <i class="bi bi-heart-fill me-1"></i>
                           Wishlist
-    
+
                         </button>
                       </a>
                     </form>
                   </div>
 
-                <%}else{ %>
-                <div class="cart mt-4 align-items-center">
-                  <form class="d-flex p-2 ">
-                    <button class="btn btn-outline-dark" type="button" data-productid="<%= product._id %>">
-                      <i class="bi-cart-fill me-1"></i>
-                      Cart
+                  <%}else{ %>
+                    <div class="cart mt-4 align-items-center">
+                      <form class="d-flex p-2 ">
+                        <button class="btn btn-outline-dark" type="button" data-productid="<%= product._id %>">
+                          <i class="bi-cart-fill me-1"></i>
+                          Cart
 
-                    </button>
-                    <button class="btn btn-outline-dark ms-2" type="submit">
-                      <i class="bi bi-heart-fill me-1"></i>
-                      Wishlist
+                        </button>
+                        <button class="btn btn-outline-dark ms-2" type="submit">
+                          <i class="bi bi-heart-fill me-1"></i>
+                          Wishlist
 
-                    </button>
-                  </form>
-                </div>
-                <% } %>
+                        </button>
+                      </form>
+                    </div>
+                    <% } %>
               </div>
             </div>
           </div>
@@ -208,21 +208,31 @@
           method: 'POST',
           headers: headers, // Include the headers in the request
         })
-        .then(response => {
-          if (response.ok) {
-            // Product added to cart Successfully, show SweetAlert success message
-            Swal.fire('Success','Product  added to cart!','success')
-          } else {
-            // Product could not be added to cart, show SweetAlert error message
-            Swal.fire('Error','Product could not be added to cart','error')
-          }
-        })
-        .catch(error => {
-          // Handle any network errors or exceptions
-          console.error('Error:',error)
-          // Show SweetAlert error message
-          Swal.fire('Error','An error occurred while adding the product to cart','error')
-        })
+          .then(response => {
+            if (response.ok) {
+              // Product added to cart Successfully, show SweetAlert success message
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Successfully added to Cart!',
+                showConfirmButton: false,
+                timer: 1000,
+                customClass: {
+                  title: 'text-success'
+                },
+
+              })
+            } else {
+              // Product could not be added to cart, show SweetAlert error message
+              Swal.fire('Error', 'Product could not be added to cart', 'error')
+            }
+          })
+          .catch(error => {
+            // Handle any network errors or exceptions
+            console.error('Error:', error)
+            // Show SweetAlert error message
+            Swal.fire('Error', 'An error occurred while adding the product to cart', 'error')
+          })
       })
     }
   </script>

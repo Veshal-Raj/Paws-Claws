@@ -10,6 +10,7 @@ const userHomePageController = require('../controllers/userHomePageController')
 const userProductController = require('../controllers/userProductController')
 const userAuth = require('../middlewares/userAuth')
 const userAddtoCart = require('../controllers/userAddtoCart')
+const userCheckoutpage = require('../controllers/userCheckoutPage')
 
 
 router.get('/',userAuth.yesSession,userHomePageController.showHomepageProducts)
@@ -45,6 +46,10 @@ router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession,userAdd
 
 // Delete from cart also in userAddtoCart controller
 router.delete('/removeFromCart/:productId',userAuth.noSession,userAddtoCart.removeFromCart)
+
+
+// ========================= Checkout page ================================== //
+router.post('/checkout',userAuth.noSession,userCheckoutpage.checkout)
 
 
 module.exports = router

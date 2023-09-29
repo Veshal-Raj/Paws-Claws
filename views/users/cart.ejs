@@ -1,6 +1,6 @@
 <%- include('../layouts/userHeader') %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
-    
+
 
 
 
@@ -31,23 +31,22 @@
                                             </div>
                                             <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                 <button class="btn btn-link px-2 minus-button"
-                                                 data-productid="<%= cartItem.product_id._id %>" 
-                                                 data-quantity="<%= cartItem.quantity - 1 %>">
+                                                    data-productid="<%= cartItem.product_id._id %>"
+                                                    data-quantity="<%= cartItem.quantity - 1 %>">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
 
                                                 <!-- Input for quantity (use cartItem.quantity) -->
-                                                <input id="quantityInput<%= cartItem.product_id._id %>"
-                                                    min="0" name="quantity"
-                                                    value="<%= cartItem.quantity %>" type="number"
+                                                <input id="quantityInput<%= cartItem.product_id._id %>" min="0"
+                                                    name="quantity" value="<%= cartItem.quantity %>" type="number"
                                                     class="form-control form-control-sm" readonly />
-                                                    
 
-                                                    <button class="btn btn-link px-2 plus-button" 
-                                                    data-productid="<%= cartItem.product_id._id %>" 
+
+                                                <button class="btn btn-link px-2 plus-button"
+                                                    data-productid="<%= cartItem.product_id._id %>"
                                                     data-quantity="<%= cartItem.quantity + 1 %>">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
                                             </div>
 
                                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -66,10 +65,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <% }); %>
-                                <!-- Display the total sum of the cart -->
-                                <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%= totalSum.toFixed(2) %></span></h4>
+                                    <!-- Display the total sum of the cart -->
+                                    <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%= totalSum.toFixed(2)
+                                                %></span></h4>
                                     <% } %>
                                         <div class="card mb-4">
                                             <div class="card-body p-4 d-flex flex-row">
@@ -84,10 +84,12 @@
                                         </div>
 
                                         <div class="card">
-                                            <div class="card-body">
-                                                <button type="button"
-                                                    class="btn btn-outline-dark btn-block btn-lg">Proceed to
-                                                    Pay</button>
+                                            <div class="card-body text-center">
+                                                <form action="/checkout" method="post">
+                                                    <button type="submit" class="btn btn-warning btn-outline-dark btn-block btn-lg"
+                                                        style="width: 100%;">Proceed to
+                                                        Pay</button>
+                                                </form>
                                             </div>
                                         </div>
                 </div>
@@ -98,13 +100,13 @@
 
     <script>
 
-           // Function to remove an item from the cart
-           const removeFromCart = async (productId) => {
+        // Function to remove an item from the cart
+        const removeFromCart = async (productId) => {
             // Show a confirmation dialog using Swal
             Swal.fire({
                 title: 'Are you sure?',
-                text:'Do you really want to delete?',
-                icon:'warning',
+                text: 'Do you really want to delete?',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#4BB543',
                 cancelButtonColor: '#FF0000',
@@ -112,49 +114,49 @@
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     // if the user confirms, send a request to remove the item from the cart
-                    const response = await fetch(`/removeFromCart/${productId}`,{
+                    const response = await fetch(`/removeFromCart/${productId}`, {
                         method: 'DELETE',
-                       
+
                     }).then(res => res.json())
-                    .then((response) => {
+                        .then((response) => {
 
-                        if (response) {
-                        // Handle success
-                        // const { updatedTotalSum } = await response.json()
+                            if (response) {
+                                // Handle success
+                                // const { updatedTotalSum } = await response.json()
 
-                        // Update the UI, for example, by removing the item from the cart display
-                        const itemToRemove = document.querySelector(`#item${productId}`)
-                        if (itemToRemove) {
-                            itemToRemove.remove()
-                        }
-                        console.log(response.updatedTotalSum)
-                        // Update the total sum
-                        updateTotalSum(response.updatedTotalSum)
-                        updateUI(null,null,null,response.updatedTotalSum )
+                                // Update the UI, for example, by removing the item from the cart display
+                                const itemToRemove = document.querySelector(`#item${productId}`)
+                                if (itemToRemove) {
+                                    itemToRemove.remove()
+                                }
+                                console.log(response.updatedTotalSum)
+                                // Update the total sum
+                                updateTotalSum(response.updatedTotalSum)
+                                updateUI(null, null, null, response.updatedTotalSum)
 
 
-                        Swal.fire({
-                            position: 'bottom',
-                            title: '<i class="fas fa-check-circle"></i> Item Removed Successfully',
-                            customClass: {
-                                title: 'text-success',
-                            },
-                            showConfirmButton: false,
-                            timer: 1000
+                                Swal.fire({
+                                    position: 'bottom',
+                                    title: '<i class="fas fa-check-circle"></i> Item Removed Successfully',
+                                    customClass: {
+                                        title: 'text-success',
+                                    },
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                })
+                            }
+
                         })
-                    }
 
-                    })
-                    
-                   
+
                 }
             })
         }
 
-      
+
 
         // Function to update the total sum in the UI
-        const updateTotalSum =  (newTotalSum) => {
+        const updateTotalSum = (newTotalSum) => {
             const totalSumElement = document.getElementById('newTotalSumejs')
             if (totalSumElement) {
                 totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`
@@ -166,27 +168,27 @@
         const plusButtons = document.querySelectorAll('.plus-button')
         const minusButtons = document.querySelectorAll('.minus-button')
 
-         // Function to update the quantity and total price in the UI
-            const updateUI = (productId, newQuantity, newTotalPrice,newTotalSum ) => {
-                const quantityInput = document.querySelector(`#quantityInput${productId}`);
-                const totalPriceElement = document.querySelector(`#totalPrice${productId}`);
-                const totalSumElement = document.getElementById('newTotalSumejs'); 
+        // Function to update the quantity and total price in the UI
+        const updateUI = (productId, newQuantity, newTotalPrice, newTotalSum) => {
+            const quantityInput = document.querySelector(`#quantityInput${productId}`);
+            const totalPriceElement = document.querySelector(`#totalPrice${productId}`);
+            const totalSumElement = document.getElementById('newTotalSumejs');
 
 
-                quantityInput.value = newQuantity;
-                totalPriceElement.innerHTML = `$${newTotalPrice.toFixed(2)}`;
+            quantityInput.value = newQuantity;
+            totalPriceElement.innerHTML = `$${newTotalPrice.toFixed(2)}`;
 
-                
 
-                if (newTotalSum !== undefined){
-                    totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`; // Update total sum
-                    
-                }
-                    
+
+            if (newTotalSum !== undefined) {
+                totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`; // Update total sum
 
             }
 
-        
+
+        }
+
+
         // Click event listeners to the plus buttons
         plusButtons.forEach((plusButton) => {
             plusButton.addEventListener('click', async () => {
@@ -194,85 +196,85 @@
                 const quantityInput = document.querySelector(`#quantityInput${productId}`)
                 let newQuantity = parseInt(quantityInput.value) || 0
 
-                if (newQuantity<5 ){
+                if (newQuantity < 5) {
 
-                    newQuantity +=1
-                    
+                    newQuantity += 1
+
                     // fetch for update the quantity on the server
                     const response = await fetch(`/updateQuantity/${productId}/${newQuantity}`, {
-                        method: 'PUT', 
+                        method: 'PUT',
                         headers: {
                             'Accept': 'application/json', // Specify JSON response
                         },
                     }).then(res => res.json())
-                    .then((response) => {
+                        .then((response) => {
 
-                        if (response) {
-                            // parse the response JSON to get the updated total price
-                            // const { updatedTotalPrice, updatedTotalSum  } = await response.json()
-                           
-                            // Update the UI with the new quantity and total price
-                            updateUI(productId,newQuantity,response.updatedTotalPrice,response.totalSum )
-    
-                            Swal.fire({
-                                position: 'bottom',
-                                
-                                title: '<i class="fas fa-check-circle"></i> Quantity Increased',
-                                customClass: {
-                                    title: 'text-success', 
-                                },
+                            if (response) {
+                                // parse the response JSON to get the updated total price
+                                // const { updatedTotalPrice, updatedTotalSum  } = await response.json()
 
-                                showConfirmButton: false,
-                                timer: 1000
-    
-                            })
-    
-                           
-                        }
-                    })
-                    
+                                // Update the UI with the new quantity and total price
+                                updateUI(productId, newQuantity, response.updatedTotalPrice, response.totalSum)
+
+                                Swal.fire({
+                                    position: 'bottom',
+
+                                    title: '<i class="fas fa-check-circle"></i> Quantity Increased',
+                                    customClass: {
+                                        title: 'text-success',
+                                    },
+
+                                    showConfirmButton: false,
+                                    timer: 1000
+
+                                })
+
+
+                            }
+                        })
+
                 }
             })
         })
 
         // Click event listeners to the minus button
         minusButtons.forEach((minusButton) => {
-            minusButton.addEventListener('click',async () => {
+            minusButton.addEventListener('click', async () => {
                 const productId = minusButton.getAttribute('data-productid')
                 const quantityInput = document.querySelector(`#quantityInput${productId}`)
                 let currentQuantity = parseInt(quantityInput.value) || 0
 
 
                 if (currentQuantity > 1) {
-                     currentQuantity -=1 // Decrementing quantity
+                    currentQuantity -= 1 // Decrementing quantity
 
                     // using fetch for updating the quantity on the server
-                    const response = await fetch(`/updateQuantity/${productId}/${currentQuantity}`,{
-                        method: 'PUT', 
+                    const response = await fetch(`/updateQuantity/${productId}/${currentQuantity}`, {
+                        method: 'PUT',
                         'Accept': 'application/json',
                     }).then(res => res.json())
-                    .then((response) => {
-                        if (response) {
-                            // Parse the response JSON to get the updated total price
-                            // const { updatedTotalPrice } = await response.json()
-    
-                            // Update the UI with the new quantity and total price
-                            updateUI(productId,currentQuantity,response.updatedTotalPrice,response.totalSum)
-                            Swal.fire({
-                                position: 'bottom',
-                               
-                                title: '<i class="fas fa-check-circle"></i> Quantity Decreased',
-                                customClass: {
-                                    title: 'text-success', // Apply the 'text-success' class to the title
-                                },
-                                showConfirmButton: false,
-                                timer: 1000
-    
-                            })
-                            
-                        }
+                        .then((response) => {
+                            if (response) {
+                                // Parse the response JSON to get the updated total price
+                                // const { updatedTotalPrice } = await response.json()
 
-                    })
+                                // Update the UI with the new quantity and total price
+                                updateUI(productId, currentQuantity, response.updatedTotalPrice, response.totalSum)
+                                Swal.fire({
+                                    position: 'bottom',
+
+                                    title: '<i class="fas fa-check-circle"></i> Quantity Decreased',
+                                    customClass: {
+                                        title: 'text-success', // Apply the 'text-success' class to the title
+                                    },
+                                    showConfirmButton: false,
+                                    timer: 1000
+
+                                })
+
+                            }
+
+                        })
 
                 }
             })
