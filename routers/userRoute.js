@@ -51,5 +51,10 @@ router.delete('/removeFromCart/:productId',userAuth.noSession,userAddtoCart.remo
 // ========================= Checkout page ================================== //
 router.post('/checkout',userAuth.noSession,userCheckoutpage.checkout)
 
+router.post('/saveAddress',userAuth.noSession,userCheckoutpage.saveAddress)
+
+router.post('/check',async(req,res)=>{
+    res.send("working")
+})
 
 module.exports = router

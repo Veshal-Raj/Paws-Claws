@@ -29,13 +29,14 @@ const userSchema = new mongoose.Schema({
         default: true,
     },
     address: [{
+        fullname: {type: String},
         first_address: {type:String},
         country: {type:String},
         state: {type:String},
-        district: {type:String},
-        town: {type:String},
-        locality: {type:String},
-        pincode: {type:Number}
+        city: {type:String},
+        pincode: {type:Number},
+        landmark: {type:String},
+        mobileNumber: {type:Number}
     }],
     cart: [{
         product_id: {
