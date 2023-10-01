@@ -54,7 +54,19 @@ const saveAddress = async (req,res) => {
         return res.status(500).json({error: 'Internal Server Error'})
     }
 }
+
+const proceedToPay = async(req,res) => {
+    try {
+        const { selectedAddress } = req.body
+
+        res.json({ status: 'success', message: 'Payment successful' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({error: 'Internal Server Error'})
+    }
+}
 module.exports ={
     checkout,
-    saveAddress
+    saveAddress,
+    proceedToPay
 }

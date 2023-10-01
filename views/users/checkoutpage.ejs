@@ -5,6 +5,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <style>
     /* Add spacing between select boxes */
@@ -20,29 +23,24 @@
       <h1>Checkout </h1>
     </div>
 
-    <div class="row">
-    <% user.address.forEach(function(address) { %> 
+    <div class="row" id="addressContainer">
+    <% user.address.forEach(function(address, index) { %> 
     <div class="card bg-light mb-3 col-md-4 m-3" style="max-width: 18rem;">
-      <div class="card-header " style="max-width: 100%
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      ;">
-        <input type="radio" aria-label="Radio button for following text input">
-        Address
+
+      <div class="card-header  d-flex justify-content-between " style="max-width: 100%;">
+        <div>
+          <input type="radio" name="addressRadio" id="addressRadio<%= index %>" aria-label="Radio button for following text input">
+          Address
+        </div>
+        <div>
+          <button class="btn btn-warning btn-outline-secondary" id="deleteButton<%= index %>">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn btn-danger btn-outline-dark" id="deleteButton<%= index %>">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+       
       </div>
       
       <div class="card-body">
@@ -60,187 +58,134 @@
     <% }) %>
   </div>
 
+    <!-- the user data is sending from the backed along with rendering this page, so for using this value in script i am storing this in a input field and make it hidden -->
+    <input type="hidden" value='<%- JSON.stringify(user) %>' id="USER">
+
 
     <div class="row">
-      <div class="col-md-4 order-md-2 mb-4">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-muted">Your cart</span>
-          <span class="badge badge-secondary badge-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">-$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
-          </li>
-        </ul>
-
-        <form class="card p-2">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-warning btn-outline-dark">Redeem</button>
-            </div>
-          </div>
-        
-      </div>
-    </form>
-
-
-
-
-      <div class="col-md-8 order-md-1">
         <div class="col-md-8 order-md-1">
-          <h1></h1>
-          <!-- <h4 class="mb-3">Add new billing address</h4> -->
-          <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
-            Add new address
-          </button>
-          <form class="needs-validation"   id="billingForm" method="post" action="/check"  style="display: none;" onsubmit=" handleSubmit(event)">
-            <!-- novalidate -->
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="firstName">First name</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                    <!-- <div class="invalid-feedback">
-                      Valid first name is required.
-                    </div> -->
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="lastName">Last name</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                    <div class="invalid-feedback">
-                      Valid last name is required.
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="mb-3">
-                  <label for="email">Email</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">@</span>
-                    </div>
-                    <input type="text" class="form-control" id="email" placeholder="Enter your Email id" required>
-                    <div class="invalid-feedback" style="width: 100%;">
-                      Your username is required.
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <label for="address">Address</label>
-                  <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-                  <div class="invalid-feedback">
-                    Please enter your shipping address.
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="select_option">
-                    <label for="country">Country</label>
-                    <select class="form-select country" aria-label="Default select example" id="country"
-                      onchange="loadStates()">
-                      <option selected>Select Country</option>
-                    </select>
-
-                    <label for="state">State</label>
-                    <select class="form-select state" aria-label="Default select example" id="state"
-                      onchange="loadCities()">
-                      <option selected>Select State</option>
-                    </select>
-
-                    <label for="city">City</label>
-                    <select class="form-select city" id="city" aria-label="Default select example">
-                      <option selected>Select City</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                      <label for="zip">Pin Code</label>
-                      <input type="text" class="form-control" id="City" placeholder="Enter your City">
-                      <div class="invalid-feedback">
-                        Please select a valid City.
+            <div class="col-md-8 order-md-1">
+              <h1></h1>
+              <!-- <h4 class="mb-3">Add new billing address</h4> -->
+              <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
+                Add new address
+              </button>
+              <form class="needs-validation"   id="billingForm"   style="display: none;" onsubmit=" handleSubmit(event)">
+                <!-- novalidate -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="firstName">First name</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                        <!-- <div class="invalid-feedback">
+                          Valid first name is required.
+                        </div> -->
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="lastName">Last name</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                          Valid last name is required.
+                        </div>
                       </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                      <label for="Landmark">Landmark</label>
-                      <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark">
-                      <div class="invalid-feedback">
-                        Please provide a valid Landmark.
+
+
+                    <div class="mb-3">
+                      <label for="email">Email</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">@</span>
+                        </div>
+                        <input type="text" class="form-control" id="email" placeholder="Enter your Email id" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                          Your username is required.
+                        </div>
                       </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                      <label for="phone">Mobile Number</label>
-                      <input type="text" class="form-control" id="phone" placeholder="Mobile Number" required>
+
+                    <div class="mb-3">
+                      <label for="address">Address</label>
+                      <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
                       <div class="invalid-feedback">
-                        Mobile Number required.
+                        Please enter your shipping address.
                       </div>
                     </div>
+
+                    <div class="row">
+                      <div class="select_option">
+                        <label for="country">Country</label>
+                        <select class="form-select country" aria-label="Default select example" id="country"
+                          onchange="loadStates()">
+                          <option selected>Select Country</option>
+                        </select>
+
+                        <label for="state">State</label>
+                        <select class="form-select state" aria-label="Default select example" id="state"
+                          onchange="loadCities()">
+                          <option selected>Select State</option>
+                        </select>
+
+                        <label for="city">City</label>
+                        <select class="form-select city" id="city" aria-label="Default select example">
+                          <option selected>Select City</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                          <label for="zip">Pin Code</label>
+                          <input type="text" class="form-control" id="City" placeholder="Enter your City">
+                          <div class="invalid-feedback">
+                            Please select a valid City.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="Landmark">Landmark</label>
+                          <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark">
+                          <div class="invalid-feedback">
+                            Please provide a valid Landmark.
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="phone">Mobile Number</label>
+                          <input type="text" class="form-control" id="phone" placeholder="Mobile Number" required>
+                          <div class="invalid-feedback">
+                            Mobile Number required.
+                          </div>
+                        </div>
+                    </div>
+                  
+                    <hr class="mb-4">
+                    <button type="submit" class="btn btn-primary"> Save</button>
+
+              </form>
+            </div>
+            <hr class="mb-4">
+            <h4 class="mb-3">Payment</h4>
+
+            <div class="d-block my-3">
+
+                  <div class="custom-control custom-radio">
+                    <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                    <label class="custom-control-label" for="credit">Cash on delivery</label>
+                  </div>
+
+                <div class="custom-control custom-radio">
+                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="razorpay">Online Payment</label>
                 </div>
-              
-                <hr class="mb-4">
-                <button type="submit" class="btn btn-primary"> Save</button>
 
-          </form>
+                <div class="custom-control custom-radio">
+                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="Wallet">Wallet</label>
+                </div>
 
-
-
+            </div>
+            
+            <button class="btn btn-primary btn-lg btn-block" id="proceedToPay" type="submit">Continue to checkout</button>
+        
         </div>
-        <hr class="mb-4">
-        <h4 class="mb-3">Payment</h4>
-
-        <div class="d-block my-3">
-
-          <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
-            <label class="custom-control-label" for="credit">Cash on delivery</label>
-          </div>
-
-          <div class="custom-control custom-radio">
-            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-            <label class="custom-control-label" for="razorpay">Razorpay</label>
-          </div>
-
-          <div class="custom-control custom-radio">
-            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-            <label class="custom-control-label" for="Wallet">Wallet</label>
-          </div>
-
-        </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-       
-      </div>
     </div>
   </div> <!-- end -->
 
@@ -330,15 +275,168 @@
     .then(data => {
       // handle the server response if needed
       console.log('SERVER RESPONSE: ',data)
+      console.log('data status: ',data.status )
+      console.log('data status: ',data.newAddress.city )
+
+      if (data.newAddress) {
+
+            // If the address is saved successfully, update the UI with the new address
+            updateUIwithNewAddress(data.newAddress, data.index); // Pass the index
+        } else {
+            // Handle any errors or display messages to the user
+            
+            Swal.fire({
+              title: 'Failed to Save!',
+              text: 'Failed to save address. Please try again.',
+              icon: 'error',
+              confirmButtonText:'OK'
+            })
+        }
     })
     .catch(error => {
       console.error('Error:',error);
     })
     
   }
+
+  // Function to update the UI with a new address
+  function updateUIwithNewAddress(newAddress, index) {
+    // Create a new address card using DOM manipulation
+    const card = document.createElement('div')
+    card.className = 'card bg-light mb-3 col-md-4 m-3'
+    card.style.maxWidth = '18rem'
+
+    // Building the card
+    card.innerHTML = `
+
+
+    
+      <div class="card-header  d-flex justify-content-between" style="max-width: 100%">
+        <div>
+          <input type="radio" name="addressRadio" id="addressRadio${index}" aria-label="Radio button for following text input">
+          Address
+        </div>  
+        <div>
+          <button class="btn btn-warning btn-outline-secondary" id="deleteButton${index}">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn btn-danger btn-outline-dark" id="deleteButton${index}">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body"> 
+       <h5 class="card-title">${newAddress.fullname}</h5>
+      <p class="card-text">${newAddress.first_address}</p>
+      <p class="card-text">${newAddress.country}</p>
+      <p class="card-text">${newAddress.state}</p>
+      <p class="card-text">${newAddress.city}</p>
+      <p class="card-text">${newAddress.pincode}</p>
+      <p class="card-text">${newAddress.landmark}</p>
+      <p class="card-text">${newAddress.mobileNumber}</p>
+    </div>
+    `
+    
+    // Append the card to the UI
+    const addressContainer = document.getElementById('addressContainer')
+    addressContainer.appendChild(card)
+}
+
+// Add an event listener to the form 
+// const billingForm = document.getElementById('billingForm')
+// billingForm.addEventListener('submit',handleSubmit)
 </script>
 
+<script>
+ 
 
+  const proceedToPayButton = document.getElementById('proceedToPay')
+  proceedToPayButton.addEventListener('click',function() {
+    // Find the selected address
+    const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked')
+    console.log("selected address radio: ",selectedAddressRadio)
+
+    if (selectedAddressRadio) {
+    console.log("selected address radio: ",selectedAddressRadio)
+
+      Swal.fire({
+        title: 'Confirm Order?',
+        text: '',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: false, // Prevent clicking outside to close
+        allowEscapeKey: false, 
+      }).then((result) => {
+        console.log('checking after swal fire')
+          if (result.isConfirmed) {
+            const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio','')
+            console.log(selectedAddressIndex)
+            console.log('checking again after selectedAddressIndex')
+            const userInputElement = document.getElementById('USER');
+            const userData = JSON.parse(userInputElement.value);
+            console.log(userData)
+            const selectedAddress = userData.address[selectedAddressIndex]
+
+            console.log(selectedAddress)
+            console.log('Before fetch');
+
+            // sending the selected address tho the server using fetch
+            fetch('/proceedToPay',{
+              method: 'POST',
+              headers: {
+                'Content-Type':'application/json',
+              },
+              body: JSON.stringify({ selectedAddress })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data)
+              if (data.status === 'success') {
+                Swal.fire({
+                  title: 'Order Successful',
+                  height: 600,
+                  width: 600,
+                  padding: '3em',
+                  color: '#716add',
+                  background: '#fff url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',  
+                  allowOutsideClick: false, // Prevent clicking outside to close
+                  allowEscapeKey: false,              
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                  footer: '<a href="/home">Go Back to Home</a>'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    // Redirect to the "order" page when the "OK" button is clicked
+                    window.location.href = '/showOrders';
+                  }
+                })
+              } else {
+                Swal.fire({
+                  title: 'Order Failed',
+                  text: data.message,
+                  icon: 'error',
+                  confirmButtonText: 'OK',
+                })
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+          }
+      })
+    } else {
+      Swal.fire({
+        title: 'No Address Selected',
+        text: 'Please select an address to procced.',
+        icon: 'error',
+        confirmButtonText:'OK'
+      })
+    }
+})
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"

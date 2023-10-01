@@ -11,6 +11,7 @@ const userProductController = require('../controllers/userProductController')
 const userAuth = require('../middlewares/userAuth')
 const userAddtoCart = require('../controllers/userAddtoCart')
 const userCheckoutpage = require('../controllers/userCheckoutPage')
+const userOrders = require('../controllers/userOrders')
 
 
 router.get('/',userAuth.yesSession,userHomePageController.showHomepageProducts)
@@ -53,8 +54,9 @@ router.post('/checkout',userAuth.noSession,userCheckoutpage.checkout)
 
 router.post('/saveAddress',userAuth.noSession,userCheckoutpage.saveAddress)
 
-router.post('/check',async(req,res)=>{
-    res.send("working")
-})
+router.post('/proceedToPay',userAuth.noSession,userCheckoutpage.proceedToPay)
+
+// ========================= Orders ============================ //
+router.get('/showOrders',userAuth.noSession,userOrders.showOrders)
 
 module.exports = router
