@@ -1,80 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+k9uSD4f5G5u1p2j9pF5G5u1p2j"
+  crossorigin="anonymous"
+>
 
-  <title>Pages / Not Found 404 - NiceAdmin Bootstrap Template</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+ 
+ 
+<style>
+  /* Place your CSS code here */
+  :root{
+    --color-background: #BEEB9F;
+    --color-bug: #00A388;
+    --color-text: #00A388;
+  }
 
-  <!-- Favicons -->
-  <link href="/img/favicon.png" rel="icon">
-  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    overflow:hidden;
+    background:var(--color-background);
+  }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  .error-code{
+    display:flex;
+    grid-gap:4vw;
+    position:relative;
+    border:0;
+    background:none;
+    font-family: "Nunito", sans-serif;
+    font-weight:600;
+    letter-spacing:.1em;
+    white-space:nowrap;
+    padding:4vw;
+    border-radius:1vw;
+    transition: all 250ms ease;
 
-  <!-- Vendor CSS Files -->
-  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
+    &:after{
+      content:"Looks like you found a bug.";
+      
+      position:absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:4vw;
+      color:var(--color-text);
+      opacity:0;    
+      transition: all 500ms ease;
+      transition-delay:1000ms;    
+    }
 
-  <!-- Template Main CSS File -->
-  <link href="/css/style.css" rel="stylesheet">
+    &:hover{
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Aug 30 2023 with Bootstrap v5.3.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+      &:after{
+        opacity:1;
+      }
+
+      .cell.filled{
+        @include transform;
+      }
+
+      .number{
+        grid-gap:2vw;
+      }
+
+      .bug{
+        transform: translateY(-200vh);
+        transition-delay:500ms;
+      }
+
+      .bug:before{
+        top:-.5vw;
+      }
+
+      .bug:after{
+        left:-.75vw;
+        right:-.75vw;
+        height:1.5vw;
+      }
+    }       
+  }
+
+  .number{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-template-rows:repeat(6, 1fr);
+    transition:all 500ms ease;
+    grid-gap:.25vw;
+    margin:auto 2vw;
+  }
+
+  .cell.filled{
+    transition:all 500ms ease;
+  }
+
+  .bug{
+    background:var(--color-bug);
+    transition: transform 4000ms ease;
+    width:2.25vw;
+    height:2.5vw;
+    position:relative;
+    border-radius:100%;
+    transition-delay:0;
+
+    /* bug head... */
+    &:before{
+      content:'';
+      height: 1.5vw;
+      width: 1.5vw;
+      display:block;
+      position:absolute;
+      top:0;
+      left:.375vw;
+      background:var(--color-bug);
+      border-radius:100%;
+      z-index:-1;
+      transition: all 1000ms ease;
+    }
+
+    /* bug legs... */
+    &:after{
+      content:'';
+      display:block;
+      position:absolute;
+      left:.5vw;
+      right:.5vw;
+      bottom:.5vw;
+      height:0;
+      transition:all 250ms ease;    
+      animation: skitter 100ms ease infinite;
+      background: 
+        top left / 100% 100% linear-gradient(
+          transparent,
+          transparent 45%,
+          var(--color-bug) 45%, 
+          var(--color-bug) 55%, 
+          transparent 55%
+        ),
+        top left / 100% 100% linear-gradient( 
+          to bottom right, 
+          transparent, 
+          transparent 45%, 
+          var(--color-bug) 45%,
+          var(--color-bug) 55%,
+          transparent 55%
+        ),
+        top left / 100% 100% linear-gradient( 
+          to bottom left, 
+          transparent, 
+          transparent 45%, 
+          var(--color-bug) 45%,
+          var(--color-bug) 55%,
+          transparent 55%
+        );
+    }
+  }
+  @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .go-to-home {
+      margin-top: 20px; /* Adjust the margin as needed */
+      text-align: center;
+      animation: fadeIn 0.5s ease 1s forwards; /* Delay for 1 second before the animation starts */
+      opacity: 0; /* Initially hidden */
+    }
+
+    .home-button {
+      background-color: var(--color-bug);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .home-button:hover {
+      background-color: #007A63; /* Change the color on hover as needed */
+    }
+
+  @keyframes skitter{
+    0%,100%{ 
+      transform:rotate(-35deg)
+    }
+    50%{
+      transform: rotate(35deg);
+    }  
+  }
+</style>
 </head>
-
 <body>
-
-  <main>
-    <div class="container">
-
-      <section class="section error-404 min-vh-100 d-flex flex-column align-items-center justify-content-center">
-        <h1>404</h1>
-        <h2>The page you are looking for doesn't exist.</h2>
-        <a class="btn" href="index.html">Back to home</a>
-        <img src="/img/not-found.svg" class="img-fluid py-5" alt="Page Not Found">
-        <div class="credits">
-          <!-- All the links in the footer should remain intact. -->
-          <!-- You can delete the links only if you purchased the pro version. -->
-          <!-- Licensing information: https://bootstrapmade.com/license/ -->
-          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-      </section>
-
+  <button class="error-code">
+    <div class="number five">
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+  
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
     </div>
-  </main><!-- End #main -->
+    <div class="number zero">
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+    </div>
+    <div class="number zero">
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+  
+      <div class="cell empty"></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell filled"><div class="bug"></div></div>
+      <div class="cell empty"></div>
+    </div>  
+  </button>  
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  
 
-  <!-- Vendor JS Files -->
-  <script src="/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/vendor/chart.js/chart.umd.js"></script>
-  <script src="/vendor/echarts/echarts.min.js"></script>
-  <script src="/vendor/quill/quill.min.js"></script>
-  <script src="/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="/vendor/tinymce/tinymce.min.js"></script>
-  <script src="/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="/js/main.js"></script>
-
+  <div class="go-to-home">
+    <form action="/home" method="get">
+    <button type="submit" class="home-button" >Go to Home</button>
+  </form>
+  </div>
+  <!-- <script>
+    setTimeout(function() {
+      var goToHomeContainer = document.querySelector('.go-to-home');
+      var button = document.createElement('button');
+      button.className = 'home-button';
+      button.textContent = 'Go to Home';
+      goToHomeContainer.appendChild(button);
+    }, 1000); // Delay for 1 second (1000 milliseconds)
+  </script> -->
 </body>
-
 </html>

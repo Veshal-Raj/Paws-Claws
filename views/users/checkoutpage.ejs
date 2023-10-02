@@ -195,139 +195,127 @@
   </div>
 
   <script>
-    const toggleBillingButton = document.getElementById('toggleBillingButton');
-    const billingForm = document.getElementById('billingForm');
 
-    toggleBillingButton.addEventListener('click', function () {
-      if (billingForm.style.display === 'none') {
-        billingForm.style.display = 'block';
-      } else {
-        billingForm.style.display = 'none';
-      }
-    });
+      const toggleBillingButton = document.getElementById('toggleBillingButton');
+      const billingForm = document.getElementById('billingForm');
+
+      toggleBillingButton.addEventListener('click', function () {
+        billingForm.style.display = billingForm.style.display === 'none' ? 'block' : 'none';   // instead of if else condition,  i changed my code using terinay orperator
+      });
+
   </script>
 
 <script>
-  // Function to handle form submission
-  function handleSubmit(event) {
-      event.preventDefault()
-    // Get all the form field values
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const email = document.getElementById("email").value;
-    const address = document.getElementById("address").value;
- 
-    
-    // document.write(city);
-    const countrySelected = document.getElementById("country")
-    const stateSelected = document.getElementById("state")
-    const citySelected = document.getElementById("city")
-    const selectedCountryName = countrySelected.options[countrySelected.selectedIndex].label
-    const selectedStateName = stateSelected.options[stateSelected.selectedIndex].label
-    const selectedCityName = citySelected.options[citySelected.selectedIndex].label
 
-    const country = selectedCountryName
-    const state = selectedStateName
-    const city = selectedCityName
-    
- 
+      // Function to handle form submission
+    async function handleSubmit(event) {
+      event.preventDefault();
 
-    const pincode = document.getElementById("City").value; // Note: should this be "pincode"?
-    const landmark = document.getElementById("Landmark").value;
-    const mobileNumber = document.getElementById("phone").value;
+      try {
+        const formData = collectFormData();
+        const response = await saveAddress(formData);
+        const data = await response.json();
 
-    // Display the retrieved values (replace with your logic)
-    console.log("First Name: " + firstName);
-    console.log("Last Name: " + lastName);
-    console.log("Email: " + email);
-    console.log("Address: " + address);
-    console.log("Country: " + country);
-    console.log("State: " + state);
-    console.log("City: " + city);
-    console.log("Pincode: " + pincode);
-    console.log("Landmark: " + landmark);
-    console.log("Mobile Number: " + mobileNumber);
-
-
-    const formData = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      address: address,
-      country: country,
-      state: state,
-      city: city,
-      pincode: pincode,
-      landmark: landmark,
-      mobileNumber: mobileNumber
-    }
-    console.log(formData)
-
-    // Sending the data to the server using a post request
-    fetch('/saveAddress', {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json'
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-      // handle the server response if needed
-      console.log('SERVER RESPONSE: ',data)
-      console.log('data status: ',data.status )
-      console.log('data status: ',data.newAddress.city )
-
-      if (data.newAddress) {
-
-            // If the address is saved successfully, update the UI with the new address
-            updateUIwithNewAddress(data.newAddress, data.index); // Pass the index
+        if (data.newAddress) {
+          updateUIwithNewAddress(data.newAddress, data.index);
         } else {
-            // Handle any errors or display messages to the user
-            
-            Swal.fire({
-              title: 'Failed to Save!',
-              text: 'Failed to save address. Please try again.',
-              icon: 'error',
-              confirmButtonText:'OK'
-            })
+          handleSaveAddressError();
         }
-    })
-    .catch(error => {
-      console.error('Error:',error);
-    })
-    
-  }
+      } catch (error) {
+        console.error('Error:', error);
+        handleSaveAddressError();
+      }
+    }
 
-  // Function to update the UI with a new address
-  function updateUIwithNewAddress(newAddress, index) {
-    // Create a new address card using DOM manipulation
-    const card = document.createElement('div')
-    card.className = 'card bg-light mb-3 col-md-4 m-3'
-    card.style.maxWidth = '18rem'
+    // Function to collect form data
+    function collectFormData() {
+      const firstName = document.getElementById("firstName").value;
+      const lastName = document.getElementById("lastName").value;
+      const email = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
 
-    // Building the card
-    card.innerHTML = `
+      const countrySelected = document.getElementById("country");
+      const stateSelected = document.getElementById("state");
+      const citySelected = document.getElementById("city");
 
+      const selectedCountryName = countrySelected.options[countrySelected.selectedIndex].label;
+      const selectedStateName = stateSelected.options[stateSelected.selectedIndex].label;
+      const selectedCityName = citySelected.options[citySelected.selectedIndex].label;
 
-    
-      <div class="card-header  d-flex justify-content-between" style="max-width: 100%">
-        <div>
-          <input type="radio" name="addressRadio" id="addressRadio${index}" aria-label="Radio button for following text input">
-          Address
-        </div>  
-        <div>
-          <button class="btn btn-warning btn-outline-secondary" id="deleteButton${index}">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
-          <button class="btn btn-danger btn-outline-dark" id="deleteButton${index}">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        </div>
+      const country = selectedCountryName;
+      const state = selectedStateName;
+      const city = selectedCityName;
+
+      const pincode = document.getElementById("City").value; // City means pincode
+      const landmark = document.getElementById("Landmark").value;
+      const mobileNumber = document.getElementById("phone").value;
+
+      return {
+        firstName,
+        lastName,
+        email,
+        address,
+        country,
+        state,
+        city,
+        pincode,
+        landmark,
+        mobileNumber
+      };
+    }
+
+    // Function to send form data to the server
+    function saveAddress(formData) {
+      return fetch('/saveAddress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+    }
+
+    // Function to handle save address errors
+    function handleSaveAddressError() {
+      Swal.fire({
+        title: 'Failed to Save!',
+        text: 'Failed to save address. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+
+    // Function to update the UI with a new address
+    function updateUIwithNewAddress(newAddress, index) {
+      const card = createAddressCard(newAddress, index);
+      const addressContainer = document.getElementById('addressContainer');
+      addressContainer.appendChild(card);
+    }
+
+    // Function to create a new address card
+    function createAddressCard(newAddress, index) {
+  const card = document.createElement('div');
+  card.className = 'card bg-light mb-3 col-md-4 m-3';
+  card.style.maxWidth = '18rem';
+
+  card.innerHTML = `
+    <div class="card-header  d-flex justify-content-between" style="max-width: 100%">
+      <div>
+        <input type="radio" name="addressRadio" id="addressRadio${index}" aria-label="Radio button for following text input">
+        Address
       </div>
+      <div>
+        <button class="btn btn-warning btn-outline-secondary" id="editButton${index}">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button class="btn btn-danger btn-outline-dark" id="deleteButton${index}">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
 
-      <div class="card-body"> 
-       <h5 class="card-title">${newAddress.fullname}</h5>
+    <div class="card-body">
+      <h5 class="card-title">${newAddress.fullname}</h5>
       <p class="card-text">${newAddress.first_address}</p>
       <p class="card-text">${newAddress.country}</p>
       <p class="card-text">${newAddress.state}</p>
@@ -336,106 +324,93 @@
       <p class="card-text">${newAddress.landmark}</p>
       <p class="card-text">${newAddress.mobileNumber}</p>
     </div>
-    `
-    
-    // Append the card to the UI
-    const addressContainer = document.getElementById('addressContainer')
-    addressContainer.appendChild(card)
+  `;
+
+  return card;
 }
 
-// Add an event listener to the form 
-// const billingForm = document.getElementById('billingForm')
-// billingForm.addEventListener('submit',handleSubmit)
+    
 </script>
 
 <script>
  
+    const proceedToPayButton = document.getElementById('proceedToPay');
+        proceedToPayButton.addEventListener('click', async function () {
+          const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked');
 
-  const proceedToPayButton = document.getElementById('proceedToPay')
-  proceedToPayButton.addEventListener('click',function() {
-    // Find the selected address
-    const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked')
-    console.log("selected address radio: ",selectedAddressRadio)
+          if (!selectedAddressRadio) {
+            Swal.fire({
+              title: 'No Address Selected',
+              text: 'Please select an address to proceed.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+            return;
+          }
 
-    if (selectedAddressRadio) {
-    console.log("selected address radio: ",selectedAddressRadio)
+          const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
+          const userInputElement = document.getElementById('USER');
+          const userData = JSON.parse(userInputElement.value);
+          const selectedAddress = userData.address[selectedAddressIndex];
 
-      Swal.fire({
-        title: 'Confirm Order?',
-        text: '',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-        allowOutsideClick: false, // Prevent clicking outside to close
-        allowEscapeKey: false, 
-      }).then((result) => {
-        console.log('checking after swal fire')
-          if (result.isConfirmed) {
-            const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio','')
-            console.log(selectedAddressIndex)
-            console.log('checking again after selectedAddressIndex')
-            const userInputElement = document.getElementById('USER');
-            const userData = JSON.parse(userInputElement.value);
-            console.log(userData)
-            const selectedAddress = userData.address[selectedAddressIndex]
+          const result = await Swal.fire({
+            title: 'Confirm Order?',
+            text: '',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          });
 
-            console.log(selectedAddress)
-            console.log('Before fetch');
+          if (!result.isConfirmed) {
+            return;
+          }
 
-            // sending the selected address tho the server using fetch
-            fetch('/proceedToPay',{
+          try {
+            const response = await fetch('/proceedToPay', {
               method: 'POST',
               headers: {
-                'Content-Type':'application/json',
+                'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ selectedAddress })
-            })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data)
-              if (data.status === 'success') {
-                Swal.fire({
-                  title: 'Order Successful',
-                  height: 600,
-                  width: 600,
-                  padding: '3em',
-                  color: '#716add',
-                  background: '#fff url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',  
-                  allowOutsideClick: false, // Prevent clicking outside to close
-                  allowEscapeKey: false,              
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                  footer: '<a href="/home">Go Back to Home</a>'
-                }).then((result) => {
+              body: JSON.stringify({ selectedAddress }),
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+              Swal.fire({
+                title: 'Order Successful',
+                height: 600,
+                width: 600,
+                padding: '3em',
+                color: '#716add',
+                background: '#fff url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                icon: 'success',
+                confirmButtonText: 'OK',
+                footer: '<a href="/home">Go Back to Home</a>',
+               }).then((result) => {
                   if (result.isConfirmed) {
-                    // Redirect to the "order" page when the "OK" button is clicked
                     window.location.href = '/showOrders';
                   }
-                })
-              } else {
-                Swal.fire({
-                  title: 'Order Failed',
-                  text: data.message,
-                  icon: 'error',
-                  confirmButtonText: 'OK',
-                })
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            })
-          }
-      })
-    } else {
-      Swal.fire({
-        title: 'No Address Selected',
-        text: 'Please select an address to procced.',
-        icon: 'error',
-        confirmButtonText:'OK'
-      })
-    }
-})
+                });
+            } else {
+              Swal.fire({
+                title: 'Order Failed',
+                text: data.message,
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            }
+            } catch (error) {
+              console.error('Error:', error);
+            }
+        });
+
+
 </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"

@@ -59,4 +59,11 @@ router.post('/proceedToPay',userAuth.noSession,userCheckoutpage.proceedToPay)
 // ========================= Orders ============================ //
 router.get('/showOrders',userAuth.noSession,userOrders.showOrders)
 
+router.get('/error',async (req,res) => {
+    res.render('error')
+})
+router.get('/something',async (req,res) => {
+    res.render('somethingwentwrong')
+})
+
 module.exports = router

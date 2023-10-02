@@ -15,6 +15,10 @@
     <link href="css/style2.css" rel="stylesheet" />
 
     <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
         .card-body-fixed-height {
 
             max-height: 200px;
@@ -99,109 +103,245 @@
         }
 
          /* Define the zoom effect for the image */
+        /* Style for the main container */
+    #message {
+        background-color: #9292a6;
+        padding: 0;
+        border-radius: 5px;
+        /* margin: 20px auto; */
+        max-width: 100%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        position: relative; /* Add this to make positioning of the footer relative */
+        height: 100%;
+    }
+   /* Style for the footer container */
+.footer {
+    background-color: #333; /* Background color */
+    color: white; /* Text color */
+    padding: 20px; /* Padding around content */
+    text-align: center; /* Center align text */
+    height: 100px;
    
+}
+
+/* Style for the footer content */
+.footer-content {
+    max-width: 800px; /* Maximum width for content */
+    margin: 0 auto; /* Center align content horizontally */
+   
+    
+}
+
+/* Style for the "Contact Us" heading */
+.footer-content p {
+    font-weight: bold; /* Bold text */
+    margin-bottom: 10px; /* Space below heading */
+}
+
+/* Style for the list items */
+.footer-content ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+}
+
+/* Style for list items */
+.footer-content li {
+    margin-bottom: 5px; /* Space between list items */
+}
+
+/* Hover effect for list items (optional) */
+.footer-content li:hover {
+    color: #FFD700; /* Change text color on hover */
+}
+.navbar {
+    padding-left: 50px;
+}
+ 
+
+   
+</style>
+
     </style>
 </head>
+<script>
+    // Function to hide the marquee after 1 second
+    function hideMarquee() {
+            setTimeout(function() {
+                var marquee = document.querySelector('marquee');
+                marquee.style.display = 'none';
+            }, 3000); // 1000 milliseconds (1 second)
+        }
+</script>
 
-<body>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid px-4 px-lg-5">
-            <a class="navbar-brand" href="/home">Paws & Claws</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Cats</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Dogs</a></li>
-
-                    <!-- <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Dogs</a></li>
-                                <li><a class="dropdown-item" href="#!">Cats</a></li>
-                            </ul>
-                        </li> -->
-                </ul>
-                <div class="d-flex ">
-                    <% if(locals.userId){ %>
-                        <form class="d-flex px-2 " action="/showWishlist" method="post">
-                             <button class="btn btn-outline-dark" type="submit">
-                                <i class="bi bi-heart-fill me-1"></i>
-                                Wishlist
-                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                            </button>
-                        </form>
-                        <form class="d-flex px-2" action="/showCart" method="post">
-                            <button class="btn btn-outline-dark" type="submit">
-                                <i class="bi-cart-fill me-1"></i>
-                                Cart
-                                <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                            </button>
-                        </form>
-                
-                    <% }else { %> 
-                        <form class="d-flex px-2 " action="/login">
-                            <button class="btn btn-outline-dark" type="submit">
-                               <i class="bi bi-heart-fill me-1"></i>
-                               Wishlist
-                               <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                           </button>
-                       </form>
-                       <form class="d-flex px-2" action="/login">
-                           <button class="btn btn-outline-dark" type="submit">
-                               <i class="bi-cart-fill me-1"></i>
-                               Cart
-                               <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                           </button>
-                       </form>
-                    
-                    <% } %> 
-                   
-
-                    <% if (locals.userId) { %>
-                        <!-- User is authenticated, show the "Sign Out" button -->
-                        <form class="d-flex px-2" action="/signout" method="post">
-                            <button class="btn btn-outline-dark" type="submit">
-                                <i class="bi bi-box-arrow-right me-1"></i> Sign Out
-                            </button>
-                        </form>
-                    <% } else { %>
-                        <!-- User is not authenticated, show the "Login" button -->
-                        <a class="btn btn-outline-dark" href="/login">
-                            <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                        </a>
-                    <% } %>
+<body onload="hideMarquee()">
 
 
-                   
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
-    <!---------------------------- extra -------------------------->
+     <!---------------------------- extra -------------------------->
 
     
   <div class="progress" id="progress">
     <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-  </div>
-  <div  id="message" style="display: none;" >
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid px-4 px-lg-5">
-            <a class="navbar-brand" href="/home">Paws & Claws</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        </div>
-        </nav>
+    <div>
+
     </div>
+</div >
+<marquee behavior="scroll" direction="right" scrollamount="30">
+    <img src="https://orig00.deviantart.net/13f8/f/2012/075/d/b/cat_running_animation_by_tiguar-d4sye1h.gif" alt="Running Cat">
+    <!-- <img src="https://th.bing.com/th/id/R.87b13e0d366f75300d6298c6ce4fc812?rik=0fJ4g9Ts02zBeg&riu=http%3a%2f%2f25.media.tumblr.com%2ftumblr_m1oxnf9BYb1qm69mso1_1280.gif&ehk=z2Lhn12LJB2LzMsOGhFjhSpX8RXcUESBWgYTec9kwMk%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat"> -->
+
+</marquee>
+  <div  id="message" style="display: none;" class="container-fluid ">
+   <!-- As a link -->
+        <nav class="navbar navbar-light bg-light container-fluid ">
+            <a class="navbar-brand" href="/home">Paws&Claws</a>
+        </nav>
   
+    <div class="container-fluid my-5  d-flex  justify-content-center">
+        <div class="card card-1">
+            <div class="card-header bg-white">
+                <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
+                    <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order,<span class="change-color">Anjali</span> !</h4> </div>
+                    <div class="col-auto text-center  my-auto pl-0 pt-sm-4"> <img class="img-fluid my-auto align-items-center mb-0 pt-3"  src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"> <p class="mb-4 pt-0 Glasses">Glasses For Everyone</p>  </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Receipt</h6> </div>
+                    <div class="col-auto  "> <small>Receipt Voucher : 1KAU9-84UIL</small> </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-2">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="https://i.imgur.com/RJOW4BL.jpg" width="135" height="135" /> </div>
+                                    <div class="media-body my-auto text-right">
+                                        <div class="row  my-auto flex-column flex-md-row">
+                                            <div class="col my-auto"> <h6 class="mb-0"> Jack Jacs</h6>  </div>
+                                            <div class="col-auto my-auto"> <small>Golden Rim </small></div>
+                                            <div class="col my-auto"> <small>Size : M</small></div>
+                                            <div class="col my-auto"> <small>Qty : 1</small></div>
+                                            <div class="col my-auto"><h6 class="mb-0">&#8377;3,600.00</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-3 ">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3"> <small> Track Order <span><i class=" ml-2 fa fa-refresh"  aria-hidden="true"></i></span></small> </div>
+                                    <div class="col mt-auto">
+                                        <div class="progress my-auto"> <div class="progress-bar progress-bar  rounded" style="width: 62%" role="progressbar" aria-valuenow="25" aria-valuemin="0"  aria-valuemax="100"></div> </div>
+                                        <div class="media row justify-content-between ">
+                                            <div class="col-auto text-right"><span> <small  class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
+                                            <div class="flex-col"> <span> <small class="text-right mr-sm-2">Out for delivary</small><i class="fa fa-circle active"></i></span></div>
+                                            <div class="col-auto flex-col-auto"><small  class="text-right mr-sm-2">Delivered</small><span> <i  class="fa fa-circle"></i></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="card card-2">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="https://i.imgur.com/fUWWpRS.jpg" width="135" height="135" /> </div>
+                                    <div class="media-body my-auto text-right">
+                                        <div class="row  my-auto flex-column flex-md-row">
+                                            <div class="col-auto my-auto "> <h6 class="mb-0"> Michel Mark</h6> </div>
+                                            <div class="col my-auto  "> <small>Black Rim </small></div>
+                                            <div class="col my-auto  "> <small>Size : L</small></div>
+                                            <div class="col my-auto  "> <small>Qty : 1</small></div>
+                                            <div class="col my-auto ">  <h6 class="mb-0">&#8377;1,235.00</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-3 ">
+                                <div class="row ">
+                                    <div class="col-md-3 mb-3">  <small> Track Order <span><i class=" ml-2 fa fa-refresh" aria-hidden="true"></i></span></small> </div>
+                                    <div class="col mt-auto">
+                                        <div class="progress"><div class="progress-bar progress-bar  rounded" style="width: 18%"  role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div> </div>
+                                        <div class="media row justify-content-between ">
+                                            <div class="col-auto text-right"><span> <small  class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
+                                            <div class="flex-col"> <span> <small class="text-right mr-sm-2">Out for delivary</small><i class="fa fa-circle"></i></span></div>
+                                            <div class="col-auto flex-col-auto"><smallclass="text-right mr-sm-2">Delivered</small><span> <i class="fa fa-circle"></i></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="row justify-content-between">
+                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
+                            <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
+                            <div class="flex-sm-col col-auto"> <p class="mb-1">&#8377;4,835</p> </div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Discount</b></p> </div>
+                            <div class="flex-sm-col col-auto"><p class="mb-1">&#8377;150</p></div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>GST 18%</b></p></div>
+                            <div class="flex-sm-col col-auto"><p class="mb-1">843</p></div>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>Delivery Charges</b></p></div>
+                            <div class="flex-sm-col col-auto"><p class="mb-1">Free</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invoice ">
+                    <div class="col"><p class="mb-1"> Invoice Number : 788152</p><p class="mb-1">Invoice Date : 22 Dec,2019</p><p class="mb-1">Recepits Voucher:18KU-62IIK</p></div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="jumbotron-fluid">
+                    <div class="row justify-content-between ">
+                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
+                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">TOTAL PAID</h2></div>
+                        <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">&#8377; 5,528</h1></div>
+                    </div>
+                    <div class="row mb-3 mt-3 mt-md-0">
+                        <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
+                        <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
+                        <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
+                    </div>
+                </div>
+            </div>
+           
+
+            <div style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
+            <button class="btn btn-warning btn-outline-dark btn-lg">Cancel Order</button>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
+            <!-- <ul>
+                <li>Email: contact@pawsandclaws.com</li>
+                <li>Phone: (123) 456-7890</li>
+                <li>Address: 1234 Pet Street, Animal City</li>
+            </ul> -->
+        </div>
+    </div>
+        
+</div>
+    
+    <script>
+        setTimeout(function () {
+            const footer = document.getElementById('myFooter');
+            footer.style.display = 'block';
+        }, 3000); // 1000 milliseconds (1 second)
+    </script>
   <script>
     // Function to animate the progress bar
     function moveProgressBar() {
@@ -256,3 +396,11 @@
         });
     </script>
 <% } %>
+
+</body>
+</html>
+
+  
+
+
+   
