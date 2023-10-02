@@ -1,4 +1,6 @@
+const { generate } = require('otp-generator');
 const User = require('../models/userModel')
+const Order = require('../models/ordersModel')
 
 
 const checkout = async (req,res) => {
@@ -55,9 +57,45 @@ const saveAddress = async (req,res) => {
     }
 }
 
+const generateOrderNumber = () => {
+    // Implement your logic here to generate a unique order number
+    // You can use a combination of timestamp, random numbers, or any other method you prefer
+    const timestamp = Date.now();
+    const randomPart = Math.floor(Math.random() * 10000);
+    return `ORDER-${timestamp}-${randomPart}`;
+};
+
 const proceedToPay = async(req,res) => {
     try {
         const { selectedAddress } = req.body
+        console.log("userCheckout.js ---> line 61 ",selectedAddress)
+
+        userId = req.session.userId
+        // console.log(user)
+        const UserFound = await User.User.findById(userId)
+        console.log(UserFound)
+        // console.log("cart: ",UserFound.cart)
+        const cart = UserFound.cart
+
+        const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+
+        console.log("total amount: ", totalPrice);
+        
+        // Create a new order using the Order model
+        const order = new Order ({
+            orderNumber: generateOrderNumber(),
+            customer:userId,
+            products: req.session.cart,
+            shippingAddress:selectedAddress,
+            totalAmount:totalPrice,
+
+        })
+
+        // Save the order to the database
+        await order.save()
+
+        const chekorder = await Order.find(order)
+        console.log(chekorder)
 
         res.json({ status: 'success', message: 'Payment successful' });
     } catch (error) {
