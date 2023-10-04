@@ -9,6 +9,7 @@ const checkout = async (req,res) => {
 
         // Fetch the user data with the populated 'address' field
         const user = await User.User.findById(userId).populate('address');
+        // console.log(user)
 
         res.render('users/checkoutpage',{userId,user})
     } catch (error) {
@@ -20,7 +21,7 @@ const checkout = async (req,res) => {
 const saveAddress = async (req,res) => {
     try {
         const formData = req.body
-        console.log(formData)
+        // console.log(formData)
 
         const userId = req.session.userId
 
@@ -68,18 +69,18 @@ const generateOrderNumber = () => {
 const proceedToPay = async(req,res) => {
     try {
         const { selectedAddress } = req.body
-        console.log("userCheckout.js ---> line 61 ",selectedAddress)
+        // console.log("userCheckout.js ---> line 71 ",selectedAddress)
 
         userId = req.session.userId
         // console.log(user)
         const UserFound = await User.User.findById(userId)
-        console.log(UserFound)
+        // console.log(UserFound)
         // console.log("cart: ",UserFound.cart)
         const cart = UserFound.cart
 
         const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
 
-        console.log("total amount: ", totalPrice);
+        // console.log("total amount: ", totalPrice);
         
         // Create a new order using the Order model
         const order = new Order ({
@@ -95,8 +96,8 @@ const proceedToPay = async(req,res) => {
         await order.save()
 
         const chekorder = await Order.find(order)
-        console.log(chekorder)
-
+        // console.log(chekorder)
+        console.log("custiomer in usrCheckoutpage ",chekorder.customer)
         res.json({ status: 'success', message: 'Payment successful' });
     } catch (error) {
         console.error(error);

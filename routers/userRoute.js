@@ -12,7 +12,8 @@ const userAuth = require('../middlewares/userAuth')
 const userAddtoCart = require('../controllers/userAddtoCart')
 const userCheckoutpage = require('../controllers/userCheckoutPage')
 const userOrders = require('../controllers/userOrders')
-
+const userCats = require('../controllers/userCatsController')
+const userDogs = require('../controllers/userDogsController')
 
 router.get('/',userAuth.yesSession,userHomePageController.showHomepageProducts)
 router.get('/login',userAuth.yesSession,userController.loginpage)
@@ -58,6 +59,14 @@ router.post('/proceedToPay',userAuth.noSession,userCheckoutpage.proceedToPay)
 
 // ========================= Orders ============================ //
 router.get('/showOrders',userAuth.noSession,userOrders.showOrders)
+
+
+// ========================= Cats =================================== //
+router.get('/cats',userCats.cats)
+
+
+// ========================= Dogs =================================== //
+router.get('/dogs',userDogs.dogs)
 
 router.get('/error',async (req,res) => {
     res.render('error')

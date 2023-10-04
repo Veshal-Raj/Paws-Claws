@@ -1,0 +1,40 @@
+<%- include('../layouts/userHeader') %>
+
+<!-- Products Section -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+            <% products.forEach((product) => { %>
+            <div class="col mb-5">
+                <div class="card card-square">
+                    <!-- Product image -->
+                    <img src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %> Image"
+                        class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
+                    <!-- Product details -->
+                    <div class="card-body p-4 card-body-fixed-height">
+                        <div class="text-center">
+                            <!-- Product name -->
+                            <h5 class="fw-bolder"><%= product.productName %></h5>
+                            <p>Category: <%= product.category.categoryName %></p>
+                            <p>Subcategory: <%= product.subcategory.subcategoryName %></p>
+                            <!-- Product price -->
+                            $<%= product.price.toFixed(2) %>
+                        </div>
+                    </div>
+                    <!-- Product actions -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <a href="/product?productId=<%= product._id %>" class="btn btn-outline-dark mt-auto">View
+                                Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+        </div>
+    </div>
+</section>
+
+<%- include('../layouts/userFooter') %>

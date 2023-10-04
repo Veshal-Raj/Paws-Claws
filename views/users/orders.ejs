@@ -156,12 +156,14 @@
 .navbar {
     padding-left: 50px;
 }
- 
+ .bullet-point {
+    list-style: none;
+ }
 
    
 </style>
-
-    </style>
+    
+    
 </head>
 <script>
     // Function to hide the marquee after 1 second
@@ -215,26 +217,49 @@
                     <% orders.forEach((order) => { %>
                         <div class="order-details">
                             <div class="row justify-content-between mb-3">
-                                <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Order Number: </h6> </div>
+                                <div class="col-auto"><ul> <li><h5 class="color-1 mb-0 change-color">Order Number: </h5> </li> </ul></div>
                                 <div class="col-auto"> <small><%= order.orderNumber %></small> </div>
+                                <div class="col-auto">
+                                    <!-- Use if-else conditions to determine the class -->
+                                    <% let statusClass = ''; %>
+                                    <% if (order.status === 'Pending') { %>
+                                        <% statusClass = 'btn-warning'; %>
+                                    <% } else if (order.status === 'Processing') { %>
+                                        <% statusClass = 'btn-primary'; %>
+                                    <% } else if (order.status === 'Shipped') { %>
+                                        <% statusClass = 'btn-info'; %>
+                                    <% } else if (order.status === 'Delivered') { %>
+                                        <% statusClass = 'btn-success'; %>
+                                    <% } else if (order.status === 'Cancelled') { %>
+                                        <% statusClass = 'btn-danger'; %>
+                                    <% } else { %>
+                                        <% statusClass = 'btn-secondary'; %>
+                                    <% } %>
+                                    <button class="btn <%= statusClass %> btn-outline-dark"><%= order.status %></button>
+                                </div>
                             </div>
-        
-                            <% if (order.products && order.products.length > 0) { %>
-                                <% order.products.forEach((product) => { %>
-                                    <div class="product-details">
-                                        <div class="row">
-                                            <div class="col-auto"> <img src="<%= product.productImage %>" alt="<%= product.product_name %>" width="100" height="100" /> </div>
-                                            <div class="col">
-                                                <h6 class="mb-0">Product Name: <%= product.product_name %></h6>
-                                                <small>Size: <%= product.product_size %></small><br>
-                                                <small>Quantity: <%= product.product_quantity %></small><br>
-                                                <h6 class="mb-0">Price: &#8377;<%= product.product_price.toFixed(2) %></h6>
-                                            </div>
-                                        </div>
-                                        <hr class="my-3">
-                                    </div>
-                                <% }) %>
-                            <% } %>
+
+
+
+
+
+                            <!-- <h2>Your Cart</h2> -->
+                            <ul class="bullet-point"> 
+                                <% user.cart.forEach((item) => { %>
+                                    <li>
+                                        <strong>Product Name: </strong> <%= item.product_name %><br>
+                                        <strong>Price: </strong> <%= item.price %><br>
+                                        <strong>Quantity: </strong> <%= item.quantity %><br>
+                                        <strong>Total Price: </strong> <%= item.totalPrice %><br>
+                                        <hr>
+                                        
+                                    </li>
+                                <% }); %>
+                            </ul>
+                            <div style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
+                                <button class="btn btn-primary btn-outline-dark ">Cancel Order</button>     
+                            </div>
+                            <hr>
                         </div>
                     <% }) %>
                 <% } else { %>
@@ -242,26 +267,9 @@
                 <% } %>
             </div>
             
-            <div class="card-footer">
-                <div class="jumbotron-fluid">
-                    <div class="row justify-content-between ">
-                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
-                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">TOTAL PAID</h2></div>
-                        <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">&#8377; 5,528</h1></div>
-                    </div>
-                    <div class="row mb-3 mt-3 mt-md-0">
-                        <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
-                        <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
-                        <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
-                    </div>
-                </div>
-            </div>
+           
            
 
-            <div style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
-            <button class="btn btn-warning btn-outline-dark btn-lg">Cancel Order</button>
-                
-            </div>
         </div>
     </div>
 

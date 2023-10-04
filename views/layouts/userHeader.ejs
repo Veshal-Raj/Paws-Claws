@@ -11,6 +11,13 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  integrity="sha384-Ff5385hCCBqGoB/nyF2gJ9Xme1z5um2F5P1l5d+Jl5OMb4m81b1x3Ltkjz5E/Kb8q"
+  crossorigin="anonymous"
+/>
+
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/style2.css" rel="stylesheet" />
 
@@ -107,26 +114,29 @@
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid px-4 px-lg-5">
-            <a class="navbar-brand" href="#!">Paws & Claws</a>
+            <a class="navbar-brand" href="/home">Paws & Claws</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Cats</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Dogs</a></li>
 
-                    <!-- <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Dogs</a></li>
-                                <li><a class="dropdown-item" href="#!">Cats</a></li>
-                            </ul>
-                        </li> -->
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/cats">Cats</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dogs">Dogs</a></li>
+                    <% if(locals.userId){ %> 
+                        <li class="nav-item"><a class="nav-link" href="/showOrders">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
+                    <% } %>
+
                 </ul>
+                <form class="d-flex">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </div>
+                </form>
+
                 <div class="d-flex ">
                     <% if(locals.userId){ %>
                         <form class="d-flex px-2 " action="/showWishlist" method="post">
@@ -186,8 +196,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<!-- Include SweetAlert library -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
+
 
 <% if (locals.userIsBlocked) { %>
     <script>
