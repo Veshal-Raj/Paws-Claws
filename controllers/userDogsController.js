@@ -2,11 +2,11 @@ const Product = require('../models/productsModel')
 const Category = require('../models/categoriesModel')
 const Subcategory = require('../models/subcategoriesModel')
 
-const dogs = async (req,res) => {
+const dogs = async (req, res) => {
     try {
 
         // Find the "Cat" category
-        const dogCategory = await Category.Category.findOne({categoryName: 'Dog'})
+        const dogCategory = await Category.Category.findOne({ categoryName: 'Dog' })
 
         // Find all products that belong to the "Dog " category
         const dogProducts = await Product.find({
@@ -14,7 +14,7 @@ const dogs = async (req,res) => {
             isAvailable: true, // Filter available products 
         }).populate('category subcategory')
 
-        res.render('users/cats',{products: dogProducts, userId: req.session.userId})
+        res.render('users/cats', { products: dogProducts, userId: req.session.userId })
 
     } catch (error) {
         console.error(error);

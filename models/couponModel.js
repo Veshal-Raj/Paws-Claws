@@ -8,7 +8,7 @@ const couponSchema = new mongoose.Schema({
     description: String,
     discountType: {
         type: String,
-        enum: ['Percentage','FixedAmount'],
+        enum: ['Percentage', 'FixedAmount'],
         required: true,
     },
     discountValue: Number,
@@ -17,10 +17,10 @@ const couponSchema = new mongoose.Schema({
     validUntil: Date,
     isActive: {
         type: Boolean,
-        default : true,
+        default: true,
     },
 })
 
-const Coupon = mongoose.model('Coupon',couponSchema)
+const Coupon = mongoose.model('Coupon', couponSchema)
 
-module.exports=Coupon
+module.exports = Coupon

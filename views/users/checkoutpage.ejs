@@ -5,9 +5,11 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
     crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 
   <style>
     /* Add spacing between select boxes */
@@ -24,168 +26,187 @@
     </div>
 
     <div class="row" id="addressContainer">
-    <% user.address.forEach(function(address, index) { %> 
-    <div class="card bg-light mb-3 col-md-4 m-3" style="max-width: 18rem;">
+      <% user.address.forEach(function(address, index) { %>
+        <div class="card bg-light mb-3 col-md-4 m-3" style="max-width: 18rem;">
 
-      <div class="card-header  d-flex justify-content-between " style="max-width: 100%;">
-        <div>
-          <input type="radio" name="addressRadio" id="addressRadio<%= index %>" aria-label="Radio button for following text input">
-          Address
+          <div class="card-header  d-flex justify-content-between " style="max-width: 100%;">
+            <div>
+              <input type="radio" name="addressRadio" id="addressRadio<%= index %>"
+                aria-label="Radio button for following text input">
+              Address
+            </div>
+            <div>
+              <button class="btn btn-warning btn-outline-secondary" id="deleteButton<%= index %>">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="btn btn-danger btn-outline-dark" id="deleteButton<%= index %>">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= address.fullname %>
+            </h5>
+            <p class="card-text">
+              <%= address.first_address %>
+            </p>
+            <p class="card-text">
+              <%= address.email %>
+            </p>
+            <p class="card-text">
+              <%= address.country %>
+            </p>
+            <p class="card-text">
+              <%= address.state %>
+            </p>
+            <p class="card-text">
+              <%= address.city %>
+            </p>
+            <p class="card-text">
+              <%= address.pincode %>
+            </p>
+            <p class="card-text">
+              <%= address.landmark %>
+            </p>
+            <p class="card-text">
+              <%= address.mobileNumber %>
+            </p>
+          </div>
         </div>
-        <div>
-          <button class="btn btn-warning btn-outline-secondary" id="deleteButton<%= index %>">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
-          <button class="btn btn-danger btn-outline-dark" id="deleteButton<%= index %>">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        </div>
-       
-      </div>
-      
-      <div class="card-body">
-        <h5 class="card-title"><%= address.fullname %></h5>
-        <p class="card-text"><%= address.first_address %></p>
-        <p class="card-text"><%= address.email %></p>
-        <p class="card-text"><%= address.country %></p>
-        <p class="card-text"><%= address.state %></p>
-        <p class="card-text"><%= address.city %></p>
-        <p class="card-text"><%= address.pincode %></p>
-        <p class="card-text"><%= address.landmark %></p>
-        <p class="card-text"><%= address.mobileNumber %></p>
-      </div>
+        <% }) %>
     </div>
-    <% }) %>
-  </div>
 
     <!-- the user data is sending from the backed along with rendering this page, so for using this value in script i am storing this in a input field and make it hidden -->
     <input type="hidden" value='<%- JSON.stringify(user) %>' id="USER">
-
+    <input type="hidden" value="<%= total %>" id="total"> <!-- taking the total which is sending from the server side and storing it in the input field-->
 
     <div class="row">
+      <div class="col-md-8 order-md-1">
         <div class="col-md-8 order-md-1">
-            <div class="col-md-8 order-md-1">
-              <h1></h1>
-              <!-- <h4 class="mb-3">Add new billing address</h4> -->
-              <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
-                Add new address
-              </button>
-              <form class="needs-validation"   id="billingForm"   style="display: none;" onsubmit=" handleSubmit(event)">
-                <!-- novalidate -->
-                    <div class="row">
-                      <div class="col-md-6 mb-3">
-                        <label for="firstName">First name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                        <!-- <div class="invalid-feedback">
+          <h1></h1>
+          <!-- <h4 class="mb-3">Add new billing address</h4> -->
+          <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
+            Add new address
+          </button>
+          <form class="needs-validation" id="billingForm" style="display: none;" onsubmit=" handleSubmit(event)">
+            <!-- novalidate -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName">First name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                <!-- <div class="invalid-feedback">
                           Valid first name is required.
                         </div> -->
-                      </div>
-                      <div class="col-md-6 mb-3">
-                        <label for="lastName">Last name</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                          Valid last name is required.
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div class="mb-3">
-                      <label for="email">Email</label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">@</span>
-                        </div>
-                        <input type="text" class="form-control" id="email" placeholder="Enter your Email id" required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                          Your username is required.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="address">Address</label>
-                      <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-                      <div class="invalid-feedback">
-                        Please enter your shipping address.
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="select_option">
-                        <label for="country">Country</label>
-                        <select class="form-select country" aria-label="Default select example" id="country"
-                          onchange="loadStates()">
-                          <option selected>Select Country</option>
-                        </select>
-
-                        <label for="state">State</label>
-                        <select class="form-select state" aria-label="Default select example" id="state"
-                          onchange="loadCities()">
-                          <option selected>Select State</option>
-                        </select>
-
-                        <label for="city">City</label>
-                        <select class="form-select city" id="city" aria-label="Default select example">
-                          <option selected>Select City</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <label for="zip">Pin Code</label>
-                          <input type="text" class="form-control" id="City" placeholder="Enter your City">
-                          <div class="invalid-feedback">
-                            Please select a valid City.
-                          </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label for="Landmark">Landmark</label>
-                          <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark">
-                          <div class="invalid-feedback">
-                            Please provide a valid Landmark.
-                          </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                          <label for="phone">Mobile Number</label>
-                          <input type="text" class="form-control" id="phone" placeholder="Mobile Number" required>
-                          <div class="invalid-feedback">
-                            Mobile Number required.
-                          </div>
-                        </div>
-                    </div>
-                  
-                    <hr class="mb-4">
-                    <button type="submit" class="btn btn-primary"> Save</button>
-
-              </form>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="lastName">Last name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid last name is required.
+                </div>
+              </div>
             </div>
+
+
+            <div class="mb-3">
+              <label for="email">Email</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">@</span>
+                </div>
+                <input type="text" class="form-control" id="email" placeholder="Enter your Email id" required>
+                <div class="invalid-feedback" style="width: 100%;">
+                  Your username is required.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="select_option">
+                <label for="country">Country</label>
+                <select class="form-select country" aria-label="Default select example" id="country"
+                  onchange="loadStates()">
+                  <option selected>Select Country</option>
+                </select>
+
+                <label for="state">State</label>
+                <select class="form-select state" aria-label="Default select example" id="state"
+                  onchange="loadCities()">
+                  <option selected>Select State</option>
+                </select>
+
+                <label for="city">City</label>
+                <select class="form-select city" id="city" aria-label="Default select example">
+                  <option selected>Select City</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="zip">Pin Code</label>
+                <input type="text" class="form-control" id="City" placeholder="Enter your City">
+                <div class="invalid-feedback">
+                  Please select a valid City.
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="Landmark">Landmark</label>
+                <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark">
+                <div class="invalid-feedback">
+                  Please provide a valid Landmark.
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="phone">Mobile Number</label>
+                <input type="text" class="form-control" id="phone" placeholder="Mobile Number" required>
+                <div class="invalid-feedback">
+                  Mobile Number required.
+                </div>
+              </div>
+            </div>
+
             <hr class="mb-4">
-            <h4 class="mb-3">Payment</h4>
+            <button type="submit" class="btn btn-primary"> Save</button>
 
-            <div class="d-block my-3">
-
-                  <div class="custom-control custom-radio">
-                    <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
-                    <label class="custom-control-label" for="credit">Cash on delivery</label>
-                  </div>
-
-                <div class="custom-control custom-radio">
-                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                  <label class="custom-control-label" for="razorpay">Online Payment</label>
-                </div>
-
-                <div class="custom-control custom-radio">
-                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                  <label class="custom-control-label" for="Wallet">Wallet</label>
-                </div>
-
-            </div>
-            
-            <button class="btn btn-primary btn-lg btn-block" id="proceedToPay" type="submit">Continue to checkout</button>
-        
+          </form>
         </div>
+        <hr class="mb-4">
+        <h4 class="mb-3">Payment</h4>
+
+        <div class="d-block my-3">
+
+          <div class="custom-control custom-radio">
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <label class="custom-control-label" for="credit">Cash on delivery</label>
+          </div>
+
+          <div class="custom-control custom-radio">
+            <input id="razorpay" name="paymentMethod" type="radio" class="custom-control-input" value="razorpay" required>
+            <label class="custom-control-label" for="razorpay">Online Payment</label>
+          </div>
+
+          <div class="custom-control custom-radio">
+            <input id="Wallet" name="paymentMethod" type="radio" class="custom-control-input"  required>
+            <label class="custom-control-label" for="Wallet">Wallet</label>
+          </div>
+
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" id="proceedToPay" type="submit" >Continue to checkout</button>
+
+      </div>
     </div>
   </div> <!-- end -->
 
@@ -196,18 +217,18 @@
 
   <script>
 
-      const toggleBillingButton = document.getElementById('toggleBillingButton');
-      const billingForm = document.getElementById('billingForm');
+    const toggleBillingButton = document.getElementById('toggleBillingButton');
+    const billingForm = document.getElementById('billingForm');
 
-      toggleBillingButton.addEventListener('click', function () {
-        billingForm.style.display = billingForm.style.display === 'none' ? 'block' : 'none';   // instead of if else condition,  i changed my code using terinay orperator
-      });
+    toggleBillingButton.addEventListener('click', function () {
+      billingForm.style.display = billingForm.style.display === 'none' ? 'block' : 'none';   // instead of if else condition,  i changed my code using terinay orperator
+    });
 
   </script>
 
-<script>
+  <script>
 
-      // Function to handle form submission
+    // Function to handle form submission
     async function handleSubmit(event) {
       event.preventDefault();
 
@@ -294,11 +315,11 @@
 
     // Function to create a new address card
     function createAddressCard(newAddress, index) {
-  const card = document.createElement('div');
-  card.className = 'card bg-light mb-3 col-md-4 m-3';
-  card.style.maxWidth = '18rem';
+      const card = document.createElement('div');
+      card.className = 'card bg-light mb-3 col-md-4 m-3';
+      card.style.maxWidth = '18rem';
 
-  card.innerHTML = `
+      card.innerHTML = `
     <div class="card-header  d-flex justify-content-between" style="max-width: 100%">
       <div>
         <input type="radio" name="addressRadio" id="addressRadio${index}" aria-label="Radio button for following text input">
@@ -326,48 +347,74 @@
     </div>
   `;
 
-  return card;
-}
+      return card;
+    }
 
-    
-</script>
 
-<script>
- 
+  </script>
+
+  <!-- Adding this script to include Razorpay library -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>+
+  
+  <script>
     const proceedToPayButton = document.getElementById('proceedToPay');
-        proceedToPayButton.addEventListener('click', async function () {
-          const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked');
+  
+    proceedToPayButton.addEventListener('click', async () => {
+      const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked');
+      const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+  
+      if (!selectedAddressRadio) {
+        showErrorPopup('No Address Selected', 'Please select an address to proceed.');
+        return;
+      }
+  
+      if (!selectedPaymentMethod) {
+        showErrorPopup('No Payment Method Selected', 'Please select a payment method to proceed.');
+        return;
+      }
+      
+      // Taking the orderid form the input field and using inside the razorpayOptions object
+           let total = document.getElementById("total").value;
 
-          if (!selectedAddressRadio) {
-            Swal.fire({
-              title: 'No Address Selected',
-              text: 'Please select an address to proceed.',
-              icon: 'error',
-              confirmButtonText: 'OK',
-            });
-            return;
-          }
-
-          const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
-          const userInputElement = document.getElementById('USER');
-          const userData = JSON.parse(userInputElement.value);
-          const selectedAddress = userData.address[selectedAddressIndex];
-
-          const result = await Swal.fire({
-            title: 'Confirm Order?',
-            text: '',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          });
-
-          if (!result.isConfirmed) {
-            return;
-          }
-
+      if (selectedPaymentMethod.value === 'razorpay') {
+        const razorpayKey = 'rzp_test_JKK8n1hAazvvci';
+        try {
+          fetch('/onlinepayment',{
+            method: "POST",
+            headers:{
+              'Content-Type':"application/json"
+            },
+            body : JSON.stringify({total: total})
+          }).then(res => res.json())
+          .then((res)=>{
+            console.log(res.orderId)
+            const razorpayOptions = {
+            // Configure Razorpay options as per your requirements
+            key: razorpayKey,
+            amount: total, // amount of the products
+            currency: 'INR', // currency code
+            name: 'Paws & Claws',
+            description: 'Order Payment',
+            order_id: res.orderId, // give the order number that is generated dynamically
+            handler: handleRazorpaySuccess,
+          };
+  
+          const razorpayInstance = new Razorpay(razorpayOptions);
+          razorpayInstance.open();
+          })
+          
+        } catch (error) {
+          showErrorPopup('Payment Error', 'Payment could not be processed. Please try again.');
+          console.error('Error:', error);
+        }
+      } else {
+        const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
+        const userData = JSON.parse(document.getElementById('USER').value);
+        const selectedAddress = userData.address[selectedAddressIndex];
+  
+        const result = await showConfirmationPopup();
+  
+        if (result.isConfirmed) {
           try {
             const response = await fetch('/proceedToPay', {
               method: 'POST',
@@ -376,42 +423,89 @@
               },
               body: JSON.stringify({ selectedAddress }),
             });
-
+  
             const data = await response.json();
-
+  
             if (data.status === 'success') {
-              Swal.fire({
-                title: 'Order Successful',
-                height: 600,
-                width: 600,
-                padding: '3em',
-                color: '#716add',
-                background: '#fff url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                icon: 'success',
-                confirmButtonText: 'OK',
-                footer: '<a href="/home">Go Back to Home</a>',
-               }).then((result) => {
-                  if (result.isConfirmed) {
-                    window.location.href = '/showOrders';
-                  }
-                });
+              showOrderSuccessPopup(() => {
+                window.location.href = '/showOrders';
+              })
             } else {
-              Swal.fire({
-                title: 'Order Failed',
-                text: data.message,
-                icon: 'error',
-                confirmButtonText: 'OK',
-              });
+              showErrorPopup('Order Failed', 'There was a problem creating your order');
             }
-            } catch (error) {
-              console.error('Error:', error);
-            }
-        });
-
-
-</script>
+          } catch (error) {
+            showErrorPopup('Error', 'An error occurred while processing your request.');
+            console.error('Error:', error);
+          }
+        }
+      }
+    });
+  
+    function handleRazorpaySuccess(response) {
+      if (response.razorpay_payment_id) {
+        showSuccessPopup('Payment Successful', 'Your payment was successful.');
+      } else {
+        showErrorPopup('Payment Failed', 'Your payment could not be processed. Please try again.');
+      }
+    }
+  
+    async function showConfirmationPopup() {
+      return Swal.fire({
+        title: 'Confirm Order?',
+        text: '',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+      });
+    }
+  
+    function showErrorPopup(title, text) {
+      Swal.fire({
+        title,
+        text,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+  
+    function showSuccessPopup(title, text) {
+      Swal.fire({
+        title,
+        text,
+        icon: 'success',
+        confirmButtonText: 'OK',
+       
+      }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/showOrders';
+        }
+      });
+    }
+  
+    function showOrderSuccessPopup(callback) {
+      Swal.fire({
+        title: 'Order Successful',
+        height: 600,
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        background: 'url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        icon: 'success',
+        confirmButtonText: 'OK',
+        footer: '<a href="/home">Go Back to Home</a>',
+      }).then((result) => {
+        if (result.isConfirmed && callback) {
+          callback() // call the callback function after clicking ok
+        }
+      })
+    }
+  </script>
+  
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"

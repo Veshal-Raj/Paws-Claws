@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema({
     customer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the user who placed the order (if applicable)
-        required:true, 
+        required: true,
     },
     products: [
         {
@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending','Processing','Shipped','Delivered','Cancelled'],
+        enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
         default: 'Pending',
     },
     shippingAddress: {
@@ -47,8 +47,13 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    paymentMethod: {
+        type: String,
+        required: true,
+        default: 'COD'
+    }
 })
 
-const Order = mongoose.model('Order',orderSchema)
+const Order = mongoose.model('Order', orderSchema)
 
 module.exports = Order

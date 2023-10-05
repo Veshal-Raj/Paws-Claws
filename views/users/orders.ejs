@@ -15,10 +15,11 @@
     <link href="css/style2.css" rel="stylesheet" />
 
     <style>
-        body{
+        body {
             margin: 0;
             padding: 0;
         }
+
         .card-body-fixed-height {
 
             max-height: 200px;
@@ -54,7 +55,7 @@
             /* Equal flex value to ensure same height as the image card */
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            
+
             /* height: 50%; */
         }
 
@@ -102,255 +103,293 @@
             /* Push the footer to the bottom */
         }
 
-         /* Define the zoom effect for the image */
+        /* Define the zoom effect for the image */
         /* Style for the main container */
-    #message {
-        background-color: #9292a6;
-        padding: 0;
-        border-radius: 5px;
-        /* margin: 20px auto; */
-        max-width: 100%;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        position: relative; /* Add this to make positioning of the footer relative */
-        height: 100%;
-    }
-   /* Style for the footer container */
-.footer {
-    background-color: #333; /* Background color */
-    color: white; /* Text color */
-    padding: 20px; /* Padding around content */
-    text-align: center; /* Center align text */
-    height: 100px;
-   
-}
+        #message {
+            background-color: #9292a6;
+            padding: 0;
+            border-radius: 5px;
+            /* margin: 20px auto; */
+            max-width: 100%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            position: relative;
+            /* Add this to make positioning of the footer relative */
+            height: 100%;
+        }
 
-/* Style for the footer content */
-.footer-content {
-    max-width: 800px; /* Maximum width for content */
-    margin: 0 auto; /* Center align content horizontally */
-   
-    
-}
+        /* Style for the footer container */
+        .footer {
+            background-color: #333;
+            /* Background color */
+            color: white;
+            /* Text color */
+            padding: 20px;
+            /* Padding around content */
+            text-align: center;
+            /* Center align text */
+            height: 100px;
 
-/* Style for the "Contact Us" heading */
-.footer-content p {
-    font-weight: bold; /* Bold text */
-    margin-bottom: 10px; /* Space below heading */
-}
+        }
 
-/* Style for the list items */
-.footer-content ul {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
-}
+        /* Style for the footer content */
+        .footer-content {
+            max-width: 800px;
+            /* Maximum width for content */
+            margin: 0 auto;
+            /* Center align content horizontally */
 
-/* Style for list items */
-.footer-content li {
-    margin-bottom: 5px; /* Space between list items */
-}
 
-/* Hover effect for list items (optional) */
-.footer-content li:hover {
-    color: #FFD700; /* Change text color on hover */
-}
-.navbar {
-    padding-left: 50px;
-}
- .bullet-point {
-    list-style: none;
- }
+        }
 
-   
-</style>
-    
-    
+        /* Style for the "Contact Us" heading */
+        .footer-content p {
+            font-weight: bold;
+            /* Bold text */
+            margin-bottom: 10px;
+            /* Space below heading */
+        }
+
+        /* Style for the list items */
+        .footer-content ul {
+            list-style-type: none;
+            /* Remove bullet points */
+            padding: 0;
+            /* Remove default padding */
+        }
+
+        /* Style for list items */
+        .footer-content li {
+            margin-bottom: 5px;
+            /* Space between list items */
+        }
+
+        /* Hover effect for list items (optional) */
+        .footer-content li:hover {
+            color: #FFD700;
+            /* Change text color on hover */
+        }
+
+        .navbar {
+            padding-left: 50px;
+        }
+
+        .bullet-point {
+            list-style: none;
+        }
+    </style>
+
+
 </head>
 <script>
     // Function to hide the marquee after 1 second
     function hideMarquee() {
-            setTimeout(function() {
-                var marquee = document.querySelector('marquee');
-                marquee.style.display = 'none';
-            }, 3000); // 1000 milliseconds (1 second)
-        }
+        setTimeout(function () {
+            var marquee = document.querySelector('marquee');
+            marquee.style.display = 'none';
+        }, 3000); // 1000 milliseconds (1 second)
+    }
 </script>
 
 <body onload="hideMarquee()">
 
 
-     <!---------------------------- extra -------------------------->
-
-    
-  <div class="progress" id="progress">
-    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-    <div>
-
-    </div>
-</div >
-<marquee behavior="scroll" direction="right" scrollamount="45">
-    <img src="https://i.pinimg.com/originals/19/58/38/19583866f2c33d855fd2be99b47cddfe.gif" alt="Running Cat">   
-    <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat"> -->
-    <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
-    <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
-    <!-- <img src="https://th.bing.com/th/id/R.422042080fd9f30151664609604fc352?rik=eo%2bn0PkX3pPHFg&riu=http%3a%2f%2fnetanimations.net%2fMoving-picture-spotted-dog-running-animated-gif.gif&ehk=vFqrRrFtJNY37GIdfYwwDEpAhPqSabeAl4M2mMmHD%2bs%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat">    -->
+    <!---------------------------- extra -------------------------->
 
 
-    <!-- <img src="https://th.bing.com/th/id/R.87b13e0d366f75300d6298c6ce4fc812?rik=0fJ4g9Ts02zBeg&riu=http%3a%2f%2f25.media.tumblr.com%2ftumblr_m1oxnf9BYb1qm69mso1_1280.gif&ehk=z2Lhn12LJB2LzMsOGhFjhSpX8RXcUESBWgYTec9kwMk%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat"> -->
-
-</marquee>
-  <div  id="message" style="display: none;" class="container-fluid ">
-   <!-- As a link -->
-        <nav class="navbar navbar-light bg-light container-fluid ">
-            <a class="navbar-brand" href="/home">Paws&Claws</a>
-        </nav>
-  
-    <div class="container-fluid my-5  d-flex  justify-content-center">
-        <div class="card card-1">
-            <div class="card-header bg-white">
-                <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
-                    <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order, <span class="change-color"> <%= user.fullname %></span> !</h4> </div>
-                    <div class="col-auto text-center  my-auto pl-0 pt-sm-4"> <img class="img-fluid my-auto align-items-center mb-0 pt-3"  src="https://media1.tenor.com/images/895def190d60d2ed353446b1fe9ad7d4/tenor.gif?itemid=12387022" width="115" height="115"> <p class="mb-4 pt-0 Glasses">Your Orders</p>  </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <% if (orders && orders.length > 0) { %>
-                    <% orders.forEach((order) => { %>
-                        <div class="order-details">
-                            <div class="row justify-content-between mb-3">
-                                <div class="col-auto"><ul> <li><h5 class="color-1 mb-0 change-color">Order Number: </h5> </li> </ul></div>
-                                <div class="col-auto"> <small><%= order.orderNumber %></small> </div>
-                                <div class="col-auto">
-                                    <!-- Use if-else conditions to determine the class -->
-                                    <% let statusClass = ''; %>
-                                    <% if (order.status === 'Pending') { %>
-                                        <% statusClass = 'btn-warning'; %>
-                                    <% } else if (order.status === 'Processing') { %>
-                                        <% statusClass = 'btn-primary'; %>
-                                    <% } else if (order.status === 'Shipped') { %>
-                                        <% statusClass = 'btn-info'; %>
-                                    <% } else if (order.status === 'Delivered') { %>
-                                        <% statusClass = 'btn-success'; %>
-                                    <% } else if (order.status === 'Cancelled') { %>
-                                        <% statusClass = 'btn-danger'; %>
-                                    <% } else { %>
-                                        <% statusClass = 'btn-secondary'; %>
-                                    <% } %>
-                                    <button class="btn <%= statusClass %> btn-outline-dark"><%= order.status %></button>
-                                </div>
-                            </div>
-
-
-
-
-
-                            <!-- <h2>Your Cart</h2> -->
-                            <ul class="bullet-point"> 
-                                <% user.cart.forEach((item) => { %>
-                                    <li>
-                                        <strong>Product Name: </strong> <%= item.product_name %><br>
-                                        <strong>Price: </strong> <%= item.price %><br>
-                                        <strong>Quantity: </strong> <%= item.quantity %><br>
-                                        <strong>Total Price: </strong> <%= item.totalPrice %><br>
-                                        <hr>
-                                        
-                                    </li>
-                                <% }); %>
-                            </ul>
-                            <div style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
-                                <button class="btn btn-primary btn-outline-dark ">Cancel Order</button>     
-                            </div>
-                            <hr>
-                        </div>
-                    <% }) %>
-                <% } else { %>
-                    <p>No orders found.</p>
-                <% } %>
-            </div>
-            
-           
-           
+    <div class="progress" id="progress">
+        <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+        <div>
 
         </div>
     </div>
+    <marquee behavior="scroll" direction="right" scrollamount="45">
+        <img src="https://i.pinimg.com/originals/19/58/38/19583866f2c33d855fd2be99b47cddfe.gif" alt="Running Cat">
+        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat"> -->
+        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
+        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
+        <!-- <img src="https://th.bing.com/th/id/R.422042080fd9f30151664609604fc352?rik=eo%2bn0PkX3pPHFg&riu=http%3a%2f%2fnetanimations.net%2fMoving-picture-spotted-dog-running-animated-gif.gif&ehk=vFqrRrFtJNY37GIdfYwwDEpAhPqSabeAl4M2mMmHD%2bs%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat">    -->
 
-    <div class="footer">
-        <div class="footer-content">
-            <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
-            <!-- <ul>
+
+        <!-- <img src="https://th.bing.com/th/id/R.87b13e0d366f75300d6298c6ce4fc812?rik=0fJ4g9Ts02zBeg&riu=http%3a%2f%2f25.media.tumblr.com%2ftumblr_m1oxnf9BYb1qm69mso1_1280.gif&ehk=z2Lhn12LJB2LzMsOGhFjhSpX8RXcUESBWgYTec9kwMk%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat"> -->
+
+    </marquee>
+    <div id="message" style="display: none;" class="container-fluid ">
+        <!-- As a link -->
+        <nav class="navbar navbar-light bg-light container-fluid ">
+            <a class="navbar-brand" href="/home">Paws&Claws</a>
+        </nav>
+
+        <div class="container-fluid my-5  d-flex  justify-content-center">
+            <div class="card card-1">
+                <div class="card-header bg-white">
+                    <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
+                        <div class="col my-auto">
+                            <h4 class="mb-0">Thanks for your Order, <span class="change-color">
+                                    <%= user.fullname %>
+                                </span> !</h4>
+                        </div>
+                        <div class="col-auto text-center  my-auto pl-0 pt-sm-4"> <img
+                                class="img-fluid my-auto align-items-center mb-0 pt-3"
+                                src="https://media1.tenor.com/images/895def190d60d2ed353446b1fe9ad7d4/tenor.gif?itemid=12387022"
+                                width="115" height="115">
+                            <p class="mb-4 pt-0 Glasses">Your Orders</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <% if (orders && orders.length> 0) { %>
+                        <% orders.forEach((order)=> { %>
+                            <div class="order-details">
+                                <div class="row justify-content-between mb-3">
+                                    <div class="col-auto">
+                                        <ul>
+                                            <li>
+                                                <h5 class="color-1 mb-0 change-color">Order Number: </h5>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-auto"> <small>
+                                            <%= order.orderNumber %>
+                                        </small> </div>
+                                    <div class="col-auto">
+                                        <!-- Use if-else conditions to determine the class -->
+                                        <% let statusClass='' ; %>
+                                            <% if (order.status==='Pending' ) { %>
+                                                <% statusClass='btn-warning' ; %>
+                                                    <% } else if (order.status==='Processing' ) { %>
+                                                        <% statusClass='btn-primary' ; %>
+                                                            <% } else if (order.status==='Shipped' ) { %>
+                                                                <% statusClass='btn-info' ; %>
+                                                                    <% } else if (order.status==='Delivered' ) { %>
+                                                                        <% statusClass='btn-success' ; %>
+                                                                            <% } else if (order.status==='Cancelled' ) {
+                                                                                %>
+                                                                                <% statusClass='btn-danger' ; %>
+                                                                                    <% } else { %>
+                                                                                        <% statusClass='btn-secondary' ;
+                                                                                            %>
+                                                                                            <% } %>
+                                                                                                <button
+                                                                                                    class="btn <%= statusClass %> btn-outline-dark">
+                                                                                                    <%= order.status %>
+                                                                                                </button>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <!-- <h2>Your Cart</h2> -->
+                                <ul class="bullet-point">
+                                    <% user.cart.forEach((item)=> { %>
+                                        <li>
+                                            <strong>Product Name: </strong>
+                                            <%= item.product_name %><br>
+                                                <strong>Price: </strong>
+                                                <%= item.price %><br>
+                                                    <strong>Quantity: </strong>
+                                                    <%= item.quantity %><br>
+                                                        <strong>Total Price: </strong>
+                                                        <%= item.totalPrice %><br>
+                                                            <hr>
+
+                                        </li>
+                                        <% }); %>
+                                </ul>
+                                <div
+                                    style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
+                                    <button class="btn btn-primary btn-outline-dark ">Cancel Order</button>
+                                </div>
+                                <hr>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p>No orders found.</p>
+                                    <% } %>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-content">
+                <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
+                <!-- <ul>
                 <li>Email: contact@pawsandclaws.com</li>
                 <li>Phone: (123) 456-7890</li>
                 <li>Address: 1234 Pet Street, Animal City</li>
             </ul> -->
+            </div>
         </div>
+
     </div>
-        
-</div>
-    
+
     <script>
         setTimeout(function () {
             const footer = document.getElementById('myFooter');
             footer.style.display = 'block';
         }, 3000); // 1000 milliseconds (1 second)
     </script>
-  <script>
-    // Function to animate the progress bar
-    function moveProgressBar() {
-        const progress = document.getElementById('progress')
-      const progressBar = document.getElementById('progress-bar');
-      const message = document.getElementById('message');
-      let width = 0;
-  
-      // Increment the width in steps and update the progress bar
-      const interval = setInterval(function () {
-        if (width >= 148) {
-          clearInterval(interval);
-          // Hide the striped progress bar
-          progressBar.style.display = 'none';
-          progress.style.display = 'none'
+    <script>
+        // Function to animate the progress bar
+        function moveProgressBar() {
+            const progress = document.getElementById('progress')
+            const progressBar = document.getElementById('progress-bar');
+            const message = document.getElementById('message');
+            let width = 0;
 
-          // Use setTimeout to display "Hello World" after 2 seconds
-          setTimeout(function () {
-            message.style.display = 'block';
-            message.class = 'fly-in'
-          }, 1); // 2000 milliseconds (2 seconds) delay
-        } else {
-          width++;
-          progressBar.style.width = width + '%';
-          progressBar.setAttribute('aria-valuenow', width);
+            // Increment the width in steps and update the progress bar
+            const interval = setInterval(function () {
+                if (width >= 148) {
+                    clearInterval(interval);
+                    // Hide the striped progress bar
+                    progressBar.style.display = 'none';
+                    progress.style.display = 'none'
+
+                    // Use setTimeout to display "Hello World" after 2 seconds
+                    setTimeout(function () {
+                        message.style.display = 'block';
+                        message.class = 'fly-in'
+                    }, 1); // 2000 milliseconds (2 seconds) delay
+                } else {
+                    width++;
+                    progressBar.style.width = width + '%';
+                    progressBar.setAttribute('aria-valuenow', width);
+                }
+            }, 20); // Adjust the duration of each step (milliseconds)
         }
-      }, 20); // Adjust the duration of each step (milliseconds)
-    }
-  
-    // Call the function to start the progress animation
-    moveProgressBar();
-  </script>
+
+        // Call the function to start the progress animation
+        moveProgressBar();
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<!-- Include SweetAlert library -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
+    <!-- Include SweetAlert library -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
 
-<% if (locals.userIsBlocked) { %>
-    <script>
-        // Display SweetAlert when the user is blocked
-        Swal.fire({
-            
-            icon: 'error',
-            title: 'Account Blocked',
-            text: 'Your account has been blocked. Please contact support.',
-            showCancelButton: false,
-            confirmButtonText: 'Ok',
-            timer: 2000,
-        }).then(() => {
-            // Redirect to the login page
-            window.location.href = '/userBlockedByAdmin';
-        });
-    </script>
-<% } %>
+    <% if (locals.userIsBlocked) { %>
+        <script>
+            // Display SweetAlert when the user is blocked
+            Swal.fire({
+
+                icon: 'error',
+                title: 'Account Blocked',
+                text: 'Your account has been blocked. Please contact support.',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+                timer: 2000,
+            }).then(() => {
+                // Redirect to the login page
+                window.location.href = '/userBlockedByAdmin';
+            });
+        </script>
+        <% } %>
 
 </body>
+
 </html>
-
-  
-
-
-   

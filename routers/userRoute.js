@@ -15,63 +15,66 @@ const userOrders = require('../controllers/userOrders')
 const userCats = require('../controllers/userCatsController')
 const userDogs = require('../controllers/userDogsController')
 
-router.get('/',userAuth.yesSession,userHomePageController.showHomepageProducts)
-router.get('/login',userAuth.yesSession,userController.loginpage)
-router.get('/signup',userAuth.yesSession,userController.signupPage)
-router.get('/otp',userAuth.yesSession,userController.otpPage)
-router.get('/forgotpassword',userAuth.yesSession,userController.forgotpasswordPage)
-router.get('/resetpassword',userAuth.yesSession,userController.resetpassword)
-router.get('/resend-otp',userAuth.yesSession,userController.resendOTP)
-router.get('/home',userHomePageController.showHomepageProducts)
+router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
+router.get('/login', userAuth.yesSession, userController.loginpage)
+router.get('/signup', userAuth.yesSession, userController.signupPage)
+router.get('/otp', userAuth.yesSession, userController.otpPage)
+router.get('/forgotpassword', userAuth.yesSession, userController.forgotpasswordPage)
+router.get('/resetpassword', userAuth.yesSession, userController.resetpassword)
+router.get('/resend-otp', userAuth.yesSession, userController.resendOTP)
+router.get('/home', userHomePageController.showHomepageProducts)
 router.get('/product', userProductController.productSinglePageView);
 
 
 
-router.get('/userBlockedByAdmin',userAuth.userBlockedByAdmin)
+router.get('/userBlockedByAdmin', userAuth.userBlockedByAdmin)
 
-router.post('/signout',userController.userSignout)
-router.post('/register',userController.registerUser)
-router.post('/verify-otp',userController.verifyOTP)
-router.post('/forgotpasswordOTP',userController.forgotpasswordOTP)
-router.post('/confirmForgotpasswordOTP',userController.confirmforgotpasswordotp)
-router.post('/newPasswordUpdate',userController.newPasswordUpdate)
+router.post('/signout', userController.userSignout)
+router.post('/register', userController.registerUser)
+router.post('/verify-otp', userController.verifyOTP)
+router.post('/forgotpasswordOTP', userController.forgotpasswordOTP)
+router.post('/confirmForgotpasswordOTP', userController.confirmforgotpasswordotp)
+router.post('/newPasswordUpdate', userController.newPasswordUpdate)
 
 
 
-router.post('/login',userController.userlogin)
+router.post('/login', userController.userlogin)
 
 
 // ========================= Add to Cart ================================== //
-router.post('/showCart',userAuth.noSession,userAddtoCart.showCart)
-router.post('/addToCart/:productId',userAuth.noSession,userAddtoCart.addToCart)
-router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession,userAddtoCart.updateQuantity)
+router.post('/showCart', userAuth.noSession, userAddtoCart.showCart)
+router.post('/addToCart/:productId', userAuth.noSession, userAddtoCart.addToCart)
+router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession, userAddtoCart.updateQuantity)
 
 // Delete from cart also in userAddtoCart controller
-router.delete('/removeFromCart/:productId',userAuth.noSession,userAddtoCart.removeFromCart)
+router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.removeFromCart)
 
 
 // ========================= Checkout page ================================== //
-router.post('/checkout',userAuth.noSession,userCheckoutpage.checkout)
+router.post('/checkout', userAuth.noSession, userCheckoutpage.checkout)
 
-router.post('/saveAddress',userAuth.noSession,userCheckoutpage.saveAddress)
+router.post('/saveAddress', userAuth.noSession, userCheckoutpage.saveAddress)
 
-router.post('/proceedToPay',userAuth.noSession,userCheckoutpage.proceedToPay)
+router.post('/proceedToPay', userAuth.noSession, userCheckoutpage.proceedToPay)
+
+// =========================== Online page ============================================ //
+router.post('/onlinepayment',userAuth.noSession,userCheckoutpage.onlinePayment)
 
 // ========================= Orders ============================ //
-router.get('/showOrders',userAuth.noSession,userOrders.showOrders)
+router.get('/showOrders', userAuth.noSession, userOrders.showOrders)
 
 
 // ========================= Cats =================================== //
-router.get('/cats',userCats.cats)
+router.get('/cats', userCats.cats)
 
 
 // ========================= Dogs =================================== //
-router.get('/dogs',userDogs.dogs)
+router.get('/dogs', userDogs.dogs)
 
-router.get('/error',async (req,res) => {
+router.get('/error', async (req, res) => {
     res.render('error')
 })
-router.get('/something',async (req,res) => {
+router.get('/something', async (req, res) => {
     res.render('somethingwentwrong')
 })
 

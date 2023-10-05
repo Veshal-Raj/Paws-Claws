@@ -13,7 +13,7 @@ const dotenv = require('dotenv').config()
 
 
 // ======================== Render user login page ======================= //
-const loginpage = async (req,res)=>{
+const loginpage = async (req, res) => {
     try {
         res.render('users/userLogin')
     } catch (error) {
@@ -24,7 +24,7 @@ const loginpage = async (req,res)=>{
 }
 
 // ======================== Render signup page ============================ //
-const signupPage =async (req,res)=>{
+const signupPage = async (req, res) => {
     try {
         res.render('users/signup')
     } catch (error) {
@@ -35,66 +35,66 @@ const signupPage =async (req,res)=>{
 }
 
 // ========================= Register User ================================= //
-const registerUser=  async (req,res)=>{
+const registerUser = async (req, res) => {
     try {
-        
+
         let { fullname, email, phone, password } = req.body
-        
-        
+
+
         // password = password.trim()
-        if(fullname == "" || email == "" || phone == "" || password == ""){
+        if (fullname == "" || email == "" || phone == "" || password == "") {
             res.json({
                 status: "FAILED",
                 message: "Empty input fileds!"
             })
         }
-        
-        
+
+
         // Hash the password
-    
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
 
 
         // Generate OTP
-        const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
-       console.log(otp)
+        const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false })
+        console.log(otp)
         // Store data in session
         req.session.registrationData = { fullname, email, phone, hashedPassword, otp }
-        
+
         // Set a timeout to clear the OTP from the session after 2 minutes
-        setTimeout(()=>{
+        setTimeout(() => {
             delete req.session.registrationData.otp
-        }, 2*60*1000) // 2 minutes in milliseconds
+        }, 2 * 60 * 1000) // 2 minutes in milliseconds
 
 
-        
+
         // Send OTP via email (configure nodemailer with your email service)
         // first i made transporter as const but it shows error like block scope variable for transporter not allowed so i used var
         var transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-              user: process.env.NAME,
-              pass: process.env.PASSWORD,
+                user: process.env.NAME,
+                pass: process.env.PASSWORD,
             },
-          });
-        
-          const mailOptions = {
+        });
+
+        const mailOptions = {
             from: process.env.NAME,
             to: email,
             subject: 'OTP Verification',
             text: `Your OTP for registration: ${otp}`,
-          };
+        };
 
-        
-          await transporter.sendMail(mailOptions);
 
-        
+        await transporter.sendMail(mailOptions);
+
+
         // Instead of rendering the otp page, i am redirecting to the /otp
         res.redirect('/otp')
-          // Render the OTP verification page
-        
-        
+        // Render the OTP verification page
+
+
     } catch (error) {
         res.render('error')
         console.error(error);
@@ -102,7 +102,7 @@ const registerUser=  async (req,res)=>{
 }
 
 // ======================== Render OTP page ================================ //
-const otpPage =async (req,res)=>{
+const otpPage = async (req, res) => {
     try {
         res.render('users/otp')
     } catch (error) {
@@ -113,20 +113,20 @@ const otpPage =async (req,res)=>{
 }
 
 // ======================== OTP Verification =============================== //
-const verifyOTP= async (req,res)=>{
+const verifyOTP = async (req, res) => {
     try {
-        
-        
-        const enteredOTP = req.body.digit1+req.body.digit2+req.body.digit3+req.body.digit4+req.body.digit5+req.body.digit6
-        
+
+
+        const enteredOTP = req.body.digit1 + req.body.digit2 + req.body.digit3 + req.body.digit4 + req.body.digit5 + req.body.digit6
+
         // Get the stored OTP from the session
         const storedOTP = req.session.registrationData.otp
 
-        
+
 
 
         //Compare the entered OTP with the stored OTP
-        if (enteredOTP === storedOTP){
+        if (enteredOTP === storedOTP) {
             // Retrieve user data from session            
             const { fullname, email, phone, hashedPassword } = req.session.registrationData
 
@@ -150,11 +150,11 @@ const verifyOTP= async (req,res)=>{
 }
 
 // ========================= Resend Otp ===================================== //
-const resendOTP = async (req,res)=>{
+const resendOTP = async (req, res) => {
     try {
-        
+
         // Check if req.session.registrationData exists and contains the email proprely
-        if (!req.session.registrationData || !req.session.registrationData.email){
+        if (!req.session.registrationData || !req.session.registrationData.email) {
             return res.status(400).send('Session data is missing or incomplete ')
 
         }
@@ -178,7 +178,7 @@ const resendOTP = async (req,res)=>{
                 user: 'process.env.NAME',
                 pass: 'process.env.PASSWORD',
             }
-        }) 
+        })
 
         var mailOptions = {
             from: 'process.env.NAME',
@@ -192,8 +192,8 @@ const resendOTP = async (req,res)=>{
         // Update the session with the new OTP
         req.session.registrationData.otp = newOTP
 
-         // Instead of rendering the otp page, i am redirecting to the /otp
-         res.redirect('/otp')
+        // Instead of rendering the otp page, i am redirecting to the /otp
+        res.redirect('/otp')
 
     } catch (error) {
         res.render('error')
@@ -204,7 +204,7 @@ const resendOTP = async (req,res)=>{
 
 
 // ========================= Render Forgot Password Page ==================== //
-const forgotpasswordPage = async (req,res)=>{
+const forgotpasswordPage = async (req, res) => {
     try {
         res.render('users/forgotpassword')
     } catch (error) {
@@ -216,19 +216,19 @@ const forgotpasswordPage = async (req,res)=>{
 
 
 // ======================== Forgot password ============================= //
-const forgotpasswordOTP = async (req,res)=>{
+const forgotpasswordOTP = async (req, res) => {
     try {
 
 
         // Generate OTP
-        const otp = otpGenerator.generate(6, {digits:true, alphabets:false, upperCaseAlphabets:false, lowerCaseAlphabets:false, specialChars:false })
+        const otp = otpGenerator.generate(6, { digits: true, alphabets: false, upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false })
         console.log(otp)
 
         // Store data in session
         req.session.forgotpasswordOTP = otp
         req.session.save()
         // req.session.abcd=123
-        console.log("req append",req.session.forgotpasswordOTP)
+        console.log("req append", req.session.forgotpasswordOTP)
         // console.log("req session",req.session)
 
     } catch (error) {
@@ -239,15 +239,15 @@ const forgotpasswordOTP = async (req,res)=>{
 
 
 // ============================== confirmforgotpasswordotp ======================== //
-const confirmforgotpasswordotp = async (req,res) =>{
+const confirmforgotpasswordotp = async (req, res) => {
     try {
-        const enteredOTP = req.body.digit1+req.body.digit2+req.body.digit3+req.body.digit4+req.body.digit5+req.body.digit6
-        console.log("reached",req.session.forgotpasswordOTP)
+        const enteredOTP = req.body.digit1 + req.body.digit2 + req.body.digit3 + req.body.digit4 + req.body.digit5 + req.body.digit6
+        console.log("reached", req.session.forgotpasswordOTP)
         const storedOtp = req.session.forgotpasswordOTP
-        if (storedOtp === enteredOTP){
+        if (storedOtp === enteredOTP) {
 
             return res.render('users/newPassword')
-        }else {
+        } else {
 
             res.render('enterOtp')
         }
@@ -258,16 +258,17 @@ const confirmforgotpasswordotp = async (req,res) =>{
 }
 
 // ================================== newPasswordUpdate =========================================== //
-const newPasswordUpdate = async (req,res) =>{
+const newPasswordUpdate = async (req, res) => {
     try {
         console.log("inside update")
         const { email, newPassword, repeatPassword } = req.body
 
         // Check if the email exists in the database
-        const user = await User.User.findOne({email})
+        const user = await User.User.findOne({ email })
 
         if (!user) {
-            return res.render('somethingwentwrong')        }
+            return res.render('somethingwentwrong')
+        }
 
         if (newPassword === repeatPassword) {
             // Hash the password
@@ -289,7 +290,7 @@ const newPasswordUpdate = async (req,res) =>{
 
 
 // ========================== Render Reset Password Page ====================== //
-const resetpassword= async (req,res)=>{
+const resetpassword = async (req, res) => {
     try {
         res.render('users/resetPassword')
     } catch (error) {
@@ -300,29 +301,29 @@ const resetpassword= async (req,res)=>{
 }
 
 // ========================= User Login ====================================== //
-const userlogin =async (req,res)=>{
+const userlogin = async (req, res) => {
     try {
-        const email   = req.body.email
-        const password= req.body.password
-     
-        
+        const email = req.body.email
+        const password = req.body.password
+
+
         // Find the user by email in the database
-    
+
         const user = await User.User.findOne({ email })
-        
+
         // Check if the user exists
-        if(!user) {
-            return res.render('users/userLogin',{alert:'User not found!'})
-            
+        if (!user) {
+            return res.render('users/userLogin', { alert: 'User not found!' })
+
         }
-     
-        const isPasswordValid = await bcrypt.compare(password,user.password);
-      
-        
-        if(!isPasswordValid) {
-            return res.render('users/userLogin',{alert:'Incorrect Password'})
-    
-            
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+
+        if (!isPasswordValid) {
+            return res.render('users/userLogin', { alert: 'Incorrect Password' })
+
+
         }
 
         // Check if the user is blocked
@@ -334,7 +335,7 @@ const userlogin =async (req,res)=>{
 
         // User is authenticated, you can set up a session or generate a token here
         // For example, set a user ID in the session
-        req.session.userId =user._id
+        req.session.userId = user._id
 
         // Redirect to a dashboard or send a sucess message
         res.redirect('/home')
@@ -346,15 +347,15 @@ const userlogin =async (req,res)=>{
 
 
 // ========================= Home ========================================== //
-const home = async(req,res)=>{
+const home = async (req, res) => {
     try {
-        if(req.session.userId){
+        if (req.session.userId) {
             console.log('hi')
-            console.log("checking session on new update: ",req.session.userId)
-            res.render('users/home',{
-                userId:req.session.userId
+            console.log("checking session on new update: ", req.session.userId)
+            res.render('users/home', {
+                userId: req.session.userId
             })
-        }else{
+        } else {
             res.render('users/home')
         }
     } catch (error) {
@@ -364,7 +365,7 @@ const home = async(req,res)=>{
 }
 
 // ======================== Sign OUt ========================================== //
-const userSignout = async (req,res)=>{
+const userSignout = async (req, res) => {
     try {
         req.session.destroy()
         console.log('session is destroyed')
@@ -377,7 +378,7 @@ const userSignout = async (req,res)=>{
 
 
 
-module.exports={
+module.exports = {
     loginpage,
     signupPage,
     otpPage,
@@ -392,5 +393,5 @@ module.exports={
     forgotpasswordOTP,
     confirmforgotpasswordotp,
     newPasswordUpdate
-    
+
 }

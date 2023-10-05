@@ -11,92 +11,97 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
                     </div>
-    
-                    <% if (user.cart.length === 0) { %>
+
+                    <% if (user.cart.length===0) { %>
                         <p>Your cart is empty.</p>
-                    <% } else { %>
-                        <% user.cart.forEach((cartItem) => { %>
-                            <% if (cartItem.product_id && cartItem.product_id._id) { %>
-                                <div id="item<%= cartItem.product_id._id %>" class="card rounded-3 mb-4">
-                                    <div class="card-body p-4">
-                                        <div class="row d-flex justify-content-between align-items-center">
-                                            <div class="col-md-2 col-lg-2 col-xl-2">
-                                                <img src="/uploads/<%= cartItem.product_id.productImages[0] %>"
-                                                    class="img-fluid rounded-3" alt="<%= cartItem.product_name %>">
-                                            </div>
-                                            <div class="col-md-3 col-lg-3 col-xl-3">
-                                                <p class="lead fw-normal mb-2">
-                                                    <%= cartItem.product_name %>
-                                                </p>
-                                                <!-- Display other product details like size and color if available -->
-                                            </div>
-                                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                                <button class="btn btn-link px-2 minus-button"
-                                                    data-productid="<%= cartItem.product_id._id %>"
-                                                    data-quantity="<%= cartItem.quantity - 1 %>">
-                                                    <i class="fas fa-minus"></i>
-                                                </button>
-    
-                                                <!-- Input for quantity (use cartItem.quantity) -->
-                                                <input id="quantityInput<%= cartItem.product_id._id %>" min="0"
-                                                    name="quantity" value="<%= cartItem.quantity %>" type="number"
-                                                    class="form-control form-control-sm" readonly />
-    
-                                                <button class="btn btn-link px-2 plus-button"
-                                                    data-productid="<%= cartItem.product_id._id %>"
-                                                    data-quantity="<%= cartItem.quantity + 1 %>">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </div>
-    
-                                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                <!-- Display the total price for this item (use cartItem.totalPrice) -->
-                                                <h5 class="mb-0" id="totalPrice<%= cartItem.product_id._id %>">
-                                                    $<%= cartItem.totalPrice.toFixed(2) %>
-                                                </h5>
-                                            </div>
-                                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                                <!-- Add a button to remove the item from the cart -->
-                                                <button class="btn btn-link px-2 delete-button"
-                                                    onclick="removeFromCart('<%= cartItem.product_id._id %>')">
-                                                    <i class="fas fa-trash fa-lg"></i>
-                                                </button>
+                        <% } else { %>
+                            <% user.cart.forEach((cartItem)=> { %>
+                                <% if (cartItem.product_id && cartItem.product_id._id) { %>
+                                    <div id="item<%= cartItem.product_id._id %>" class="card rounded-3 mb-4">
+                                        <div class="card-body p-4">
+                                            <div class="row d-flex justify-content-between align-items-center">
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                    <img src="/uploads/<%= cartItem.product_id.productImages[0] %>"
+                                                        class="img-fluid rounded-3" alt="<%= cartItem.product_name %>">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <p class="lead fw-normal mb-2">
+                                                        <%= cartItem.product_name %>
+                                                    </p>
+                                                    <!-- Display other product details like size and color if available -->
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                    <button class="btn btn-link px-2 minus-button"
+                                                        data-productid="<%= cartItem.product_id._id %>"
+                                                        data-quantity="<%= cartItem.quantity - 1 %>">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+
+                                                    <!-- Input for quantity (use cartItem.quantity) -->
+                                                    <input id="quantityInput<%= cartItem.product_id._id %>" min="0"
+                                                        name="quantity" value="<%= cartItem.quantity %>" type="number"
+                                                        class="form-control form-control-sm" readonly />
+
+                                                    <button class="btn btn-link px-2 plus-button"
+                                                        data-productid="<%= cartItem.product_id._id %>"
+                                                        data-quantity="<%= cartItem.quantity + 1 %>">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <!-- Display the total price for this item (use cartItem.totalPrice) -->
+                                                    <h5 class="mb-0" id="totalPrice<%= cartItem.product_id._id %>">
+                                                        $<%= cartItem.totalPrice.toFixed(2) %>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                    <!-- Add a button to remove the item from the cart -->
+                                                    <button class="btn btn-link px-2 delete-button"
+                                                        onclick="removeFromCart('<%= cartItem.product_id._id %>')">
+                                                        <i class="fas fa-trash fa-lg"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            <% } else { %>
-                                <!-- Handle the case where product_id or _id is missing or null -->
-                                <div class="card rounded-3 mb-4">
-                                    <div class="card-body p-4">
-                                        <p class="text-danger">Invalid product data</p>
-                                        <!-- You can add additional error handling here if needed -->
-                                    </div>
-                                </div>
-                            <% } %>
-                        <% }); %>
-                        <!-- Display the total sum of the cart -->
-                        <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%= totalSum.toFixed(2) %></span></h4>
-                    <% } %>
-    
-                    <div class="card mb-4">
-                        <div class="card-body p-4 d-flex flex-row">
-                            <div class="form-outline flex-fill">
-                                <input type="text" id="form1" class="form-control form-control-lg" />
-                                <label class="form-label" for="form1">Discount code</label>
-                            </div>
-                            <button type="button" class="btn btn-outline-dark btn-lg ms-3">Apply</button>
-                        </div>
-                    </div>
-    
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <form action="/checkout" method="post">
-                                <button type="submit" class="btn btn-warning btn-outline-dark btn-block btn-lg"
-                                    style="width: 100%;">Proceed to Pay</button>
-                            </form>
-                        </div>
-                    </div>
+                                    <% } else { %>
+                                        <!-- Handle the case where product_id or _id is missing or null -->
+                                        <div class="card rounded-3 mb-4">
+                                            <div class="card-body p-4">
+                                                <p class="text-danger">Invalid product data</p>
+                                                <!-- You can add additional error handling here if needed -->
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% }); %>
+                                                <!-- Display the total sum of the cart -->
+                                                <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%=
+                                                            totalSum.toFixed(2) %></span></h4>
+                                                <% } %>
+
+                                                    <div class="card mb-4">
+                                                        <div class="card-body p-4 d-flex flex-row">
+                                                            <div class="form-outline flex-fill">
+                                                                <input type="text" id="form1"
+                                                                    class="form-control form-control-lg" />
+                                                                <label class="form-label" for="form1">Discount
+                                                                    code</label>
+                                                            </div>
+                                                            <button type="button"
+                                                                class="btn btn-outline-dark btn-lg ms-3">Apply</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card">
+                                                        <div class="card-body text-center">
+                                                            <form action="/checkout" method="post">
+                                                                <button type="submit"
+                                                                    class="btn btn-warning btn-outline-dark btn-block btn-lg"
+                                                                    style="width: 100%;">Proceed to Pay</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                 </div>
             </div>
         </div>

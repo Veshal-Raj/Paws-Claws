@@ -18,16 +18,16 @@ const app = express()
 
 
 const port = process.env.PORT || 4000
-mongoose.connect('mongodb://localhost:27017/PawsAndClaws',{
+mongoose.connect('mongodb://localhost:27017/PawsAndClaws', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-.then(()=>{
-    console.log('Database is connected successfully!')
-})
-.catch((error)=>{
-    console.error('Database connection error:', error);
-})
+    .then(() => {
+        console.log('Database is connected successfully!')
+    })
+    .catch((error) => {
+        console.error('Database connection error:', error);
+    })
 
 
 
@@ -39,21 +39,21 @@ app.use(cookieParser())
 app.use(session({
     secret: config.sessionSecret,
     resave: false,
-    saveUninitialized:true,
+    saveUninitialized: true,
 }))
 
 
 // =========================== View Engine Setup ================== //
 
-app.set('views',path.join(__dirname,'views'))
-app.set('view engine','ejs')
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 
 // ===================== Default Use ============================== //
 
 app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(express.static(path.join(__dirname,'public')))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, 'public')))
 // app.use(upload.any()); // This allows handling both files and form data
 
 
@@ -62,19 +62,19 @@ app.use(express.static(path.join(__dirname,'public')))
 // ==================== Cache Controlling========================= //
 
 app.use(nocache())
-app.use((req,res,next)=>{
-    res.set("Cache-control","no-store,no-cache")
+app.use((req, res, next) => {
+    res.set("Cache-control", "no-store,no-cache")
     next()
 })
 
 
 
 // ========================== Routers ============================= //
-app.use('/',userRouter)
-app.use('/admin',adminRouter)
+app.use('/', userRouter)
+app.use('/admin', adminRouter)
 
 
 // =========================== Server ============================= //
-app.listen(port,()=>{
+app.listen(port, () => {
     console.log(`Server is running at port ${port}`)
 })

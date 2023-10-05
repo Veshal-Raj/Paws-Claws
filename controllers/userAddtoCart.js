@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 
 
 // Route for adding a product to the cart
-const addToCart = async (req,res) => {
+const addToCart = async (req, res) => {
     try {
         const { productId } = req.params
 
@@ -12,7 +12,7 @@ const addToCart = async (req,res) => {
 
         if (!product) {
             // Handle the case where the product with the given ID doesn't exist
-            return res.status(404).json({ error: 'Product not found'})
+            return res.status(404).json({ error: 'Product not found' })
         }
 
         // Extract the product details you need
@@ -26,7 +26,7 @@ const addToCart = async (req,res) => {
 
         if (!user) {
             // Handle the case where the user doesn't exist 
-            return res.status(404).json({error: 'User not found'})
+            return res.status(404).json({ error: 'User not found' })
         }
 
         // Check if the product is already in the cart
@@ -46,23 +46,23 @@ const addToCart = async (req,res) => {
                 quantity: 1, // Assuming you're adding one item by default
                 totalPrice: price, // Set the initial total price 
             }
-            
+
             // Add the new cart item to the user's cart
             user.cart.push(cartItem)
 
         }
-            // Save the updated user datas with the cart to the database
-            await user.save()
+        // Save the updated user datas with the cart to the database
+        await user.save()
 
-            // Respond with a success messsage or updated cart data
-            res.json({ message: 'Product added to cart',cart: user.cart})
+        // Respond with a success messsage or updated cart data
+        res.json({ message: 'Product added to cart', cart: user.cart })
     } catch (error) {
-        console.error('Error:',error)
-        res.status(500).json({ error: 'An error occurred while adding the product to the cart'})
+        console.error('Error:', error)
+        res.status(500).json({ error: 'An error occurred while adding the product to the cart' })
     }
 }
 
-const showCart = async (req,res) => {
+const showCart = async (req, res) => {
     try {
         // Get the user ID from the session
         const userId = req.session.userId
@@ -71,23 +71,23 @@ const showCart = async (req,res) => {
         const user = await User.User.findById(userId).populate('cart.product_id')
 
         if (!user) {
-            return res.status(404).render('error',{message: 'User is not found'})
+            return res.status(404).render('error', { message: 'User is not found' })
         }
 
 
         // Calculating total sum of the  product in cart
-        const totalSum = user.cart.reduce((sum,cartItem)=>{
+        const totalSum = user.cart.reduce((sum, cartItem) => {
             return sum + cartItem.totalPrice
-        },0)
+        }, 0)
         // Render the cart page and pass the user's cart data to the cart page
-         res.render('users/cart',{ user, userId:req.session.userId, totalSum })
-    } catch (error) {   
+        res.render('users/cart', { user, userId: req.session.userId, totalSum })
+    } catch (error) {
         console.error(error)
         res.status(500).render('error')
     }
 }
 
-const updateQuantity = async (req,res) => {
+const updateQuantity = async (req, res) => {
     try {
         const { productId, newQuantity } = req.params
         const userId = req.session.userId
@@ -96,24 +96,24 @@ const updateQuantity = async (req,res) => {
         const user = await User.User.findById(userId)
 
         if (!user) {
-            return res.status(404).json({error: 'User not found'})
+            return res.status(404).json({ error: 'User not found' })
         }
-       
+
         // Find the cart item with the matching product ID
         const cartItem = user.cart.find((item) => item.product_id.toString() === productId)
-        
+
         if (!cartItem) {
-            return res.status(404).json({error: 'Product not found in the cart'})
-        } 
+            return res.status(404).json({ error: 'Product not found in the cart' })
+        }
 
         // Update the quantity and total price
         cartItem.quantity = parseInt(newQuantity)
         cartItem.totalPrice = cartItem.price * cartItem.quantity
 
-         // Calculating total sum of the  product in cart
-         const totalSum = user.cart.reduce((sum,cartItem)=>{
+        // Calculating total sum of the  product in cart
+        const totalSum = user.cart.reduce((sum, cartItem) => {
             return sum + cartItem.totalPrice
-        },0)
+        }, 0)
 
 
         // Save the user with the updated cart
@@ -121,13 +121,13 @@ const updateQuantity = async (req,res) => {
 
         // Respond with the updated total price
         // console.log(totalSum)
-        res.json({updatedTotalPrice: cartItem.totalPrice,totalSum})
+        res.json({ updatedTotalPrice: cartItem.totalPrice, totalSum })
     } catch (error) {
-        console.error('Error:',error)
+        console.error('Error:', error)
     }
 }
 
-const removeFromCart = async (req,res) => {
+const removeFromCart = async (req, res) => {
     try {
         const { productId } = req.params
         const userId = req.session.userId
@@ -136,31 +136,31 @@ const removeFromCart = async (req,res) => {
         let user = await User.User.findById(userId)
 
         if (!user) {
-            return res.status(404).json({error: 'User not found '})
+            return res.status(404).json({ error: 'User not found ' })
         }
 
         // Remove the cart item wiht the matching product ID
-        await user.cart.pull({ product_id: productId})
+        await user.cart.pull({ product_id: productId })
 
         await user.save()
 
-         user = await User.User.findById(userId)
+        user = await User.User.findById(userId)
 
 
         // Calculate the updated total sum
-        const totalSum = user.cart.reduce((sum,cartItem) => {
+        const totalSum = user.cart.reduce((sum, cartItem) => {
             return sum + cartItem.totalPrice
-        },0)
+        }, 0)
 
         // save the user with the updated cart
         await user.save()
         // console.log(totalSum)
         // respond with the updated total sum
-        res.json({ updatedTotalSum: totalSum})
+        res.json({ updatedTotalSum: totalSum })
 
     } catch (error) {
         console.error(error)
-        res.status(500).json({error: 'Internal server error '})
+        res.status(500).json({ error: 'Internal server error ' })
     }
 }
 

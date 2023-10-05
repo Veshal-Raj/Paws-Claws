@@ -27,7 +27,8 @@
   <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
-  <link href="  https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css  " rel="stylesheet">
+  <link href="  https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css  "
+    rel="stylesheet">
   <link href="  https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css  " rel="stylesheet">
 
 
@@ -275,8 +276,8 @@
 
   </header><!-- End Header -->
 
-   <!-- ======= Sidebar ======= -->
-   <aside id="sidebar" class="sidebar">
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
@@ -288,112 +289,116 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-         <a class="nav-link " href="index.html">
-           <i class="bi bi-grid"></i>
-           <span>Orders</span>
-         </a>
-       </li><!-- End Orders Nav -->
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Orders</span>
+        </a>
+      </li><!-- End Orders Nav -->
 
-       <li class="nav-item">
-         <a class="nav-link " href="index.html">
-           <i class="bi bi-grid"></i>
-           <span>Products</span>
-         </a>
-       </li><!-- End Products Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Products</span>
+        </a>
+      </li><!-- End Products Nav -->
 
-       <li class="nav-item">
-         <a class="nav-link " href="/admin/users">
-           <i class="bi bi-grid"></i>
-           <span>Users</span>
-         </a>
-       </li><!-- End Users Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="/admin/users">
+          <i class="bi bi-grid"></i>
+          <span>Users</span>
+        </a>
+      </li><!-- End Users Nav -->
 
-       <li class="nav-item">
-         <a class="nav-link " href="index.html">
-           <i class="bi bi-grid"></i>
-           <span>Category</span>
-         </a>
-       </li><!-- End Category Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Category</span>
+        </a>
+      </li><!-- End Category Nav -->
 
-       <li class="nav-item">
-         <a class="nav-link " href="index.html">
-           <i class="bi bi-grid"></i>
-           <span> Coupons</span>
-         </a>
-       </li><!-- End Coupons Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span> Coupons</span>
+        </a>
+      </li><!-- End Coupons Nav -->
 
-       <li class="nav-item">
-         <a class="nav-link " href="index.html">
-           <i class="bi bi-grid"></i>
-           <span>Sales Report</span>
-         </a>
-       </li><!-- End Sales Report Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Sales Report</span>
+        </a>
+      </li><!-- End Sales Report Nav -->
 
-       <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link " href="index.html">
           <i class="bi bi-grid"></i>
           <span>Banner</span>
         </a>
       </li><!-- End Banner Nav -->
 
-      
+
     </ul>
 
   </aside><!-- End Sidebar-->
 
-  
+
 
   <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Categories</h1>
-        <nav>
-          <!-- <ol class="breadcrumb">
+      <h1>Categories</h1>
+      <nav>
+        <!-- <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.html">Users</a></li>
             <li class="breadcrumb-item active">Data</li>
           </ol> -->
-        </nav>
-      </div><!-- End Page Title -->
-      <section class="section d-flex justify-content-end ">
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section d-flex justify-content-end ">
 
-        <div class="col-auto px-2 py-2">
-            <button type="submit" class="btn btn-primary mb-2">    
-                <i class="bi bi-plus-lg"></i>
-                Add Product</button>
-          </div>
-          <div class="col-auto px-2 py-2">
-              <button type="submit" class="btn btn-primary mb-2">  
-                <i class="bi bi-plus-lg"></i>
-                Add Category
-              </button>
-          </div>
-      </section>
-      <section class="section py-4">
-        <table id="example" class="table table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                   
-                </tr>
-            </thead>
-            <tbody>
+      <div class="col-auto px-2 py-2">
+        <button type="submit" class="btn btn-primary mb-2">
+          <i class="bi bi-plus-lg"></i>
+          Add Product</button>
+      </div>
+      <div class="col-auto px-2 py-2">
+        <button type="submit" class="btn btn-primary mb-2">
+          <i class="bi bi-plus-lg"></i>
+          Add Category
+        </button>
+      </div>
+    </section>
+    <section class="section py-4">
+      <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
 
-              <% catList.forEach(function(cat) { %>
-                <tr>
-                  <td><%= cat._id %></td>
-                  <td><%= cat.name %></td>
-                </tr>
-              <% }) %>
-               
-               
-            </tbody>
-            <tfoot>
-                
-            </tfoot>
-        </table>
-      </section>
-     
-    </main>
+          </tr>
+        </thead>
+        <tbody>
+
+          <% catList.forEach(function(cat) { %>
+            <tr>
+              <td>
+                <%= cat._id %>
+              </td>
+              <td>
+                <%= cat.name %>
+              </td>
+            </tr>
+            <% }) %>
+
+
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+    </section>
+
+  </main>
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer fixed-bottom">
@@ -427,8 +432,8 @@
 
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- Add this to your HTML template -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <!-- Add this to your HTML template -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 
@@ -441,4 +446,3 @@
 </body>
 
 </html>
-

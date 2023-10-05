@@ -82,13 +82,16 @@
                           </form>
                           <% } else { %>
                             <!-- Block Subcategory Button -->
-                            <form action="/admin/subcategoriesNA?CatID=<%= categoryId %>&SubCatID=<%= subcategory._id %>" method="post">
-                              <button type="submit" class="btn btn-primary" data-bs-target="#activeModal<%= subcategory._id %>">Block</button>
+                            <form
+                              action="/admin/subcategoriesNA?CatID=<%= categoryId %>&SubCatID=<%= subcategory._id %>"
+                              method="post">
+                              <button type="submit" class="btn btn-primary"
+                                data-bs-target="#activeModal<%= subcategory._id %>">Block</button>
                             </form>
-                            
-                            
-                            
-                            
+
+
+
+
                             <% } %>
                       </td>
                     </tr>

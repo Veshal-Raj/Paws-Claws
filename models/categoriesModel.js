@@ -10,16 +10,16 @@ const categorySchema = new mongoose.Schema({
     subcategories: [
         {
 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subcategory'
-    }
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Subcategory'
+        }
     ],
-    isDisabled : {
+    isDisabled: {
         type: Boolean,
         default: false,
     }
 })
 
-const Category = mongoose.model('Category',categorySchema)
+const Category = mongoose.model('Category', categorySchema)
 
-module.exports = {Category};
+module.exports = { Category };

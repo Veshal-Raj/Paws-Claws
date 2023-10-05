@@ -7,7 +7,7 @@ const productSinglePageView = async (req, res) => {
         // Get the product ID from the query parameter
         const productId = req.query.productId;
 
-        
+
         // Check if productId is defined and is a valid ObjectId
         if (!mongoose.Types.ObjectId.isValid(productId)) {
 
@@ -22,12 +22,12 @@ const productSinglePageView = async (req, res) => {
         }
 
         // Rendering the product details page with the product data
-        res.render('users/productSingleViewpage', { product , userId:req.session.userId});
+        res.render('users/productSingleViewpage', { product, userId: req.session.userId });
     } catch (error) {
         console.error(error);
         res.render('error');
     }
-};``
+}; ``
 
 module.exports = {
     productSinglePageView

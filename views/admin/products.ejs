@@ -7,7 +7,7 @@
 
         </div><!-- End Page Title -->
         <section class="section d-flex justify-content-end ">
-            
+
             <!-- Button to Trigger the Modal -->
             <div class="col-auto px-2 py-2">
                 <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
@@ -20,84 +20,84 @@
             <!-- Modal for Adding a Product -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
                 aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
 
-                                <!-- //enctype="multipart/form-data" -->
-                                <form id="productForm" method="post" action="/admin/addproduct"
-                                    enctype="multipart/form-data">
-                                    <!-- Product Form Goes Here -->
-                                    <div class="mb-3">
-                                        <label for="productName" class="form-label">Product Name</label>
-                                        <input type="text" class="form-control" id="productName" name="productName"
-                                            required>
-                                    </div>
+                            <!-- //enctype="multipart/form-data" -->
+                            <form id="productForm" method="post" action="/admin/addproduct"
+                                enctype="multipart/form-data">
+                                <!-- Product Form Goes Here -->
+                                <div class="mb-3">
+                                    <label for="productName" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="productName" name="productName"
+                                        required>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productPrice" class="form-label">Price</label>
-                                        <input type="number" class="form-control" id="productPrice" name="price" required>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productPrice" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="productPrice" name="price" required>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productDescription" class="form-label">Product Description</label>
-                                        <textarea class="form-control" id="productDescription" name="productDescription"
-                                            required></textarea>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productDescription" class="form-label">Product Description</label>
+                                    <textarea class="form-control" id="productDescription" name="productDescription"
+                                        required></textarea>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productCategory" class="form-label">Category</label>
-                                        <select class="form-select" id="productAddCategory" name="category" required>
-                                            <option value="" disabled>Available Categories</option>
-                                            <% categories.forEach((category)=> { %>
-                                                <option value="<%= category._id %>">
-                                                    <%= category.categoryName %>
-                                                </option>
-                                                <% }) %>
-                                        </select>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productCategory" class="form-label">Category</label>
+                                    <select class="form-select" id="productAddCategory" name="category" required>
+                                        <option value="" disabled>Available Categories</option>
+                                        <% categories.forEach((category)=> { %>
+                                            <option value="<%= category._id %>">
+                                                <%= category.categoryName %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productSubcategory" class="form-label">Subcategory</label>
-                                        <select class="form-select" id="productAddSubcategory"  name="subcategory" required>
-                                            <option value="" disabled>Available Sub Categories</option>
-                                        </select>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productSubcategory" class="form-label">Subcategory</label>
+                                    <select class="form-select" id="productAddSubcategory" name="subcategory" required>
+                                        <option value="" disabled>Available Sub Categories</option>
+                                    </select>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productStock" class="form-label">Stock</label>
-                                        <input type="number" class="form-control" id="productStock" name="quantityInStock"
-                                            required>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productStock" class="form-label">Stock</label>
+                                    <input type="number" class="form-control" id="productStock" name="quantityInStock"
+                                        required>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productImages" class="form-label">Product Images</label>
-                                        <input type="file" class="form-control" id="productImages" name="productImages"
-                                            accept="image/*" multiple>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productImages" class="form-label">Product Images</label>
+                                    <input type="file" class="form-control" id="productImages" name="productImages"
+                                        accept="image/*" multiple>
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="productStatus" class="form-label">Status</label>
-                                        <select class="form-select" id="productStatus" name="productStatus" required>
-                                            <option value="active">Active</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="productStatus" class="form-label">Status</label>
+                                    <select class="form-select" id="productStatus" name="productStatus" required>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save Product</button>
-                                    </div>
-                                </form>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save Product</button>
+                                </div>
+                            </form>
 
-                            </div>
                         </div>
                     </div>
+                </div>
             </div>
 
 
@@ -119,8 +119,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <% let i =0; products.forEach(function(product) { %>
+
+                    <% let i=0; products.forEach(function(product) { %>
                         <tr>
                             <td>
                                 <%= product._id %>
@@ -213,98 +213,104 @@
                                     </div>
                                     <div class="modal-body">
                                         <!-- Form for editing a product (add form fields as needed) -->
-                                       
-                                        <form id="editProductForm<%= product._id %>" enctype="multipart/form-data"   method="post" action="/admin/editProduct/<%= product._id %>">
-                                               
+
+                                        <form id="editProductForm<%= product._id %>" enctype="multipart/form-data"
+                                            method="post" action="/admin/editProduct/<%= product._id %>">
+
                                             <!-- Product name -->
-                                                <div class="mb-3">
-                                                    <label for="editProductName" class="form-label">Product Name</label>
-                                                        <input type="text" class="form-control"
-                                                            id="editProductName<%= product._id %>" name="editProductName"
-                                                            value="<%= product.productName %>" required>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label for="editProductName" class="form-label">Product Name</label>
+                                                <input type="text" class="form-control"
+                                                    id="editProductName<%= product._id %>" name="editProductName"
+                                                    value="<%= product.productName %>" required>
+                                            </div>
 
                                             <!-- Product description -->
-                                                <div class="mb-3">
-                                                    <label for="editProductDescription" class="form-label">Product
-                                                        Description</label>
-                                                        <textarea class="form-control"
-                                                            id="editProductDescription<%= product._id %>"
-                                                            name="editProductDescription"
-                                                            required><%= product.productDescription %></textarea>
-                                                </div>
-                                        
+                                            <div class="mb-3">
+                                                <label for="editProductDescription" class="form-label">Product
+                                                    Description</label>
+                                                <textarea class="form-control"
+                                                    id="editProductDescription<%= product._id %>"
+                                                    name="editProductDescription"
+                                                    required><%= product.productDescription %></textarea>
+                                            </div>
+
                                             <!-- Stock quantity -->
-                                                <div class="mb-3">
-                                                    <label for="editProductStock" class="form-label">Stock Quantity</label>
-                                                        <input type="number" class="form-control"
-                                                            id="editProductStock<%= product._id %>" name="editProductStock"
-                                                            value="<%= product.quantityInStock %>" required>
+                                            <div class="mb-3">
+                                                <label for="editProductStock" class="form-label">Stock Quantity</label>
+                                                <input type="number" class="form-control"
+                                                    id="editProductStock<%= product._id %>" name="editProductStock"
+                                                    value="<%= product.quantityInStock %>" required>
+                                            </div>
+
+                                            <!-- Category select field -->
+                                            <div class="mb-3">
+                                                <label for="editProductCategory" class="form-label">Category</label>
+                                                <select class="form-select" id="editProductCategory<%= product._id %>"
+                                                    name="editProductCategory" required
+                                                    onchange="loadSubcategories(value,'<%= i%>')">
+                                                    <option value="" disabled>Select a category</option>
+                                                    <% categories.forEach(category=> { %>
+                                                        <option value="<%= category._id %>"
+                                                            <%=category._id.toString()===product.category.toString()
+                                                            ? 'selected' : '' %>>
+                                                            <%= category.categoryName %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+
+                                            <!-- Subcategory select field -->
+                                            <div class="mb-3">
+                                                <label for="editProductSubcategory"
+                                                    class="form-label">Subcategory</label>
+                                                <select class="editProductSubcategory form-select"
+                                                    name="editProductSubcategory" required
+                                                    data-product-id="<%= product._id %>">
+                                                    <option value="" disabled>Select a subcategory</option>
+                                                </select>
+                                            </div>
+
+
+                                            <!-- Product image (You can choose to edit or delete existing images) -->
+                                            <div class="mb-3">
+                                                <label for="editProductImages" class="form-label">Product Images</label>
+                                                <input type="file" class="form-control"
+                                                    id="editProductImages<%= product._id %>" name="editProductImages"
+                                                    accept="image/*" multiple>
+                                            </div>
+
+                                            <!-- Product price -->
+                                            <div class="mb-3">
+                                                <label for="editProductPrice" class="form-label">Price</label>
+                                                <input type="number" class="form-control"
+                                                    id="editProductPrice<%= product._id %>" name="editProductPrice"
+                                                    value="<%= product.price %>" required>
+                                            </div>
+
+                                            <!-- Display existing images -->
+                                            <div class="mb-3">
+                                                <label for="existingProductImages<%= product._id %>"
+                                                    class="form-label">Existing Product Images</label>
+                                                <div id="existingProductImages<%= product._id %>">
+                                                    <% product.productImages.forEach(function(imageUrl,index) { %>
+                                                        <img src="/uploads/<%= imageUrl %>" alt="Product Image"
+                                                            class="img-thumbnail">
+                                                        <button type="button" class="btn btn-danger delete-image-button"
+                                                            onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
+                                                            Delete
+                                                        </button>
+
+                                                        <% }); %>
                                                 </div>
-
-                                                <!-- Category select field -->
-                                                    <div class="mb-3">
-                                                        <label for="editProductCategory" class="form-label">Category</label>
-                                                            <select class="form-select" id="editProductCategory<%= product._id %>" name="editProductCategory" required
-                                                                onchange="loadSubcategories(value,'<%= i%>')">
-                                                                <option value="" disabled>Select a category</option>
-                                                                <% categories.forEach(category => { %>
-                                                                    <option value="<%= category._id %>" <%= category._id.toString() === product.category.toString() ? 'selected' : '' %>>
-                                                                        <%= category.categoryName %>
-                                                                    </option>
-                                                                <% }); %>
-                                                            </select>
-                                                    </div>
-
-                                                <!-- Subcategory select field -->
-                                                    <div class="mb-3">
-                                                        <label for="editProductSubcategory" class="form-label">Subcategory</label>
-                                                            <select class="editProductSubcategory form-select" name="editProductSubcategory" required
-                                                                    data-product-id="<%= product._id %>">
-                                                                <option value="" disabled>Select a subcategory</option>
-                                                        </select>
-                                                    </div>
-                                           
-
-                                                <!-- Product image (You can choose to edit or delete existing images) -->
-                                                    <div class="mb-3">
-                                                        <label for="editProductImages" class="form-label">Product Images</label>
-                                                            <input type="file" class="form-control"
-                                                                id="editProductImages<%= product._id %>" name="editProductImages"
-                                                                accept="image/*" multiple>
-                                                    </div>
-                                          
-                                                <!-- Product price -->
-                                                    <div class="mb-3">
-                                                        <label for="editProductPrice" class="form-label">Price</label>
-                                                            <input type="number" class="form-control"
-                                                                id="editProductPrice<%= product._id %>" name="editProductPrice"
-                                                                value="<%= product.price %>" required>
-                                                    </div>
-
-                                                <!-- Display existing images -->
-                                                    <div class="mb-3">
-                                                        <label for="existingProductImages<%= product._id %>"
-                                                            class="form-label">Existing Product Images</label>
-                                                            <div id="existingProductImages<%= product._id %>">
-                                                                <% product.productImages.forEach(function(imageUrl,index) { %>
-                                                                    <img src="/uploads/<%= imageUrl %>" alt="Product Image"
-                                                                        class="img-thumbnail">
-                                                                        <button type="button" class="btn btn-danger delete-image-button"
-                                                                            onclick="deleteImage('<%= product._id %>','<%= imageUrl %>')">
-                                                                            Delete
-                                                                        </button>
-                                                                       
-                                                                    <% }); %>
-                                                            </div>
-                                                    </div>
-
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                            </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
                                     </form>
                                 </div>
                             </div>
@@ -323,11 +329,11 @@
 
         const addCategorySelect = document.getElementById('productAddCategory');
         const addSubcategorySelect = document.getElementById('productAddSubcategory');
-        console.log("category select value",addCategorySelect.value)
+        console.log("category select value", addCategorySelect.value)
         addCategorySelect.addEventListener('change', async () => {
 
             const addSelectedCategoryId = addCategorySelect.value;
-            
+
             console.log(addSelectedCategoryId)
             // Clear previous subcategory options
             addSubcategorySelect.innerHTML = '';
@@ -335,7 +341,7 @@
             await fetch(`/admin/productSubcategories`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ categoryId:addSelectedCategoryId })
+                body: JSON.stringify({ categoryId: addSelectedCategoryId })
             })
                 .then((response) => response.json())
                 .then((subcategories) => {
@@ -396,31 +402,31 @@
                 return
             }
         }
-        
-        
+
+
         // =============================== Edit category ==================================== //
 
-       async function loadSubcategories (id,j) {
+        async function loadSubcategories(id, j) {
             // console.log(id)
-        const subList = await fetch(`/admin/loadSubcategories`,{
+            const subList = await fetch(`/admin/loadSubcategories`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({categoryId:id})
+                body: JSON.stringify({ categoryId: id })
             })
 
-            .then((value) => {
-                return value.json()
-            })
-            .catch((err) => {
-                console.error(err);
-            })
+                .then((value) => {
+                    return value.json()
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
 
             let editProductSubcategory = document.getElementsByClassName("editProductSubcategory")[j].innerHTML
             console.log(subList)
-            document.getElementsByClassName("editProductSubcategory")[j].innerHTML=''
-            for (let i=0;i<subList.length;i++) {
+            document.getElementsByClassName("editProductSubcategory")[j].innerHTML = ''
+            for (let i = 0; i < subList.length; i++) {
                 let option = document.createElement("option");
                 option.value = subList[i]._id
                 option.text = subList[i].subcategoryName

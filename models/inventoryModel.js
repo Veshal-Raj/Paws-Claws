@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const inventoryTransactionSchema = new mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Product',
+        ref: 'Product',
     },
     transcationType: String,
     transcationDate: Date,
@@ -12,6 +12,6 @@ const inventoryTransactionSchema = new mongoose.Schema({
     notes: String,
 })
 
-const inventoryTransaction = mongoose.model('inventoryTransaction',inventoryTransactionSchema)
+const inventoryTransaction = mongoose.model('inventoryTransaction', inventoryTransactionSchema)
 
 module.exports = inventoryTransaction

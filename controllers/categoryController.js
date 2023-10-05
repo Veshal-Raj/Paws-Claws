@@ -1,10 +1,10 @@
 const Category = require('../models/categoriesModel')
 
 // ===================== Create a new category ================================== //
-const CreateCategory = async (req,res)=>{
+const CreateCategory = async (req, res) => {
     try {
         const { categoryName } = req.body
-        const category = new Category.Category({categoryName})
+        const category = new Category.Category({ categoryName })
         const savedCategory = await category.save()
         res.redirect('/admin/categories')
     } catch (error) {
@@ -14,11 +14,11 @@ const CreateCategory = async (req,res)=>{
 }
 
 // ==================== Get all categories ====================================== //
-const getAllCategories = async (req,res)=>{
+const getAllCategories = async (req, res) => {
     try {
         const categories = await Category.Category.find().populate('subcategories')
-      
-        res.render('admin/category',{categories})
+
+        res.render('admin/category', { categories })
 
     } catch (error) {
         res.render('error')
@@ -27,14 +27,14 @@ const getAllCategories = async (req,res)=>{
 }
 
 // =================== Making Category Available ================================== //
-const categoryAvailable = async  (req ,res )=>{
+const categoryAvailable = async (req, res) => {
     try {
         const categoryId = req.params.categoryId
-        
-        const categoryFind = await Category.Category.findByIdAndUpdate(categoryId,{$set:{isDisabled:false}})
-        
-        if(!categoryFind){
-            res.status(400).json({message: 'Category not Found'})
+
+        const categoryFind = await Category.Category.findByIdAndUpdate(categoryId, { $set: { isDisabled: false } })
+
+        if (!categoryFind) {
+            res.status(400).json({ message: 'Category not Found' })
         }
         res.redirect('/admin/categories')
     } catch (error) {
@@ -44,14 +44,14 @@ const categoryAvailable = async  (req ,res )=>{
 }
 
 // ====================== Making Category Not-Available ============================= //
-const categoryNA = async (req,res) =>{
+const categoryNA = async (req, res) => {
     try {
         const categoryId = req.params.categoryId
 
-        const categoryFind = await Category.Category.findByIdAndUpdate(categoryId,{$set:{isDisabled:true}}) 
-        
-        if(!categoryFind) {
-            res.status(400).json({ message: 'Category not found'})
+        const categoryFind = await Category.Category.findByIdAndUpdate(categoryId, { $set: { isDisabled: true } })
+
+        if (!categoryFind) {
+            res.status(400).json({ message: 'Category not found' })
         }
         res.redirect('/admin/categories')
     } catch (error) {
@@ -61,21 +61,21 @@ const categoryNA = async (req,res) =>{
 }
 
 // ======================= Editing Category ========================================== //
-const categoryEdit =async (req,res)=>{
+const categoryEdit = async (req, res) => {
     try {
         const categoryId = req.query.CatID // Extract the category ID from the URL
-        
+
         const updatedCategoryName = req.body.editCategoryName // Extract the updated category data from the request body
-        
 
-        const updatedCategory = await Category.Category.updateOne({_id:categoryId},{$set:{categoryName:updatedCategoryName}})
 
-        if(!updatedCategory) {
+        const updatedCategory = await Category.Category.updateOne({ _id: categoryId }, { $set: { categoryName: updatedCategoryName } })
+
+        if (!updatedCategory) {
             return res.status(404).send('Category not found')
         }
 
         res.redirect('/admin/categories')
-        
+
 
     } catch (error) {
         res.render('error')
@@ -84,11 +84,11 @@ const categoryEdit =async (req,res)=>{
 }
 
 // ======================  Get a Single Category ==================================== //
-const getCategoryById = async (req,res)=>{
+const getCategoryById = async (req, res) => {
     try {
         const category = await Category.Category.findById(req.params.categoryId)
-        if(!category){
-            return res.status(404).json({error:'Category not found'})
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' })
         }
         res.status(201).json(category)
     } catch (error) {
@@ -97,7 +97,7 @@ const getCategoryById = async (req,res)=>{
     }
 }
 
-module.exports ={
+module.exports = {
     CreateCategory,
     getAllCategories,
     getCategoryById,
