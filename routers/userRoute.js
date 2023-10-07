@@ -14,6 +14,7 @@ const userCheckoutpage = require('../controllers/userCheckoutPage')
 const userOrders = require('../controllers/userOrders')
 const userCats = require('../controllers/userCatsController')
 const userDogs = require('../controllers/userDogsController')
+const userSearch = require('../controllers/userSearchController')
 
 router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
 router.get('/login', userAuth.yesSession, userController.loginpage)
@@ -41,6 +42,9 @@ router.post('/newPasswordUpdate', userController.newPasswordUpdate)
 router.post('/login', userController.userlogin)
 
 
+// ========================= Search bar ================================= //
+router.get('/search', userSearch.homePageSearchbar )
+
 // ========================= Add to Cart ================================== //
 router.post('/showCart', userAuth.noSession, userAddtoCart.showCart)
 router.post('/addToCart/:productId', userAuth.noSession, userAddtoCart.addToCart)
@@ -66,10 +70,12 @@ router.get('/showOrders', userAuth.noSession, userOrders.showOrders)
 
 // ========================= Cats =================================== //
 router.get('/cats', userCats.cats)
+router.get('/cats/filter',userCats.filterCatProducts)
 
 
 // ========================= Dogs =================================== //
 router.get('/dogs', userDogs.dogs)
+router.get('/dogs/filter',userDogs.filterDogProducts)
 
 router.get('/error', async (req, res) => {
     res.render('error')

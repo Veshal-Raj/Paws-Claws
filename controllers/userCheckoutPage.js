@@ -10,13 +10,6 @@ const razorpay = new Razorpay({
 })
 
 
-// API signature
-// {razorpayInstance}.{resourceName}.{methodName}(resourceId [, params])
-
-// example
-
-// instance.payments.fetch(paymentId)
-
 const generateOrderNumber = () => {
     // Implement your logic here to generate a unique order number
     // You can use a combination of timestamp, random numbers, or any other method you prefer
@@ -31,9 +24,7 @@ const checkout = async (req, res) => {
 
         // Fetch the user data with the populated 'address' field
         const user = await User.User.findById(userId).populate('address');
-        // console.log(user)
 
-        
 
         // Finding the user with their cart data populated
         const userCart = await User.User.findById(userId).populate('cart.product_id')
@@ -43,12 +34,8 @@ const checkout = async (req, res) => {
         }
         let total = 0;
         userCart.cart.forEach((i)=>{
-            // console.log(i.totalPrice,"ujujujujjj")
             total += i.totalPrice
         })
-        // console.log("total: ", total)
-        
-
         
 
         // Generate the order ID (you can use your logic here)
@@ -64,7 +51,6 @@ const checkout = async (req, res) => {
 const saveAddress = async (req, res) => {
     try {
         const formData = req.body
-        // console.log(formData)
 
         const userId = req.session.userId
 
@@ -105,24 +91,22 @@ const saveAddress = async (req, res) => {
 
 
 const proceedToPay = async (req, res) => {
+    console.log('hiello')
     try {
         const { selectedAddress } = req.body
         // console.log("userCheckout.js ---> line 71 ",selectedAddress)
 
 
         const  userId = req.session.userId
-        // console.log(user)
         const UserFound = await User.User.findById(userId)
-        // console.log(UserFound)
-        // console.log("cart: ",UserFound.cart)
        
         const cart = UserFound.cart
         const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
 
-        // console.log("total amount: ", totalPrice);
-
         // generating order number
         const orderId = generateOrderNumber()
+
+        const paymentMethod = 'Online Payment'; //
 
         // Create a new order using the Order model
         const order = new Order({
@@ -131,23 +115,18 @@ const proceedToPay = async (req, res) => {
             products: req.session.cart,
             shippingAddress: selectedAddress,
             totalAmount: totalPrice,
+            paymentMethod: paymentMethod, // Set the payment method to 'Online Payment'
 
         })
 
+        console.log("order ==",order)
         // Save the order to the database
-        await order.save()
+        let newOrderSave = await order.save()
 
-        // create a Razorpay order 
-        const razorpayOrder = await razorpay.orders.create({
-            amount: totalPrice*100, // Amount in paisa (multiply by 100 for rupees)
-            currency: 'INR',
-            receipt:order.orderNumber,
-        })
+        console.log('new Order ',newOrderSave)
+
         
-        // const chekorder = await Order.find(order)
-        // console.log(chekorder)
-        // console.log("custiomer in usrCheckoutpage ", chekorder.customer)
-        res.json({ status: 'success',orderId:razorpayOrder.id, amount:razorpayOrder.amount, message: 'Payment successful' ,orderId});
+        res.json({ status: 'success', message: 'Order created successful' });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })
@@ -158,14 +137,44 @@ const proceedToPay = async (req, res) => {
 const onlinePayment = async (req,res) => {
     try {
         const totalPrice = req.body.total
+        const { selectedAddress } = req.body.selectedAddress
+        // console.log("userCheckout.js ---> line 71 ",selectedAddress)
+
+
+        const  userId = req.session.userId
+        const UserFound = await User.User.findById(userId)
+       
+        const cart = UserFound.cart
+        const totalSumPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+
+
+        // generating order number
+        const orderId = generateOrderNumber()
+
+        const paymentMethod = 'Online Payment'; //
+
+        // Create a new order using the Order model
+        const Neworder = new Order({
+            orderNumber: orderId,
+            customer: userId,
+            products: req.session.cart,
+            shippingAddress: selectedAddress,
+            totalAmount: totalPrice,
+            paymentMethod: paymentMethod, // Set the payment method to 'COD'
+
+        })
+
+         await Neworder.save()
+
+
         const options = {
-            amount: totalPrice*100, // Ra
+            amount: totalSumPrice*100, // converting paisa to ruppes
             currency: 'INR',
         }
 
         const order = await razorpay.orders.create(options)
         res.json({orderId: order.id})
-        // console.log(totalPrice)
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })

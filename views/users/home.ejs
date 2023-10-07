@@ -1,61 +1,136 @@
 <%- include('../layouts/userHeader') %>
-    <!-- Header-->
-    <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Home Page is on Construction</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Please visit after sometime</p>
-            </div>
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Home Page is under Construction</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Please visit after some time</p>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Section-->
-    <section class="py-5">
+<!-- Section-->
+<div id="main-content-container">
+    <section class="py-5" id="main-content">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-
                 <!-- Loop through the filtered products and display them-->
-
-                <% for(let i=0;i<products.length;i++) { %>
-                    <% } %>
-                        <% products.forEach((product)=> { %>
-                            <div class="col mb-5">
-                                <div class="card card-square">
-                                    <!--Product image-->
-
-                                    <img src="/uploads/<%= product.productImages[0] %>"
-                                        alt="<%= product.productName %>Image" class="card-img-top img-fluid"
-                                        style="height: 300px; width: 100%; padding: 5px;">
-                                    <!-- Product details -->
-                                    <div class="card-body p-4 card-body-fixed-height">
-                                        <div class="text-center">
-                                            <!-- product name  -->
-                                            <h5 class="fw-bolder">
-                                                <%= product.productName %>
-                                            </h5>
-                                            <p>Category: <%= product.category.categoryName %>
-                                            </p>
-                                            <p>Subcategory: <%= product.subcategory.subcategoryName %>
-                                            </p>
-                                            <!-- product price  -->
-                                            $<%= product.price.toFixed(2) %>
-                                        </div>
-                                    </div>
-
-                                    <!-- product actions  -->
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center">
-                                            <a href="/product?productId=<%= product._id %>"
-                                                class="btn btn-outline-dark mt-auto">View Details</a>
-                                        </div>
-                                    </div>
+                <% for (let i = 0; i < products.length; i++) { %>
+                    <div class="col mb-5">
+                        <div class="card card-square">
+                            <!--Product image-->
+                            <img src="/uploads/<%= products[i].productImages[0] %>"
+                                alt="<%= products[i].productName %>Image" class="card-img-top img-fluid"
+                                style="height: 300px; width: 100%; padding: 5px;">
+                            <!-- Product details -->
+                            <div class="card-body p-4 card-body-fixed-height">
+                                <div class="text-center">
+                                    <!-- product name  -->
+                                    <h5 class="fw-bolder">
+                                        <%= products[i].productName %>
+                                    </h5>
+                                    <p>Category: <%= products[i].category.categoryName %>
+                                    </p>
+                                    <p>Subcategory: <%= products[i].subcategory.subcategoryName %>
+                                    </p>
+                                    <!-- product price  -->
+                                    $<%= products[i].price.toFixed(2) %>
                                 </div>
                             </div>
-                            <% }) %>
-
+                            <!-- product actions  -->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a href="/product?productId=<%= products[i]._id %>"
+                                        class="btn btn-outline-dark mt-auto">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
     </section>
+</div>
 
-    <%- include('../layouts/userFooter') %>
+
+<section class="py-5" id="main-content">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div id="search-results" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        </div>
+    </div>
+</section>
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const searchForm = document.getElementById('search-form')
+        const searchInput = document.getElementById('search-input')
+        const mainContentContainer = document.getElementById('main-content-container');
+
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault()
+
+            // Get the search query from the input field
+            const query = searchInput.value 
+
+            // Send a fetch request to the server to fetch search results
+            fetch(`/search?query=${query}`) 
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`)
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    console.log('Received data:', data); // Debug: Log the received data
+
+                    // Hide the main content container
+                    mainContentContainer.style.display = 'none'
+
+                    const resultsContainer = document.getElementById('search-results')
+
+                    // Clear previous search results
+                    resultsContainer.innerHTML = ''
+
+                    if (data.length === 0) resultsContainer.textContent = 'No products found.'
+                    else {
+                        // Loop through the products and create a list or display them as needed
+                        data.forEach(product => {
+                            const productCard = document.createElement('div')
+                            productCard.classList.add('col', 'mb-5');
+                            productCard.innerHTML = `
+                            
+
+                                <div class="col  mb-5">
+                                    <div class="card card-square">
+                                        <!-- Product image -->
+                                        <img src="/uploads/${product.productImages[0]}" alt="${product.productName} Image" 
+                                        class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
+                                        <!-- Product details -->
+                                        <div class="card-body p-4 card-body-fixed-height">
+                                            <div class="text-center">
+                                                <!-- Product name -->
+                                                <h5 class="fw-bolder">${product.productName}</h5>
+                                               
+                                                <!-- Product price -->
+                                                <p class="mb-0">$${product.price.toFixed(2)}</p>
+                                            </div>
+                                        </div>
+                                        <!-- Product actions -->
+                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                            <div class="text-center">
+                                                <a href="/product?productId=${product._id}" class="btn btn-outline-dark mt-auto">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                            `;
+                            resultsContainer.appendChild(productCard)
+                        })
+                    }
+                })
+        })
+    })
+</script>
+<%- include('../layouts/userFooter') %>

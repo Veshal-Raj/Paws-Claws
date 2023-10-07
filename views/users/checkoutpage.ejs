@@ -375,6 +375,9 @@
       
       // Taking the orderid form the input field and using inside the razorpayOptions object
            let total = document.getElementById("total").value;
+           const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
+        const userData = JSON.parse(document.getElementById('USER').value);
+        const selectedAddress = userData.address[selectedAddressIndex];
 
       if (selectedPaymentMethod.value === 'razorpay') {
         const razorpayKey = 'rzp_test_JKK8n1hAazvvci';
@@ -384,7 +387,7 @@
             headers:{
               'Content-Type':"application/json"
             },
-            body : JSON.stringify({total: total})
+            body : JSON.stringify({total: total,selectedAddress:selectedAddress})
           }).then(res => res.json())
           .then((res)=>{
             console.log(res.orderId)
@@ -443,8 +446,24 @@
   
     function handleRazorpaySuccess(response) {
       if (response.razorpay_payment_id) {
-        showSuccessPopup('Payment Successful', 'Your payment was successful.');
-      } else {
+        Swal.fire({
+        title: 'Order Successful',
+        height: 600,
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        background: 'url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        icon: 'success',
+        confirmButtonText: 'OK',
+        footer: '<a href="/home">Go Back to Home</a>',
+      }).then((result) => {
+        if (result.isConfirmed && callback) {
+          callback() // call the callback function after clicking ok
+        }
+      })
+          } else {
         showErrorPopup('Payment Failed', 'Your payment could not be processed. Please try again.');
       }
     }
