@@ -34,6 +34,7 @@ const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
 const subcategoryController = require('../controllers/subCategories')
 const productController = require('../controllers/productController')
+const orderController = require('../controllers/orderController')
 const adminAuth = require('../middlewares/adminAuth')
 
 
@@ -94,5 +95,8 @@ adminRoute.post('/deleteImage', adminAuth.noSession, productController.deleteIma
 adminRoute.post('/editproduct/:productId', adminAuth.noSession, upload.any(), productController.editproductsave)
 
 
+// ============================ Order route ========================================== //
+adminRoute.get('/orders',adminAuth.noSession,orderController.showOrders)
+adminRoute.post('/updateOrderStatus',adminAuth.noSession,orderController.updateOrderStatus)
 
 module.exports = adminRoute

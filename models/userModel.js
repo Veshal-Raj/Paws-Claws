@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
         city: { type: String },
         pincode: { type: Number },
         landmark: { type: String },
-        mobileNumber: { type: Number }
+        mobileNumber: { type: String  }
     }],
     cart: [{
         product_id: {

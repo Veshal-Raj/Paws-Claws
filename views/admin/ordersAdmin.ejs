@@ -1,0 +1,98 @@
+<%- include('../layouts/header') %>
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Categories</h1>
+        </div><!-- End Page Title -->
+        <section class="section py-4">
+
+            <table id="example" class="table datatable table-hover table-striped table-bordered" style="width:100%">
+
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Order Number</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(function(order, index) { %>
+                        <tr>
+                            <th scope="row" >
+                                <%= index + 1 %>
+                            </th>
+                            <td>
+                                <%= order.orderNumber %>
+                            </td>
+                            <td>
+                                <%= order.customer.fullname %>
+                            </td>
+                            <td>
+                                <%= order.totalAmount %>
+                            </td>
+                            <td>
+                                <%= order.orderDate %>
+                            </td>
+                            <td>
+                                <select class="custom-select" id="inputGroupSelect01-<%= order._id %>"
+                                    data-order-id="<%= order._id %>">
+                                    <option value="Pending" <% if (order.status==='Pending' ) { %>selected<% } %>
+                                            >Pending</option>
+                                    <% for (const status of ['Processing', 'Shipped' , 'Delivered' , 'Cancelled' ]) { %>
+                                        <option value="<%= status %>" <% if (order.status===status) { %>selected<% } %>>
+                                                <%= status %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </section>
+
+
+        <script>
+            // Function to update order status
+            function updateOrderStatus(orderId, newStatus) {
+                // Send a POST request to the server
+                fetch('/admin/updateOrderStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ orderId, newStatus }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Update the order status in the DOM
+                        const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
+
+                        // Update the order status in the DOM
+                        if (orderStatusElement) {
+                            orderStatusElement.value = newStatus
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error updating order status: ', error);
+                    })
+            }
+
+            // Event listener for order status change
+            document.querySelectorAll('[id^="inputGroupSelect01-"]').forEach((selectElement) => {
+                selectElement.addEventListener('change', (event) => {
+                    const newStatus = event.target.value;
+                    const orderId = event.target.dataset.orderId;
+                    updateOrderStatus(orderId, newStatus);
+                });
+            });
+
+
+        </script>
+
+    </main>
+    
+
+    <%- include('../layouts/footer') %>

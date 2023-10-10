@@ -218,9 +218,34 @@
         <% } %>
 
     <!-- Products Section -->
-<div id="main-content-container">
+    <div class="col-10 col-sm-12 col-lg-12  ">
+        <div id="main-content-container">
+       
 
-    <section class="py-5" id="main-content">
+    
+    <section class="py-5" >
+        <div class="col-2 col-sm-2 col-lg-2  " id="default-price-sort">
+            <div class="d-flex justify-content-center">
+                <div class="card  " style="max-width: 18rem;">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="flexRadioDefault1" value="lowToHigh">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Low to High
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="flexRadioDefault2" value="highToLow">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                High to Low
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container px-4 px-lg-5 mt-5" >
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
@@ -260,24 +285,145 @@
             </div>
         </div>
     </section>
-
 </div>
 
+
     <section class="py-5" id="main-content">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div id="search-results" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+        <div class="col-2 col-sm-2 col-lg-2  " id="price-sort" style="display: none;">
+            <div class="d-flex justify-content-center">
+                <div class="card  " style="max-width: 18rem;">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="flexRadioDefault1" value="lowToHigh">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Low to High
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                id="flexRadioDefault2" value="highToLow">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                High to Low
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
 
+        <div class="container px-4 px-lg-5 mt-5">
+            <div id="search-results" 
+                class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            </div>
+        </div>
+
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
+
+    </section>
+</div>
     <script>
+        // Wait for the DOM to be fully loaded before executing the code
         document.addEventListener('DOMContentLoaded', function() {
+            // Get reference to HTML elements
             const searchForm = document.getElementById('cat-search-form');
             const searchInput = document.getElementById('cat-search-input');
             const searchResultsContainer = document.getElementById('search-results');
             const existingProductsContainer = document.getElementById('main-content-container');
+            const defaultPriceSort = document.getElementById('default-price-sort')
+            const filteredPriceSort = document.getElementById('price-sort')
 
-    
+            // Array to store the original products data
+            let productsData = []
+
+            // Function to sort products based on price
+            function sortProducts(products, sortOrder) {
+                return products.slice().sort((a,b) => {
+                    if (sortOrder === 'lowToHigh'){
+                        return a.price - b.price;
+                    } else if (sortOrder === 'highToLow') {
+                        return b.price - a.price;
+                    }
+                })
+            }
+
+            // Function to render sorted produts
+            function renderSortedProducts(products) {
+                // Clear the previous search results
+                searchResultsContainer.innerHTML = ''
+
+                if (products.length === 0) {
+                    searchResultsContainer.textContent = 'No products found.'
+                } else {
+                    // Loop through products and create product cards
+                    products.forEach(product => {
+                        const productCard = document.createElement('div')
+                        productCard.classList.add('product-card')
+                        productCard.innerHTML = `
+                                    <div class="col  mb-5">                              
+                                        <div class="card card-square">
+                                            <!-- Product image -->
+                                            <img src="/uploads/${product.productImages[0]}" alt="${product.productName} Image" 
+                                                class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
+                                            <!-- Product details -->
+                                            <div class="card-body p-4 card-body-fixed-height">
+                                                <div class="text-center">
+                                                    <!-- Product name -->
+                                                    <h5 class="fw-bolder">${product.productName}</h5>
+                                                    <p class="mb-0">Category: ${product.category.categoryName}</p>
+                                                    <p class="mb-0">Subcategory: ${product.subcategory.subcategoryName}</p>
+                                                    <!-- Product price -->
+                                                    <p class="mb-0">$${product.price.toFixed(2)}</p>
+                                                </div>
+                                                </div>
+                                            <!-- Product actions -->
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center">
+                                                    <a href="/product?productId=${product._id}" class="btn btn-outline-dark mt-auto">View Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    `
+                        searchResultsContainer.appendChild(productCard)
+                    })
+                }
+            }
+
+
+            // Event listener for default sorting radio buttons
+            defaultPriceSort.addEventListener('change', function (e) {
+                const sortOrder = e.target.value
+                if (productsData.length > 0) {
+                    const sortedProducts = sortProducts(productsData, sortOrder)
+                    renderSortedProducts(sortedProducts)
+                }
+            })
+
+            // Even listener for filtered sorting radio buttons
+            filteredPriceSort.addEventListener('change', function (e) {
+                const sortOrder = e.target.value
+                if (productsData.length > 0) {
+                    const sortedProducts = sortProducts(productsData, sortOrder)
+                    renderSortedProducts(sortedProducts)
+                }
+            })
+            
+            // Event listener for the search form submission
             searchForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
     
@@ -293,6 +439,9 @@
                     const data = await response.json();
     
                     console.log("Data:", data);
+
+                    // Update the productsData array with the fetched data
+                    productsData = data
     
                     // Clear previous search results and hide already shown images
                     searchResultsContainer.innerHTML = '';
@@ -302,38 +451,12 @@
                     if (data.length === 0) {
                         searchResultsContainer.textContent = 'No products found.';
                     } else {
-                        // Loop through the products and create a list or display them as needed
-                        data.forEach(product => {
-                            const productCard = document.createElement('div');
-                            productCard.classList.add('product-card');
-                            productCard.innerHTML = `
-                                <div class="col  mb-5">
-                                    <div class="card card-square">
-                                        <!-- Product image -->
-                                        <img src="/uploads/${product.productImages[0]}" alt="${product.productName} Image" 
-                                            class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
-                                        <!-- Product details -->
-                                        <div class="card-body p-4 card-body-fixed-height">
-                                            <div class="text-center">
-                                                <!-- Product name -->
-                                                <h5 class="fw-bolder">${product.productName}</h5>
-                                                <p class="mb-0">Category: ${product.category.categoryName}</p>
-                                                <p class="mb-0">Subcategory: ${product.subcategory.subcategoryName}</p>
-                                                <!-- Product price -->
-                                                <p class="mb-0">$${product.price.toFixed(2)}</p>
-                                            </div>
-                                        </div>
-                                        <!-- Product actions -->
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center">
-                                                <a href="/product?productId=${product._id}" class="btn btn-outline-dark mt-auto">View Details</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            searchResultsContainer.appendChild(productCard);
-                        });
+                        // Show the filtered sorting options
+                        filteredPriceSort.style.display = 'block';
+
+                        // Default sorting by 'lowToHigh'
+                        const sortedProducts = sortProducts(productsData, 'lowToHigh'); 
+                        renderSortedProducts(sortedProducts);
                     }
                 } catch (error) {
                     console.error(error);

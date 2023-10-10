@@ -1,6 +1,7 @@
 const { generate } = require('otp-generator');
 const User = require('../models/userModel')
 const Order = require('../models/ordersModel')
+const Product = require('../models/productsModel')
 const Razorpay = require('razorpay')
 
 // Initialize the Razorpay instance with the key_id and key_secret
@@ -25,28 +26,50 @@ const checkout = async (req, res) => {
         // Fetch the user data with the populated 'address' field
         const user = await User.User.findById(userId).populate('address');
 
-
         // Finding the user with their cart data populated
-        const userCart = await User.User.findById(userId).populate('cart.product_id')
+        const userCart = await User.User.findById(userId).populate('cart.product_id');
 
         if (!userCart) {
-            return res.status(404).render('error', { message: 'User is not found' })
+            return res.status(404).render('error', { message: 'User is not found' });
         }
+
         let total = 0;
-        userCart.cart.forEach((i)=>{
-            total += i.totalPrice
-        })
+        const cartDetailsWithProduct = [];
+
         
+
+        for (const cartItem of userCart.cart) {
+            const product = await Product.findById(cartItem.product_id);
+            const productImage = product.productImages[0]; //  productImages is an array of image paths
+
+            cartDetailsWithProduct.push({
+                product_id: cartItem.product_id,
+                product_name: product.productName,
+                price: product.price,
+                quantity: cartItem.quantity,
+                totalPrice: cartItem.totalPrice,
+                productImage: productImage,
+            });
+
+            total += cartItem.totalPrice;
+        }
 
         // Generate the order ID (you can use your logic here)
         const orderId = generateOrderNumber(); // Replace with your logic to generate the order ID
 
-        res.render('users/checkoutpage', { userId, user,orderId,total })
+        res.render('users/checkoutpage', {
+            userId,
+            user,
+            orderId,
+            total,
+            cartdetails: cartDetailsWithProduct,
+        });
     } catch (error) {
-        console.error(error)
-        res.render('error')
+        console.error(error);
+        res.render('error');
     }
 }
+
 
 const saveAddress = async (req, res) => {
     try {
@@ -137,7 +160,7 @@ const proceedToPay = async (req, res) => {
 const onlinePayment = async (req,res) => {
     try {
         const totalPrice = req.body.total
-        const { selectedAddress } = req.body.selectedAddress
+        const  selectedAddress  = req.body.selectedAddress
         // console.log("userCheckout.js ---> line 71 ",selectedAddress)
 
 

@@ -9,6 +9,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  
 
 
   <style>
@@ -83,14 +84,75 @@
     <input type="hidden" value='<%- JSON.stringify(user) %>' id="USER">
     <input type="hidden" value="<%= total %>" id="total"> <!-- taking the total which is sending from the server side and storing it in the input field-->
 
+
+    
+   
     <div class="row">
       <div class="col-md-8 order-md-1">
         <div class="col-md-8 order-md-1">
           <h1></h1>
+          
           <!-- <h4 class="mb-3">Add new billing address</h4> -->
           <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
             Add new address
           </button>
+
+           <!-- Button trigger modal -->
+           <button  type="button" class="btn btn-outline-dark mb-3" data-bs-toggle="modal"
+              data-bs-target="#orderInfoModal" id="orderInfo">
+            Order Information
+          </button>
+          
+<!-- Modal -->
+<div class="modal fade" id="orderInfoModal" tabindex="-1" role="dialog" aria-labelledby="orderInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderInfoModalLabel">Order Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% cartdetails.forEach(function(cartItem, index) { %>
+                <tr>
+                  <th scope="row"><%= index + 1 %></th>
+                  <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>" 
+                    class="cart-image" style="height: 100px; width: auto;"></td>
+                  <td><%= cartItem.product_name %></td>
+                  <td><%= cartItem.quantity %></td>
+                  <td>$<%= cartItem.price %></td>
+                </tr>
+
+                <% }); %>
+        
+              <td colspan="5" class="text-end"><b>Total: $<%= total %></b></td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
           <form class="needs-validation" id="billingForm" style="display: none;" onsubmit=" handleSubmit(event)">
             <!-- novalidate -->
             <div class="row">
