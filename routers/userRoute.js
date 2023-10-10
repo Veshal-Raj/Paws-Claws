@@ -61,8 +61,15 @@ router.post('/saveAddress', userAuth.noSession, userCheckoutpage.saveAddress)
 
 router.post('/proceedToPay', userAuth.noSession, userCheckoutpage.proceedToPay)
 
+router.delete('/deleteOrderAddress/:addressId', userAuth.noSession,userCheckoutpage.deleteOrder)
+
+router.get('/getAddress/:id', userAuth.noSession, userCheckoutpage.getAddress )
+
+router.delete('/deletingAddressWhileEditing/:addressId', userAuth.noSession, userCheckoutpage.deletingAddressWhileEditing) // for deleting the card while i click the edit button
+
 // =========================== Online page ============================================ //
 router.post('/onlinepayment',userAuth.noSession,userCheckoutpage.onlinePayment)
+router.delete('/clearCart', userAuth.noSession, userCheckoutpage.clearCart)
 
 // ========================= Orders ============================ //
 router.get('/showOrders', userAuth.noSession, userOrders.showOrders)

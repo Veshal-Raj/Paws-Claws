@@ -97,20 +97,106 @@ const saveAddress = async (req, res) => {
         }
 
         // Push the new address to the address array
+        let index = user.address.length
         user.address.push(newAddress)
-
         // Save the user document with the updated address
         await user.save()
+        let id = user.address[index]._id
+        console.log(id, 'index',index)
 
        
         // Address added successfully
-        return res.status(200).json({ message: 'Address added successfully', newAddress })
+        return res.status(200).json({ message: 'Address added successfully', newAddress,index ,id})
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })
     }
 }
 
+const getAddress = async (req,res) => {
+    try {
+        
+        const userId = req.session.userId; // taking the userId from the session
+        
+        const addressId = req.params.id; // taking the addressId from the params that is sending from the client sides
+
+        // Find the user by ID and filter the address array to get the matching address
+        const user = await User.User.findById(userId);
+
+        if (!user) {
+        // Handle case when the user is not found
+        return res.status(404).json({ error: 'User not found' });
+        }
+
+        const address = user.address.id(addressId);
+        // console.log(address)
+
+        if (!address) {
+            // Handle case when the address is not found
+            return res.status(404).json({ error: 'Address not found' });
+        }
+
+         // Send the found address as a JSON response
+        res.json({ address });
+
+    } catch (error) {
+        console.error(error)
+        res.render('error')
+    }
+}
+
+
+const deletingAddressWhileEditing = async (req,res) => {
+    try {
+        const addressId = req.params.addressId // expecting address id that is send from the front end 
+        const userId = req.session.userId // Get the user's Id from the session
+
+        // deleting the user's particular addresss while  editing
+        const deleteAddress = await User.User.findByIdAndUpdate(
+            userId,
+            {$pull: { address: { _id: addressId } } },
+            { new: true } // To return the updated user
+            )
+
+            if (!deleteAddress) {
+                // Handle case when the address is not deleted
+                return res.status(404).json({ success: false, message: 'User not found' });
+            }
+
+            // Respond with a success message 
+            res.status(200).json({ success: true, message: 'Address deleted successfully '})
+
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }
+}
+
+
+const deleteOrder = async (req,res) => {
+    try {
+        const addressId = req.params.addressId;
+        const userId = req.session.userId; // Get the user's ID from the session
+    
+        // Update the user  to remove the address using $pull
+        const updatedUser = await User.User.findByIdAndUpdate(
+          userId,
+          { $pull: { address: { _id: addressId } } },
+          { new: true } // To return the updated user 
+        );
+    
+        if (!updatedUser) {
+          // Handle the case where the user  is not found
+          return res.status(404).json({ success: false, message: 'User not found' });
+        }
+    
+        // Respond with a success message
+        res.json({ success: true, message: 'Address deleted successfully' });
+      }  catch (error) {
+        console.error(error);
+        res.redirect('/something')
+    }
+}
 
 
 const proceedToPay = async (req, res) => {
@@ -204,9 +290,39 @@ const onlinePayment = async (req,res) => {
     }
 }
 
+
+const clearCart = async (req,res) => {
+    try {
+        const userId = req.session.userId
+
+    // find the user by userId
+    const user = await User.User.findById(userId)
+
+    if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      // Clear the user's cart by setting it to an empty array
+    user.cart = [];
+      console.log("user cart",user.cart)
+    // Save the updated user document
+    await user.save();
+
+    return res.json({ success: true, message: 'Cart cleared successfully' });
+
+    } catch (error) {
+        console.error(error);
+        res.render('error')
+    }    
+}
+
 module.exports = {
     checkout,
     saveAddress,
     proceedToPay,
-    onlinePayment
+    onlinePayment,
+    deleteOrder,
+    getAddress,
+    deletingAddressWhileEditing,
+    clearCart
 }

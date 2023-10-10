@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
 
 
   <style>
@@ -37,10 +37,12 @@
               Address
             </div>
             <div>
-              <button class="btn btn-warning btn-outline-secondary" id="deleteButton<%= index %>">
+              <button class="btn btn-warning btn-outline-secondary edit-button" data-address-id="<%= address._id %>"
+                 id="editButton<%= index %>">
                 <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="btn btn-danger btn-outline-dark" id="deleteButton<%= index %>">
+              <button class="btn btn-danger btn-outline-dark delete-button" data-address-id="<%= address._id %>"
+                id="deleteButton<%= index %>">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
@@ -82,76 +84,78 @@
 
     <!-- the user data is sending from the backed along with rendering this page, so for using this value in script i am storing this in a input field and make it hidden -->
     <input type="hidden" value='<%- JSON.stringify(user) %>' id="USER">
-    <input type="hidden" value="<%= total %>" id="total"> <!-- taking the total which is sending from the server side and storing it in the input field-->
+    <input type="hidden" value="<%= total %>" id="total">
+    <!-- taking the total which is sending from the server side and storing it in the input field-->
 
 
-    
-   
+
     <div class="row">
       <div class="col-md-8 order-md-1">
         <div class="col-md-8 order-md-1">
           <h1></h1>
-          
+
           <!-- <h4 class="mb-3">Add new billing address</h4> -->
           <button id="toggleBillingButton" class="btn btn-outline-dark mb-3">
             Add new address
           </button>
 
-           <!-- Button trigger modal -->
-           <button  type="button" class="btn btn-outline-dark mb-3" data-bs-toggle="modal"
-              data-bs-target="#orderInfoModal" id="orderInfo">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-outline-dark mb-3" data-bs-toggle="modal"
+            data-bs-target="#orderInfoModal" id="orderInfo">
             Order Information
           </button>
-          
-<!-- Modal -->
-<div class="modal fade" id="orderInfoModal" tabindex="-1" role="dialog" aria-labelledby="orderInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="orderInfoModalLabel">Order Information</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% cartdetails.forEach(function(cartItem, index) { %>
-                <tr>
-                  <th scope="row"><%= index + 1 %></th>
-                  <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>" 
-                    class="cart-image" style="height: 100px; width: auto;"></td>
-                  <td><%= cartItem.product_name %></td>
-                  <td><%= cartItem.quantity %></td>
-                  <td>$<%= cartItem.price %></td>
-                </tr>
+          <!-- Modal -->
+          <div class="modal fade" id="orderInfoModal" tabindex="-1" role="dialog" aria-labelledby="orderInfoModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="orderInfoModalLabel">Order Information</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-                <% }); %>
-        
-              <td colspan="5" class="text-end"><b>Total: $<%= total %></b></td>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
+                <div class="modal-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Image</th>
+                          <th>Product Name</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% cartdetails.forEach(function(cartItem, index) { %>
+                          <tr>
+                            <th scope="row">
+                              <%= index + 1 %>
+                            </th>
+                            <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>"
+                                class="cart-image" style="height: 100px; width: auto;"></td>
+                            <td>
+                              <%= cartItem.product_name %>
+                            </td>
+                            <td>
+                              <%= cartItem.quantity %>
+                            </td>
+                            <td>$<%= cartItem.price %>
+                            </td>
+                          </tr>
+                          <% }); %>
+                            <td colspan="5" class="text-end"><b>Total: $<%= total %></b></td>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <form class="needs-validation" id="billingForm" style="display: none;" onsubmit=" handleSubmit(event)">
             <!-- novalidate -->
@@ -159,9 +163,6 @@
               <div class="col-md-6 mb-3">
                 <label for="firstName">First name</label>
                 <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                <!-- <div class="invalid-feedback">
-                          Valid first name is required.
-                        </div> -->
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lastName">Last name</label>
@@ -240,11 +241,14 @@
             </div>
 
             <hr class="mb-4">
-            <button type="submit" class="btn btn-primary"> Save</button>
+            <button type="submit"  class="btn btn-primary"> Save</button>
 
           </form>
+
         </div>
+
         <hr class="mb-4">
+
         <h4 class="mb-3">Payment</h4>
 
         <div class="d-block my-3">
@@ -255,27 +259,29 @@
           </div>
 
           <div class="custom-control custom-radio">
-            <input id="razorpay" name="paymentMethod" type="radio" class="custom-control-input" value="razorpay" required>
+            <input id="razorpay" name="paymentMethod" type="radio" class="custom-control-input" value="razorpay"
+              required>
             <label class="custom-control-label" for="razorpay">Online Payment</label>
           </div>
 
           <div class="custom-control custom-radio">
-            <input id="Wallet" name="paymentMethod" type="radio" class="custom-control-input"  required>
+            <input id="Wallet" name="paymentMethod" type="radio" class="custom-control-input" required>
             <label class="custom-control-label" for="Wallet">Wallet</label>
           </div>
 
         </div>
 
-        <button class="btn btn-primary btn-lg btn-block" id="proceedToPay" type="submit" >Continue to checkout</button>
+        <button class="btn btn-primary btn-lg btn-block" id="proceedToPay" type="submit">Continue to checkout</button>
 
       </div>
     </div>
+
   </div> <!-- end -->
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
 
   </footer>
-  </div>
+
 
   <script>
 
@@ -297,15 +303,19 @@
       try {
         const formData = collectFormData();
         const response = await saveAddress(formData);
+        console.log("stage 1 --> line 301", response)
         const data = await response.json();
-
+        console.log('data: ', data.newAddress)
         if (data.newAddress) {
-          updateUIwithNewAddress(data.newAddress, data.index);
+          console.log('if')
+          console.log('data.indexz', data.index, data.id)
+          updateUIwithNewAddress(data.newAddress, data.index, data.id);
         } else {
+          console.log('else')
           handleSaveAddressError();
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error???????:', error);
         handleSaveAddressError();
       }
     }
@@ -348,14 +358,14 @@
     }
 
     // Function to send form data to the server
-    function saveAddress(formData) {
-      return fetch('/saveAddress', {
+    async function saveAddress(formData) {
+      return await fetch('/saveAddress', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
+      })
     }
 
     // Function to handle save address errors
@@ -369,14 +379,19 @@
     }
 
     // Function to update the UI with a new address
-    function updateUIwithNewAddress(newAddress, index) {
-      const card = createAddressCard(newAddress, index);
+    function updateUIwithNewAddress(newAddress, index, id) {
+      console.log(index)
+      const card = createAddressCard(newAddress, index, id);
       const addressContainer = document.getElementById('addressContainer');
+
       addressContainer.appendChild(card);
+      removeButton()
     }
 
     // Function to create a new address card
-    function createAddressCard(newAddress, index) {
+    function createAddressCard(newAddress, index, id) {
+      console.log("fsfsfsfsfsdfsfss", index)
+
       const card = document.createElement('div');
       card.className = 'card bg-light mb-3 col-md-4 m-3';
       card.style.maxWidth = '18rem';
@@ -388,10 +403,10 @@
         Address
       </div>
       <div>
-        <button class="btn btn-warning btn-outline-secondary" id="editButton${index}">
+        <button class="btn btn-warning btn-outline-secondary edit-button" id="editButton${index}" data-address-id="${id}">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="btn btn-danger btn-outline-dark" id="deleteButton${index}">
+        <button class="btn btn-danger btn-outline-dark delete-button" id="deleteButton${index}"  data-address-id="${id}">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -408,6 +423,8 @@
       <p class="card-text">${newAddress.mobileNumber}</p>
     </div>
   `;
+      console.log('card', card)
+      // Add a click event listener to the delete button
 
       return card;
     }
@@ -415,59 +432,206 @@
 
   </script>
 
+  <script>
+    // Function to add an event listener to all edit buttons
+    document.querySelectorAll('.edit-button').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const addressId = button.getAttribute('data-address-id')
+
+        // Fetch the address data for editing using the retrieved addressId
+        fetch(`/getAddress/${addressId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data)
+          if (data.address) {
+          // console.log(data.address)
+
+            // Populate the form fields with the retrived address data
+            populateFormFields(data.address)
+
+            
+          // Delete the card after successfully populating the form
+          const cardToRemove = button.closest('.card');
+          if (cardToRemove) {
+            cardToRemove.remove();
+          }
+            // Send the addressId to the backend for deleting the selected address
+           deleteAddressFromBackend(addressId,)
+
+            // Show the billingForm if it's hidden
+            document.getElementById('billingForm').style.display = 'block'
+          } else   {
+            // handle the case when the address data is not found
+            console.error('Address not found. ');
+          }
+        })
+        .catch((error) => {
+          console.error('Error: ', error);
+        })
+      })
+    })
+
+        function populateFormFields(addressData) {
+          console.log(addressData)
+        // addressData is an object containing address information
+      const fullName = addressData.fullname;
+      console.log(fullName);
+      // Splitting fullName into first name and last name
+      const parts = fullName.split(' ');
+      console.log(parts);
+      
+      // Extract first name and last name
+      const firstName = parts[0];
+      const lastName = parts.slice(1).join(' ');
+
+      // Now you can set the first name and last name in the form fields
+      document.getElementById('firstName').value = firstName;
+      document.getElementById('lastName').value = lastName;      
+      document.getElementById('address').value = addressData.first_address
+      document.getElementById('country').value = addressData.country
+      document.getElementById('state').value = addressData.state
+      document.getElementById('city').value = addressData.city
+      document.getElementById('City').value = addressData.pincode
+      document.getElementById('Landmark').value = addressData.landmark
+      document.getElementById('phone').value = addressData.mobileNumber
+
+      // Display the billingForm if it's hidden
+      document.getElementById('billingForm').style.display = 'block'
+
+    }
+
+    // function for sending a fetch request to delete the address from the database
+     function deleteAddressFromBackend(addressId) {
+        fetch(`/deletingAddressWhileEditing/${addressId}`, {
+          method:'DELETE',
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // Address deleted successfully on the backend
+            console.log('Address deleted successfully.')
+          } else {
+            // Handle the case when the address deletion on the backend fails
+            console.error('Failed to delete address on the backend.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error: ', error);
+        })
+     }
+   
+ 
+    // Adding a click event listener to all delete buttons
+    function removeButton() {
+
+
+      document.querySelectorAll('.delete-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+          // Get the address Id from the data attribute
+          const addressId = button.getAttribute('data-address-id');
+          console.log("address             lllllllllll", addressId)
+          // Show a confirmation dialog using SweetAlert
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to delete this address.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // User confirmed, make the fetch request to delete the address
+              fetch(`/deleteOrderAddress/${addressId}`, {
+                method: 'DELETE'
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  // Handle the response, eg: remove the order address from the checkout page
+                  if (data.success) {
+                    const cardToRemove = button.closest('.card');
+                    if (cardToRemove) {
+                      cardToRemove.remove();
+                    }
+                    // Show a success message
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Address Deleted',
+                      text: 'The address has been deleted successfully!'
+                    });
+                  } else {
+                    // Show an error message
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to delete address. Please try again.'
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.error('Error: ', error);
+                });
+            }
+          });
+        });
+      });
+    }
+    removeButton()
+  </script>
+
+
   <!-- Adding this script to include Razorpay library -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>+
-  
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <script>
     const proceedToPayButton = document.getElementById('proceedToPay');
-  
+
     proceedToPayButton.addEventListener('click', async () => {
       const selectedAddressRadio = document.querySelector('input[name="addressRadio"]:checked');
       const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
-  
+
       if (!selectedAddressRadio) {
         showErrorPopup('No Address Selected', 'Please select an address to proceed.');
         return;
       }
-  
+
       if (!selectedPaymentMethod) {
         showErrorPopup('No Payment Method Selected', 'Please select a payment method to proceed.');
         return;
       }
-      
+
       // Taking the orderid form the input field and using inside the razorpayOptions object
-           let total = document.getElementById("total").value;
-           const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
-        const userData = JSON.parse(document.getElementById('USER').value);
-        const selectedAddress = userData.address[selectedAddressIndex];
+      let total = document.getElementById("total").value;
+      const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
+      const userData = JSON.parse(document.getElementById('USER').value);
+      const selectedAddress = userData.address[selectedAddressIndex];
 
       if (selectedPaymentMethod.value === 'razorpay') {
         const razorpayKey = 'rzp_test_JKK8n1hAazvvci';
         try {
-          fetch('/onlinepayment',{
+          fetch('/onlinepayment', {
             method: "POST",
-            headers:{
-              'Content-Type':"application/json"
+            headers: {
+              'Content-Type': "application/json"
             },
-            body : JSON.stringify({total: total,selectedAddress:selectedAddress})
+            body: JSON.stringify({ total: total, selectedAddress: selectedAddress })
           }).then(res => res.json())
-          .then((res)=>{
-            console.log(res.orderId)
-            const razorpayOptions = {
-            // Configure Razorpay options as per your requirements
-            key: razorpayKey,
-            amount: total, // amount of the products
-            currency: 'INR', // currency code
-            name: 'Paws & Claws',
-            description: 'Order Payment',
-            order_id: res.orderId, // give the order number that is generated dynamically
-            handler: handleRazorpaySuccess,
-          };
-  
-          const razorpayInstance = new Razorpay(razorpayOptions);
-          razorpayInstance.open();
-          })
-          
+            .then((res) => {
+              console.log(res.orderId)
+              const razorpayOptions = {
+                // Configure Razorpay options as per your requirements
+                key: razorpayKey,
+                amount: total, // amount of the products
+                currency: 'INR', // currency code
+                name: 'Paws & Claws',
+                description: 'Order Payment',
+                order_id: res.orderId, // give the order number that is generated dynamically
+                handler: handleRazorpaySuccess,
+              };
+
+              const razorpayInstance = new Razorpay(razorpayOptions);
+              razorpayInstance.open();
+            })
+
         } catch (error) {
           showErrorPopup('Payment Error', 'Payment could not be processed. Please try again.');
           console.error('Error:', error);
@@ -476,9 +640,9 @@
         const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
         const userData = JSON.parse(document.getElementById('USER').value);
         const selectedAddress = userData.address[selectedAddressIndex];
-  
+
         const result = await showConfirmationPopup();
-  
+
         if (result.isConfirmed) {
           try {
             const response = await fetch('/proceedToPay', {
@@ -488,9 +652,9 @@
               },
               body: JSON.stringify({ selectedAddress }),
             });
-  
+
             const data = await response.json();
-  
+
             if (data.status === 'success') {
               showOrderSuccessPopup(() => {
                 window.location.href = '/showOrders';
@@ -505,31 +669,56 @@
         }
       }
     });
-  
+
     function handleRazorpaySuccess(response) {
       if (response.razorpay_payment_id) {
+        clearCartOnBackend()
         Swal.fire({
-        title: 'Order Successful',
-        height: 600,
-        width: 600,
-        padding: '3em',
-        color: '#716add',
-        background: 'url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        icon: 'success',
-        confirmButtonText: 'OK',
-        footer: '<a href="/home">Go Back to Home</a>',
-      }).then((result) => {
-        if (result.isConfirmed && callback) {
-          callback() // call the callback function after clicking ok
-        }
-      })
-          } else {
+          title: 'Order Successful',
+          height: 600,
+          width: 600,
+          padding: '3em',
+          color: '#716add',
+          background: 'url("https://www.icegif.com/wp-content/uploads/2023/02/icegif-1174.gif") ',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          icon: 'success',
+          confirmButtonText: 'OK',
+          footer: '<a href="/home">Go Back to Home</a>',
+        }).then((result) => {
+          if (result.isConfirmed && callback) {
+            callback() // call the callback function after clicking ok
+
+            // Send a request to the backend to clear the cart
+            clearCartOnBackend()
+          }
+        })
+      } else {
         showErrorPopup('Payment Failed', 'Your payment could not be processed. Please try again.');
       }
     }
-  
+
+
+    async function clearCartOnBackend() {
+      console.log('clearCartonBackend')
+      // Make a fetch request to clear the cart on the server
+      await fetch('/clearCart', {
+        method:'DELETE', // for clearing the cart 
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Cart items cleared successfully on the server
+          console.log('Cart item cleared on the server.');
+        } else {
+          // Handle the case where cart item clearing on the server failed
+          console.error('Cart item clearing on the server failed.');
+        }
+      }).catch((error) => {
+        console.error('Error: ', error);
+      })
+    } 
+
     async function showConfirmationPopup() {
       return Swal.fire({
         title: 'Confirm Order?',
@@ -542,7 +731,7 @@
         allowEscapeKey: false,
       });
     }
-  
+
     function showErrorPopup(title, text) {
       Swal.fire({
         title,
@@ -551,21 +740,21 @@
         confirmButtonText: 'OK',
       });
     }
-  
+
     function showSuccessPopup(title, text) {
       Swal.fire({
         title,
         text,
         icon: 'success',
         confirmButtonText: 'OK',
-       
+
       }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = '/showOrders';
+          window.location.href = '/showOrders';
         }
       });
     }
-  
+
     function showOrderSuccessPopup(callback) {
       Swal.fire({
         title: 'Order Successful',
@@ -582,11 +771,14 @@
       }).then((result) => {
         if (result.isConfirmed && callback) {
           callback() // call the callback function after clicking ok
+
+           // Send a request to the backend to clear the cart
+           clearCartOnBackend()
         }
       })
     }
   </script>
-  
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
