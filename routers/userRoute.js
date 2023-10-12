@@ -15,6 +15,7 @@ const userOrders = require('../controllers/userOrders')
 const userCats = require('../controllers/userCatsController')
 const userDogs = require('../controllers/userDogsController')
 const userSearch = require('../controllers/userSearchController')
+const userWallet = require('../controllers/userWallet')
 
 router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
 router.get('/login', userAuth.yesSession, userController.loginpage)
@@ -53,6 +54,9 @@ router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession, userAd
 // Delete from cart also in userAddtoCart controller
 router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.removeFromCart)
 
+// ============================= User Wallet===================================== //
+
+router.get('/wallet', userAuth.noSession, userWallet.wallet)
 
 // ========================= Checkout page ================================== //
 router.post('/checkout', userAuth.noSession, userCheckoutpage.checkout)
@@ -67,12 +71,15 @@ router.get('/getAddress/:id', userAuth.noSession, userCheckoutpage.getAddress )
 
 router.delete('/deletingAddressWhileEditing/:addressId', userAuth.noSession, userCheckoutpage.deletingAddressWhileEditing) // for deleting the card while i click the edit button
 
-// =========================== Online page ============================================ //
+// =========================== Online payment  ============================================ //
 router.post('/onlinepayment',userAuth.noSession,userCheckoutpage.onlinePayment)
 router.delete('/clearCart', userAuth.noSession, userCheckoutpage.clearCart)
 
 // ========================= Orders ============================ //
 router.get('/showOrders', userAuth.noSession, userOrders.showOrders)
+
+// ======================== Cancel Order =========================== //
+router.post('/cancelOrder/:orderId',userAuth.noSession,userOrders.cancelOrder)
 
 
 // ========================= Cats =================================== //

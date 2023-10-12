@@ -254,7 +254,7 @@
         <div class="d-block my-3">
 
           <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"  value="COD" required>
             <label class="custom-control-label" for="credit">Cash on delivery</label>
           </div>
 
@@ -643,7 +643,7 @@
 
         const result = await showConfirmationPopup();
 
-        if (result.isConfirmed) {
+        if (result.isConfirmed && selectedPaymentMethod.value === 'COD') {
           try {
             const response = await fetch('/proceedToPay', {
               method: 'POST',
@@ -672,6 +672,7 @@
 
     function handleRazorpaySuccess(response) {
       if (response.razorpay_payment_id) {
+        // Send a request to the backend to clear the cart
         clearCartOnBackend()
         Swal.fire({
           title: 'Order Successful',
@@ -690,7 +691,7 @@
             callback() // call the callback function after clicking ok
 
             // Send a request to the backend to clear the cart
-            clearCartOnBackend()
+            // clearCartOnBackend()
           }
         })
       } else {

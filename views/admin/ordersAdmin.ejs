@@ -37,7 +37,7 @@
                             </td>
                             <td>
                                 <select class="custom-select" id="inputGroupSelect01-<%= order._id %>"
-                                    data-order-id="<%= order._id %>">
+                                    data-order-id="<%= order._id %>"  data-order-number="<%= order.orderNumber %>">
                                     <option value="Pending" <% if (order.status==='Pending' ) { %>selected<% } %>
                                             >Pending</option>
                                     <% for (const status of ['Processing', 'Shipped' , 'Delivered' , 'Cancelled' ]) { %>
@@ -54,9 +54,18 @@
         </section>
 
 
+
         <script>
-            // Function to update order status
-            function updateOrderStatus(orderId, newStatus) {
+            // Function to restore the order status to the previous value
+            function restoreOrderStatus(orderId, currentStatus) {
+                const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
+                if (orderStatusElement) {
+                    orderStatusElement.value = currentStatus;
+                }
+            }
+        
+            // Function to send a request to update the order status
+            function sendOrderStatusUpdate(orderId, newStatus) {
                 // Send a POST request to the server
                 fetch('/admin/updateOrderStatus', {
                     method: 'POST',
@@ -65,32 +74,92 @@
                     },
                     body: JSON.stringify({ orderId, newStatus }),
                 })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // Update the order status in the DOM
-                        const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
-
-                        // Update the order status in the DOM
-                        if (orderStatusElement) {
-                            orderStatusElement.value = newStatus
+                .then((response) => response.json())
+                .then((data) => {
+                    // Update the order status in the DOM
+                    const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
+                    if (orderStatusElement) {
+                        orderStatusElement.value = newStatus;
+        
+                        // Disable the select element if the order is canceled
+                        if (newStatus === "Cancelled") {
+                            orderStatusElement.disabled = true;
+                        } else {
+                            orderStatusElement.disabled = false;
                         }
-                    })
-                    .catch((error) => {
-                        console.error('Error updating order status: ', error);
-                    })
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error updating order status: ', error);
+                    // In case of an error, restore the status to the previous value
+                    const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
+                    if (orderStatusElement) {
+                        const currentStatus = orderStatusElement.value;
+                        restoreOrderStatus(orderId, currentStatus);
+                    }
+                });
             }
-
+        
             // Event listener for order status change
             document.querySelectorAll('[id^="inputGroupSelect01-"]').forEach((selectElement) => {
                 selectElement.addEventListener('change', (event) => {
                     const newStatus = event.target.value;
                     const orderId = event.target.dataset.orderId;
-                    updateOrderStatus(orderId, newStatus);
+                    const orderNumber = event.target.dataset.orderNumber
+        
+                    // Check if the new status is "Cancelled"
+                    if (newStatus === "Cancelled") {
+                        // Show a confirmation dialog using Swal
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "You are about to change the order status to Cancelled.",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, change it!",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // The admin confirmed the status change, send the request to update the status
+                                sendOrderStatusUpdate(orderId, newStatus);
+
+                                // Add a request to the backend route
+                                fetch('/admin/cancelOrder',{
+                                    method:'POST',
+                                    headers: {
+                                        'Content-Type':'application/json',
+                                    },
+                                    body: JSON.stringify({ orderNumber })
+                                })
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    // Handle the response from the backend if needed
+                                    console.log('Order cancellation request sent to the backend')
+                                })
+                                .catch((error) => {
+                                    console.error("Failed sending cancellation request to the backend", error);
+                                })
+
+                            } else {
+                                // The admin canceled the action, roll back the status
+                                const orderStatusElement = document.getElementById(`inputGroupSelect01-${orderId}`);
+                                if (orderStatusElement) {
+                                    // Restore the previous status immediately without reloading
+                                    const currentStatus = orderStatusElement.options[orderStatusElement.selectedIndex].value;
+                                    orderStatusElement.value = currentStatus;
+                                }
+                            }
+                        });
+                    } else {
+                        // For other status changes, directly update the status
+                        sendOrderStatusUpdate(orderId, newStatus);
+                    }
                 });
             });
-
-
         </script>
+        
+        
+        
 
     </main>
     

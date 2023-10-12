@@ -99,4 +99,5 @@ adminRoute.post('/editproduct/:productId', adminAuth.noSession, upload.any(), pr
 adminRoute.get('/orders',adminAuth.noSession,orderController.showOrders)
 adminRoute.post('/updateOrderStatus',adminAuth.noSession,orderController.updateOrderStatus)
 
+adminRoute.post('/cancelOrder',adminAuth.noSession, orderController.cancelOrder)
 module.exports = adminRoute
