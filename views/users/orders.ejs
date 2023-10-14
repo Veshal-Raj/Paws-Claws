@@ -285,28 +285,29 @@
 
                                 <!-- <h2>Your Cart</h2> -->
                                 <ul class="bullet-point">
-                                    <% user.cart.forEach((item)=> { %>
+                                    <% order.products.forEach((product) => {  %>
                                         <li>
+                                           
                                             <strong>Product Name: </strong>
-                                            <%= item.product_name %><br>
+                                            <%= product.product_name %><br>
                                                 <strong>Price: </strong>
-                                                <%= item.price %><br>
+                                                <%= product.price %><br>
                                                     <strong>Quantity: </strong>
-                                                    <%= item.quantity %><br>
+                                                    <%= product.quantity %><br>
                                                         <strong>Total Price: </strong>
-                                                        <%= item.totalPrice %><br>
+                                                        <%= product.totalPrice %><br>
                                                             <hr>
 
                                         </li>
                                         <% }); %>
                                 </ul>
-                                <% if (!order.status==='Cancelled') { %>
+                               <% if (order.status !=='Cancelled' ) { %> 
                                 <div
                                     style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
                                     <button class="btn btn-primary btn-outline-dark "  id="cancelOrderButton"
                                             data-order-number="<%= order.orderNumber %>">Cancel Order</button>
                                 </div>
-                                <% } %>
+                                <% }  %>
                                 <hr>
                             </div>
                             <% }) %>

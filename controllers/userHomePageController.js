@@ -1,10 +1,12 @@
 const Product = require('../models/productsModel')
 const Category = require('../models/categoriesModel')
 const Subcategory = require('../models/subcategoriesModel')
+// const { default: products } = require('razorpay/dist/types/products')
 
 // Function to retrieve a list of products based on block status
 const showHomepageProducts = async (req, res) => {
     try {
+
 
 
         // Retrieve all products from the database
@@ -16,6 +18,9 @@ const showHomepageProducts = async (req, res) => {
 
         // Retrieve all subcategories form the database
         const allSubcategories = await Subcategory.find()
+
+
+        
 
         // Filter products based on block status of product, category, and subcategory
         const filteredProducts = allProducts.filter((product) => {
@@ -33,14 +38,38 @@ const showHomepageProducts = async (req, res) => {
             return isProductBlocked && !isCategoryBlocked && !isSubcategoryBlocked
         })
 
+        const totalProducts = filteredProducts.length
+        const productsPerPage = 8 // Number of products to display per page
 
-        res.render('users/home', { products: filteredProducts, userId: req.session.userId })
+        // Calculate the total number of pages
+        const totalPages = Math.ceil(totalProducts/productsPerPage)
+
+        // Determine  the current page
+        let currentPage = parseInt(req.query.page) || 1;
+        if (currentPage < 1) currentPage = 1
+        if (currentPage > totalPages) currentPage = totalPages
+
+        // Calculate the index range for the current page
+        const startIndex = (currentPage - 1) * productsPerPage
+        const endIndex = Math.min(startIndex + productsPerPage,totalProducts)
+
+        //Filter products based on the current page
+        const productsToDisplay = allProducts.slice(startIndex,endIndex)
+
+        res.render('users/home', {
+             products: productsToDisplay,
+              userId: req.session.userId ,
+              totalPages: totalPages,
+              currentPage:currentPage
+            })
     } catch (error) {
         res.render('error')
         console.error(error);
     }
 }
 
+
 module.exports = {
     showHomepageProducts,
+
 }

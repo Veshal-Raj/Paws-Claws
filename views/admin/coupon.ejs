@@ -1,0 +1,246 @@
+<%- include('../layouts/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+<main id="main" class="main">
+    <section>
+        <h1>Coupons</h1>
+        <div class="row">
+            <!-- Left side: Coupon Creation Form -->
+            <div class="col-md-6">
+                <form id="couponForm" action="/admin/createCoupon" method="post" onsubmit="submitForm(event)">
+
+                    <!-- Coupon code  -->
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-8 mt-3">
+                            <label for="code">Coupon Code</label>
+                            <input type="text" class="form-control" id="code" name="code" placeholder="Coupon Code" required>
+                        </div>
+                    </div> 
+                    
+                    <!-- description -->
+                    <div class="form-group col-md-8 mt-3">
+                        <label for="description">Description</label>
+                        <textarea type="number" class="form-control" id="description" name="description" placeholder="Write someting about Coupons..."></textarea>
+                    </div>
+
+                    <!-- Coupon type -->
+                    <div class="form-group col-md-8 mt-3" >
+                        <label for="discountType">Coupon Type</label>
+                        <select class="form-control" id="discountType" name="discountType" required>
+                            <option value="Percentage">Percentage</option>
+                            <option value="FixedAmount">Fixed Amount</option>
+                        </select>
+                    </div>
+
+                    <!-- Discount Amount -->
+                    <div class="form-group col-md-8 mt-3">
+                        <label for="discountValue">Discount Amount</label>
+                        <input type="number" class="form-control" id="discountValue" name="discountValue" placeholder="Discount Amount" required>
+                    </div>
+
+                    <!-- minimumPurchase -->
+                    <div class="form-group col-md-8 mt-3">
+                        <label for="minimumPurchase">Minimum Purchase</label>
+                        <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" placeholder="Minimum Purchase">
+                    </div>
+
+                   
+
+                    <!-- validUntil -->
+                    <div class="form-group col-md-8 mt-3">
+                        <label for="validUntil">Valid Until</label>
+                        <input type="date" class="form-control" id="validUntil" name="validUntil" required>
+                    </div>
+                    
+                   
+                    <!-- usesLeft -->
+                    <div class="form-group col-md-8 mt-3">
+                        <label for="usesLeft">Uses Left</label>
+                        <input type="number" class="form-control" id="usesLeft" name="usesLeft" placeholder="Uses Left" required>
+                      </div>
+                      <!-- status -->
+                      <div class="form-group col-md-8 mt-3">
+                        
+                            <label for="status">Status :</label>
+
+                            <select name="status" id="status">
+                              <option value="active">Active</option>
+                              <option value="inactive">Inactive</option>
+                              
+                            </select>
+                        
+                      </div>
+                    <!-- Add more form fields as needed -->
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Create Coupon</button>
+                </form>
+            </div>
+            <!-- Right side: Available Coupons -->
+            <!-- // Assuming you have retrieved the coupon data from your database and stored it in an array called 'coupons' -->
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Available Coupons</h5>
+                            <!-- Add a new coupon button or any other actions if needed -->
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush" id="couponsList"> <!-- Add the 'id' attribute here -->
+                        <% coupons.forEach(coupon => { %>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p><strong><%= coupon.code %></strong></p>
+                                <div>
+                                    <a href="#" class="text-primary mr-2"><i class="fas fa-pencil-alt"></i></a>
+                                    <a href="#" class="text-danger" onclick="deleteCoupon('<%= coupon._id %>')"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                            <p>Coupon Code: <%= coupon.code %></p>
+                            <p>Description: <%= coupon.description %></p>
+                            <p>Coupon Type: <%= coupon.discountType %></p>
+                            <p>Valid Until: <%= coupon.validUntil ? coupon.validUntil.toDateString() : 'N/A' %></p>
+                            <p>Discount Type: <%= coupon.discountType %></p>
+                            <p>Discount Amount: <%= coupon.discountValue %></p>
+                            
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+   function submitForm(event) {
+    event.preventDefault(); // prevent form from submitting normally
+
+    const form = event.target
+    const formData = new FormData(form);
+
+    // Convert the form data to a JSON object
+    const formDataObject = {}
+    formData.forEach((value, key) => {
+        formDataObject[key] = value;
+    })
+
+    // Send a POST request to the backend
+    fetch('/admin/createCoupon', {
+        method : 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataObject)
+    })
+    .then((response) => response.json())
+    .then((data) => {
+       // Handle the response from the server
+       if (data.message === 'Coupon saved successfully') {
+                // Show SweetAlert for success
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Coupon saved successfully',
+                    icon: 'success',
+                }).then(() => {
+                    // Handle the success action (e.g., update the front end)
+                    updateFrontend(data.coupon);
+                });
+            } else {
+                // Handle any other response (e.g., error)
+                console.log(data);
+            }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    })
+
+   }
+
+   function updateFrontend(newCoupon) {
+    console.log('Updating frontend with new coupon:', newCoupon);
+    // Add the new coupon to the front end without reloading the page
+    const couponsList = document.getElementById('couponsList');
+
+    // Create a new list item for the coupon
+    const listItem = document.createElement('div');
+    listItem.innerHTML = `
+    <div class="col-md-6">
+      
+            <ul class="list-group list-group-flush" id="couponsList"> <!-- Add the 'id' attribute here -->
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                                
+                                <p><strong>${newCoupon.code}</strong></p>
+                                <div>
+                                    <a href="#" class="text-primary mr-2"><i class="fas fa-pencil-alt"></i></a>
+                                    <a href="#" class="text-danger"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+       
+        <p>Description: ${newCoupon.description}</p>
+        <p>Valid From: ${newCoupon.validFrom}</p>
+        <p>Valid Until: ${newCoupon.validUntil ? newCoupon.validUntil.toDateString() : 'N/A'}</p>
+        <p>Discount Type: ${newCoupon.discountType}</p>
+        <p>Discount Amount: ${newCoupon.discountValue}</p>
+        <p>Minimum Purchase: ${newCoupon.minimumPurchase}</p>
+        <p>Uses Left: ${newCoupon.usesLeft}</p>
+        <p>Status: ${newCoupon.isActive ? 'Active' : 'Inactive'}</p>
+        <!-- Add more fields as needed -->
+        </li>
+        </ul>    
+       
+        </div>
+    `;
+
+    couponsList.appendChild(listItem);
+}
+
+</script>
+
+<script>
+    function deleteCoupon(couponId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this coupon!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Send a request to delete the coupon
+                fetch(`/admin/deleteCoupon/${couponId}`, {
+                    method: 'DELETE'
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.message === 'Coupon deleted successfully') {
+                    // Remove the deleted coupon from the frontend
+                    const deletedCoupon = document.querySelector(`[data-id="${couponId}"]`);
+                    if (deletedCoupon) {
+                        deletedCoupon.parentNode.removeChild(deletedCoupon);
+                    }
+                        Swal.fire('Deleted!','Your coupon has been deleted.','success')
+                    } else {
+                        Swal.fire('Error','Failed to delete the coupon','error')
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:',error);
+                    Swal.fire('Error','Failed to delete the coupon',error)
+                })
+            }
+        })
+    }
+</script>
+
+
+
+<%- include('../layouts/footer') %>

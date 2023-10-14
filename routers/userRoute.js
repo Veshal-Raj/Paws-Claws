@@ -29,6 +29,7 @@ router.get('/product', userProductController.productSinglePageView);
 
 
 
+
 router.get('/userBlockedByAdmin', userAuth.userBlockedByAdmin)
 
 router.post('/signout', userController.userSignout)

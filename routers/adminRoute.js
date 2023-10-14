@@ -36,6 +36,7 @@ const subcategoryController = require('../controllers/subCategories')
 const productController = require('../controllers/productController')
 const orderController = require('../controllers/orderController')
 const adminAuth = require('../middlewares/adminAuth')
+const couponController = require('../controllers/couponController')
 
 
 
@@ -100,4 +101,13 @@ adminRoute.get('/orders',adminAuth.noSession,orderController.showOrders)
 adminRoute.post('/updateOrderStatus',adminAuth.noSession,orderController.updateOrderStatus)
 
 adminRoute.post('/cancelOrder',adminAuth.noSession, orderController.cancelOrder)
+
+
+// ======================== Coupon route ====================================== //
+adminRoute.get('/Offer',adminAuth.noSession,couponController.showCoupons )
+adminRoute.post('/createCoupon',adminAuth.noSession, couponController.createCoupon)
+
+adminRoute.delete('/deleteCoupon/:id', adminAuth.noSession,couponController.deleteCoupon)
+
+
 module.exports = adminRoute

@@ -14,7 +14,33 @@ const dogs = async (req, res) => {
             isAvailable: true, // Filter available products 
         }).populate('category subcategory')
 
-        res.render('users/dogs', { products: dogProducts, userId: req.session.userId })
+
+        const totalProducts = dogProducts.length
+        const productsPerPage = 8 // Number of products to display per page
+
+        // Calculate the total number of pages
+        const totalPages = Math.ceil(totalProducts/productsPerPage)
+
+        // Determine the current page
+        let currentPage = parseInt(req.query.page) || 1
+        if (currentPage < 1) currentPage = 1
+        if (currentPage > totalPages) currentPage = totalPages
+
+        // Calculate the index range for the current page
+        const startIndex = (currentPage - 1) * productsPerPage
+        const endIndex = Math.min(startIndex + productsPerPage,totalProducts)
+
+         // Filter products based  on the current page
+         const productsToDisplay = dogProducts.slice(startIndex,endIndex)
+
+
+
+        res.render('users/dogs', { 
+            products: productsToDisplay,
+             userId: req.session.userId,
+             totalPages: totalPages,
+             currentPage:currentPage
+             })
 
     } catch (error) {
         console.error(error);

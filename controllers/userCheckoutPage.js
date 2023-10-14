@@ -57,6 +57,9 @@ const checkout = async (req, res) => {
         // Generate the order ID (you can use your logic here)
         const orderId = generateOrderNumber(); // Replace with your logic to generate the order ID
 
+        // const orderDetails = await Order.findById(orderId)
+        // console.log(orderDetails)
+
         res.render('users/checkoutpage', {
             userId,
             user,
@@ -221,7 +224,7 @@ const proceedToPay = async (req, res) => {
         const order = new Order({
             orderNumber: orderId,
             customer: userId,
-            products: req.session.cart,
+            products: cart,
             shippingAddress: selectedAddress,
             totalAmount: totalPrice,
             paymentMethod: paymentMethod, // Set the payment method to 'Online Payment'
@@ -301,7 +304,8 @@ const clearCart = async (req,res) => {
     if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
-
+      // Storing the cart items in the session temporary
+      const order = await Order.findById()
       // Clear the user's cart by setting it to an empty array
     user.cart = [];
       console.log("user cart",user.cart)
