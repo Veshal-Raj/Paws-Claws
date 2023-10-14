@@ -6,29 +6,48 @@ const { response } = require('express');
 // ===================== create a new sub-category ============================= //
 const createSubCategory = async (req, res) => {
   try {
-    const { subcategoryName, category } = req.body
+    const { subcategoryName, category } = req.body;
 
+    // Validation: Check if subcategoryName is provided and not empty
+    if (!subcategoryName || subcategoryName.trim() === "") {
+      return res.status(400).json({ error: 'Subcategory name is required' });
+    }
+
+    // Validation: Check if category is a valid category ID
+    const existingCategory = await Category.Category.findById(category);
+    if (!existingCategory) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    // Validation: Check if subcategoryName is unique within the category (case-insensitive)
+    const isDuplicateSubcategory = await Subcategory.findOne({
+      subcategoryName: {
+        $regex: new RegExp(`^${subcategoryName}$`, 'i'), // Case-insensitive comparison
+      },
+      category: category,
+    });
+
+    if (isDuplicateSubcategory) {
+      return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+    }
 
     // Create a new subcategory
     const subcategory = await Subcategory.create({ subcategoryName, category });
 
+    // Check if the subcategory was successfully added to the category
+    if (existingCategory.subcategories.indexOf(subcategory._id) === -1) {
+      return res.status(500).json({ error: 'Failed to add subcategory to the category' });
+    }
 
-   // Find the corresponding category and push the subcategory to its subcategories array
-   const updatedCategory = await Category.Category.findByIdAndUpdate(
-    category,
-    { $push: { subcategories: subcategory._id } }, // Push the subcategory's objectId to the array
-    { new: true }
-  );
-
-   // Redirect to the admin categories page after successful creation
+    // Redirect to the admin categories page after successful creation
     res.redirect('/admin/categories');
-
   } catch (error) {
     // Handle errors and send an error response
-    res.status(500).json({ error: 'Internal Server Error!' })
     console.error(error);
+    res.status(500).json({ error: 'Internal Server Error!' });
   }
-}
+};
+
 
 
 // ================ Get all subCategory for a specific Category =======================//
@@ -83,24 +102,54 @@ const getCategoryNameByCategoryId = async (categoryId) => {
 const subcategoryEdit = async (req, res) => {
   try {
     // Extract the subcategory ID from the URL
-    const subcategoryID = req.query.SubID 
-    const categoryID = req.query.CatID
+    const subcategoryID = req.query.SubID;
+    const categoryID = req.query.CatID;
 
-    const updatedSubcategoryName = req.body.editSubcategoryName // Extract the updated subcategory data from the request body
+    const updatedSubcategoryName = req.body.editSubcategoryName;
 
-    const updatedSubcategory = await Subcategory.updateOne({ _id: subcategoryID }, { $set: { subcategoryName: updatedSubcategoryName } })
-
-    if (!updatedSubcategory) {
-      return res.status(404).send('Subcategory not found')
+    // Validation: Check if subcategoryID and updatedSubcategoryName are provided and not empty
+    if (!subcategoryID || !updatedSubcategoryName || updatedSubcategoryName.trim() === "") {
+      return res.status(400).json({ error: 'Subcategory ID and name are required' });
     }
 
-    res.redirect(`/admin/subcategories/${categoryID}`)
+  
+    // Validation: Check if the subcategory with the provided subcategoryID exists
+    const existingSubcategory = await Subcategory.findById(subcategoryID);
+    if (!existingSubcategory) {
+      return res.status(404).json({ error: 'Subcategory not found' });
+    }
 
+    // Validation: Check if the subcategory name already exists within the category (case-insensitive)
+    const isDuplicateSubcategory = await Subcategory.findOne({
+      _id: { $ne: subcategoryID }, // Exclude the current subcategory being edited
+      subcategoryName: { $regex: new RegExp(`^${updatedSubcategoryName}$`, 'i') }, // Case-insensitive comparison
+      category: categoryID,
+    });
+
+    if (isDuplicateSubcategory) {
+      return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+    }
+
+    // Update the subcategory name
+    const updatedSubcategory = await Subcategory.updateOne(
+      { _id: subcategoryID },
+      { $set: { subcategoryName: updatedSubcategoryName } }
+    );
+
+    // Check if no documents were modified during the update
+    if (updatedSubcategory.nModified === 0) {
+      return res.status(404).send('Subcategory not found');
+    }
+
+    // Redirect to the subcategories page within the specified category
+    res.redirect(`/admin/subcategories/${categoryID}`);
   } catch (error) {
-    res.status(500).send('Internal Error')
-    console.error("Error", error)
+    // Handle errors and send an error response
+    console.error("Error", error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
+
 
 
 const subcategoryAvailable = async (req, res) => {

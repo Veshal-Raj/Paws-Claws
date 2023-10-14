@@ -27,27 +27,45 @@ const showCoupons = async (req, res) => {
 };
 
 
-const createCoupon = async (req,res) => {
-    console.log('checking')
+const createCoupon = async (req, res) => {
     try {
-        // Retrieve the form data from the request body
-        const formData = req.body
+        const formData = req.body;
+
+        // Server-side validation
+        if (
+            formData.discount < 0 ||
+            formData.discountValue < 0 ||
+            formData.minimumPurchase < 0 ||
+            formData.usesLeft < 0
+        ) {
+            return res.status(400).json({ error: 'Values must be non-negative.' });
+        }
+
+        // Ensure case sensitivity and trim the coupon code
+        formData.code = formData.code.trim(); // Trim leading/trailing white spaces
+        const existingCoupon = await Coupon.findOne({ code: formData.code });
+
+        if (existingCoupon) {
+            return res.status(400).json({ error: 'Coupon code already exists.' });
+        }
 
         // Save the form data to the database using Mongoose
         const newCoupon = new Coupon(formData);
         const savedCoupon = await newCoupon.save();
 
-        // Respond with the saved coupon and a success message
         res.status(201).json({
             message: 'Coupon saved successfully',
             coupon: savedCoupon,
         });
 
     } catch (error) {
-        console.error('Error in create coupon ', error);
-        res.status(500).json({ error: 'Internal server error '})
+        console.error('Error in create coupon', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+
 
 
 const deleteCoupon = async (req,res) => {

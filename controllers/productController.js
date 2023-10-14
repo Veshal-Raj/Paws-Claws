@@ -25,48 +25,71 @@ const renderProductpage = async (req, res) => {
 
 const addproduct = async (req, res) => {
     try {
-        // Get product data from the form 
+        // Get product data from the form
         const {
             productName,
             price,
             productDescription,
             quantityInStock,
             productStatus,
-        } = req.body
+        } = req.body;
 
-
-        const categoryId = req.body.category
-        const subcategoryId = req.body.subcategory
-
+        const categoryId = req.body.category;
+        const subcategoryId = req.body.subcategory;
 
         // Extract uploaded files and create an array of filenames
-        const productImages = []
+        const productImages = [];
         req.files.forEach((file) => {
-            productImages.push(file.filename)
-        })
+            productImages.push(file.filename);
+        });
 
-        // Create a new product document
+        // Server-side validation
+        if (
+            !productName ||
+            !price ||
+            !productDescription ||
+            !quantityInStock ||
+            !productStatus ||
+            !categoryId ||
+            !subcategoryId
+        ) {
+            return res.status(400).json({ error: 'All fields are required.' });
+        }
+
+        // Validate price and quantityInStock to be non-negative numbers
+        if (
+            isNaN(price) || isNaN(quantityInStock) ||
+            price < 0 || quantityInStock < 0
+        ) {
+            return res.status(400).json({ error: 'Price and quantity must be non-negative numbers.' });
+        }
+
+        // Trim product name and product description
+        const trimmedProductName = productName.trim();
+        const trimmedProductDescription = productDescription.trim();
+
+        // Create a new product document with trimmed strings
         const newProduct = new Product({
-            productName,
+            productName: trimmedProductName,
             price,
-            productDescription,
+            productDescription: trimmedProductDescription,
             quantityInStock,
             productStatus,
             productImages,
             category: categoryId,
-            subcategory: subcategoryId
-        })
+            subcategory: subcategoryId,
+        });
 
         // Save it to MongoDB
         await newProduct.save();
-        // Redirect to the product list page after adding the product 
-        res.redirect('/admin/products')
-
+        // Redirect to the product list page after adding the product
+        res.redirect('/admin/products');
     } catch (error) {
-        res.status(500).send('Internal Error')
-        console.error(error)
+        res.status(500).send('Internal Error');
+        console.error(error);
     }
-}
+};
+
 
 const fetchSucategories = async (req, res) => {
     try {
@@ -169,28 +192,35 @@ const deleteImage = async (req, res) => {
 
 const editproductsave = async (req, res) => {
     try {
-        const productId = req.params.productId
+        const productId = req.params.productId;
 
         // Fetch the existing product by its ID
-        const existingProduct = await Product.findById(productId)
-       
+        const existingProduct = await Product.findById(productId);
 
         if (!existingProduct) {
-            return res.status(404).json({ error: 'Product not found' })
+            return res.status(404).json({ error: 'Product not found' });
         }
+
       
         // Update the product details with data from the form
-        existingProduct.productName = req.body.editProductName;
-        existingProduct.productDescription = req.body.editProductDescription;
+        existingProduct.productName = req.body.editProductName.trim();
+        existingProduct.productDescription = req.body.editProductDescription.trim();
         existingProduct.quantityInStock = req.body.editProductStock;
         existingProduct.category = req.body.editProductCategory;
         existingProduct.subcategory = req.body.editProductSubcategory;
         existingProduct.price = req.body.editProductPrice;
 
 
-        // Add validation logic here for other required fields if needed
-        if (!existingProduct.productName || !existingProduct.quantityInStock || !existingProduct.price) {
-            return res.status(400).json({ error: 'Required fields are missing' });
+        // Add validation logic for required fields and negative numbers
+        if (
+            !existingProduct.productName ||
+            !existingProduct.productDescription ||
+            isNaN(existingProduct.quantityInStock) ||
+            isNaN(existingProduct.price) ||
+            existingProduct.quantityInStock < 0 ||
+            existingProduct.price < 0
+        ) {
+            return res.status(400).json({ error: 'Invalid data or required fields are missing' });
         }
       
 
