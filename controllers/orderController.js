@@ -42,8 +42,7 @@ const updateOrderStatus = async (req,res) => {
 
 const cancelOrder = async (req,res) => {
     try {
-        console.log('hi')
-
+        
         const orderNumber = req.body.orderNumber;
         const userId = req.session.userId;
 

@@ -5,12 +5,14 @@ const fs = require('fs').promises
 
 const renderProductpage = async (req, res) => {
     try {
-        // Fetch all the product data from the database
-        const products = await Product.find()
-
-        // Fetch all categories from the database
-        const categories = await Category.Category.find().populate('subcategories');
-        const subcategories = await Subcategory.find();
+      // Fetch all the product data from the database with populated category and subcategory fields
+    const products = await Product.find().populate('category subcategory');
+    
+    // Fetch all categories from the database with populated subcategories
+    const categories = await Category.Category.find().populate('subcategories');
+    
+    // Fetch all subcategories
+    const subcategories = await Subcategory.find();
 
 
         // render the product page with products
@@ -68,13 +70,8 @@ const addproduct = async (req, res) => {
 
 const fetchSucategories = async (req, res) => {
     try {
-        console.log('hi')
-        console.log(req.body)
         const categoryId = req.body.categoryId;
-        console.log(categoryId)
         const subcategories = await Subcategory.find({ category: categoryId })
-        console.log(subcategories)
-
         res.json(subcategories)
     } catch (error) {
         console.error(error)
@@ -112,10 +109,10 @@ const productAvailability = async (req, res) => {
 const getSubcategories = async (req, res) => {
     try {
         const categoryId = req.body.categoryId // Get the category id from the query for showing subcategories
-        // console.log(req.body.categoryId)
+      
         // Find subcategories that belong to the selected category.
         const subcategories = await Subcategory.find({ category: categoryId })
-        // console.log(subcategories)
+     
         res.json(subcategories)
     } catch (error) {
         console.error(error)
@@ -134,9 +131,7 @@ const deleteImage = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' })
         }
 
-        // Check if the index is within valid bounds
-
-
+ 
         // Get image file name to delete
 
         let indexToDelete = -1
@@ -147,8 +142,7 @@ const deleteImage = async (req, res) => {
             }
         }
 
-        console.log(indexToDelete)
-
+    
         if (indexToDelete === -1) {
             return res.status(404).json({ message: 'Image is not found' })
         }
@@ -179,40 +173,26 @@ const editproductsave = async (req, res) => {
 
         // Fetch the existing product by its ID
         const existingProduct = await Product.findById(productId)
-        console.log(existingProduct)
-        // console.log(existingProduct)
+       
 
         if (!existingProduct) {
             return res.status(404).json({ error: 'Product not found' })
         }
-        // console.log(req.body)
+      
         // Update the product details with data from the form
         existingProduct.productName = req.body.editProductName;
-        // console.log(existingProduct.productName)
-
         existingProduct.productDescription = req.body.editProductDescription;
-        // console.log(existingProduct.productDescription)
-
         existingProduct.quantityInStock = req.body.editProductStock;
-        // console.log(existingProduct.quantityInStock)
-
         existingProduct.category = req.body.editProductCategory;
-        // console.log(existingProduct.category)
-
         existingProduct.subcategory = req.body.editProductSubcategory;
-        // console.log(existingProduct.subcategory)
-
         existingProduct.price = req.body.editProductPrice;
-        // console.log(existingProduct.price)
-
 
 
         // Add validation logic here for other required fields if needed
         if (!existingProduct.productName || !existingProduct.quantityInStock || !existingProduct.price) {
             return res.status(400).json({ error: 'Required fields are missing' });
         }
-
-        // Handle product images updates here if needed
+      
 
         // Save the updated product
         await existingProduct.save()

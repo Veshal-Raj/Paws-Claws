@@ -5,6 +5,7 @@ const User = require('../models/userModel')
 // Route for adding a product to the cart
 const addToCart = async (req, res) => {
     try {
+        // Extract the productId from the request parameters
         const { productId } = req.params
 
         // Retrieve the product details based on the productId
@@ -56,6 +57,7 @@ const addToCart = async (req, res) => {
 
         // Respond with a success messsage or updated cart data
         res.json({ message: 'Product added to cart', cart: user.cart })
+
     } catch (error) {
         console.error('Error:', error)
         res.status(500).json({ error: 'An error occurred while adding the product to the cart' })
@@ -71,6 +73,7 @@ const showCart = async (req, res) => {
         const user = await User.User.findById(userId).populate('cart.product_id')
 
         if (!user) {
+            // Handle the case where the user doesn't exist
             return res.status(404).render('error', { message: 'User is not found' })
         }
 
@@ -79,8 +82,10 @@ const showCart = async (req, res) => {
         const totalSum = user.cart.reduce((sum, cartItem) => {
             return sum + cartItem.totalPrice
         }, 0)
+
         // Render the cart page and pass the user's cart data to the cart page
         res.render('users/cart', { user, userId: req.session.userId, totalSum })
+   
     } catch (error) {
         console.error(error)
         res.status(500).render('error')
@@ -89,6 +94,7 @@ const showCart = async (req, res) => {
 
 const updateQuantity = async (req, res) => {
     try {
+        // Extract the productId and newQuantity from the request parameters
         const { productId, newQuantity } = req.params
         const userId = req.session.userId
 
@@ -120,7 +126,6 @@ const updateQuantity = async (req, res) => {
         await user.save()
 
         // Respond with the updated total price
-        // console.log(totalSum)
         res.json({ updatedTotalPrice: cartItem.totalPrice, totalSum })
     } catch (error) {
         console.error('Error:', error)
@@ -129,6 +134,7 @@ const updateQuantity = async (req, res) => {
 
 const removeFromCart = async (req, res) => {
     try {
+        // Extract the productId and newQuantity from the request parameters
         const { productId } = req.params
         const userId = req.session.userId
 
@@ -154,7 +160,7 @@ const removeFromCart = async (req, res) => {
 
         // save the user with the updated cart
         await user.save()
-        // console.log(totalSum)
+        
         // respond with the updated total sum
         res.json({ updatedTotalSum: totalSum })
 

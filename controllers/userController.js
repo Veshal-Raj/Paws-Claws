@@ -13,23 +13,23 @@ const dotenv = require('dotenv').config()
 
 
 // ======================== Render user login page ======================= //
-const loginpage = async (req, res) => {
+const loginpage = (req, res) => {
     try {
-        res.render('users/userLogin')
+        res.render('users/userLogin');
     } catch (error) {
-        res.render('error')
         console.error(error);
-
+        res.render('error');
     }
-}
+};
+
 
 // ======================== Render signup page ============================ //
 const signupPage = async (req, res) => {
     try {
         res.render('users/signup')
     } catch (error) {
-        res.render('error')
         console.error(error);
+        res.render('error')
 
     }
 }

@@ -4,78 +4,88 @@ const Subcategory = require('../models/subcategoriesModel')
 
 const dogs = async (req, res) => {
     try {
+        // Number of products to display per page
+        const productsPerPage = 8;
 
-        // Find the "Cat" category
-        const dogCategory = await Category.Category.findOne({ categoryName: 'Dog' })
+        // Find the "Dog" category
+        const dogCategory = await Category.Category.findOne({ categoryName: 'Dog' });
 
-        // Find all products that belong to the "Dog " category
+        // Count the total number of available products in the "Dog" category
+        const totalProducts = await Product.countDocuments({
+            category: dogCategory,
+            isAvailable: true,
+        });
+
+        // Calculate the total number of pages required for pagination
+        const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+        // Determine the current page based on the query parameter, default to page 1
+        let currentPage = parseInt(req.query.page) || 1;
+        currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
+        // Calculate the number of products to skip based on the current page
+        const skip = (currentPage - 1) * productsPerPage;
+
+        // Find and populate products belonging to the "Dog" category, apply pagination
         const dogProducts = await Product.find({
             category: dogCategory,
-            isAvailable: true, // Filter available products 
-        }).populate('category subcategory')
+            isAvailable: true,
+        })
+        .populate('category subcategory')
+        .skip(skip)
+        .limit(productsPerPage)
+        .lean(); // Convert documents to plain JavaScript objects
 
-
-        const totalProducts = dogProducts.length
-        const productsPerPage = 8 // Number of products to display per page
-
-        // Calculate the total number of pages
-        const totalPages = Math.ceil(totalProducts/productsPerPage)
-
-        // Determine the current page
-        let currentPage = parseInt(req.query.page) || 1
-        if (currentPage < 1) currentPage = 1
-        if (currentPage > totalPages) currentPage = totalPages
-
-        // Calculate the index range for the current page
-        const startIndex = (currentPage - 1) * productsPerPage
-        const endIndex = Math.min(startIndex + productsPerPage,totalProducts)
-
-         // Filter products based  on the current page
-         const productsToDisplay = dogProducts.slice(startIndex,endIndex)
-
-
-
-        res.render('users/dogs', { 
-            products: productsToDisplay,
-             userId: req.session.userId,
-             totalPages: totalPages,
-             currentPage:currentPage
-             })
-
+        res.render('users/dogs', {
+            products: dogProducts,
+            userId: req.session.userId,
+            totalPages,
+            currentPage,
+        });
     } catch (error) {
         console.error(error);
-        res.render('error')
+        res.render('error');
     }
 }
 
-const filterDogProducts = async (req,res) => {
+
+const filterDogProducts = async (req, res) => {
     try {
-        // Find the 'Dog' category
-        const  dogCategory = await Category.Category.findOne({categoryName: 'Dog'})
+        // Get the search query from the request query parameters with a default of an empty string
+        const searchQuery = req.query.query || '';
+
+        // Find the "Dog" category
+        const dogCategory = await Category.Category.findOne({ categoryName: 'Dog' });
 
         if (!dogCategory) {
-            console.error(error)
-            return res.redirect('/error')
+            console.error(error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
 
-        // Get the search query from the request query paramaters
-        const searchQuery = req.query.query || ''  // Default to an empty string if query parameter is not provided
-
-
-        // Find all products that belong to the "Dog" category and match the search input in the product name
-        const filteredDogProducts = await Product.find({
+        // Create a query object for filtering products
+        const query = {
             category: dogCategory,
             isAvailable: true, // Filter available products
-            productName: {$regex: searchQuery, $options: 'i'} // Case-insensitive search 
-        }).populate('category subcategory') 
+        };
 
-        // Send the filtered products as JSON response
-        res.json(filteredDogProducts)
+        if (searchQuery) {
+            // If a search query is provided, add a condition to search by product name
+            query.productName = { $regex: searchQuery, $options: 'i' };
+        }
+
+        // Find and populate products matching the query
+        const filteredDogProducts = await Product.find(query)
+            .populate('category subcategory')
+            .lean(); // Convert documents to plain JavaScript objects
+
+        // Send the filtered products as a JSON response
+        res.json(filteredDogProducts);
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: 'Internal Server Error'})
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
 
 module.exports = {
     dogs,

@@ -80,10 +80,7 @@ const userBlocked = async (req, res) => {
     try {
         const userId = req.params.userId
 
-
         const userFind = await User.User.findByIdAndUpdate(userId, { $set: { isVerified: false } })
-
-
 
         if (!userFind) {
             res.status(400).json({ message: 'User not Found' });

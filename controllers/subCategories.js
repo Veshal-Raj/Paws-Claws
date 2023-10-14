@@ -8,23 +8,23 @@ const createSubCategory = async (req, res) => {
   try {
     const { subcategoryName, category } = req.body
 
-    // Fetch all categories from the database
-    const categories = await Category.Category.find()
-
 
     // Create a new subcategory
-    const subcategory = new Subcategory({ subcategoryName, category })
-    const savedSubcategory = await subcategory.save()
+    const subcategory = await Subcategory.create({ subcategoryName, category });
 
 
-    // find the corresponding category and push the subcategory to its subcategory array
-    const upadatedCategory = await Category.Category.findByIdAndUpdate(
-      category,
-      { $push: { subcategories: savedSubcategory._id } }, // Push the subcategory's objectId to the array
-      { new: true }
-    )
-    res.redirect('/admin/categories')
+   // Find the corresponding category and push the subcategory to its subcategories array
+   const updatedCategory = await Category.Category.findByIdAndUpdate(
+    category,
+    { $push: { subcategories: subcategory._id } }, // Push the subcategory's objectId to the array
+    { new: true }
+  );
+
+   // Redirect to the admin categories page after successful creation
+    res.redirect('/admin/categories');
+
   } catch (error) {
+    // Handle errors and send an error response
     res.status(500).json({ error: 'Internal Server Error!' })
     console.error(error);
   }
@@ -35,13 +35,15 @@ const createSubCategory = async (req, res) => {
 
 const getAllCategoriesWithSubcategories = async (req, res) => {
   try {
-    const categories = await Category.Category.find().populate('subcategories');
-    const subcategories = await Subcategory.find();
+    const [categories, subcategories] = await Promise.all([
+      Category.Category.find().populate('subcategories'),
+      Subcategory.find(),
+    ]);
 
     res.render('admin/category', { categories, subcategories });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error!' });
     console.error(error);
+    res.status(500).json({ error: 'Internal Server Error!' });
   }
 };
 
@@ -80,15 +82,11 @@ const getCategoryNameByCategoryId = async (categoryId) => {
 // ================== Editing Subcategory ================================ //
 const subcategoryEdit = async (req, res) => {
   try {
-    const subcategoryID = req.query.SubID // Extract the subcategory ID from the URL
-
-
+    // Extract the subcategory ID from the URL
+    const subcategoryID = req.query.SubID 
     const categoryID = req.query.CatID
 
-
     const updatedSubcategoryName = req.body.editSubcategoryName // Extract the updated subcategory data from the request body
-
-
 
     const updatedSubcategory = await Subcategory.updateOne({ _id: subcategoryID }, { $set: { subcategoryName: updatedSubcategoryName } })
 
@@ -97,9 +95,6 @@ const subcategoryEdit = async (req, res) => {
     }
 
     res.redirect(`/admin/subcategories/${categoryID}`)
-
-    // if this redirect is not working then, use this ---> adminRoute.post('/subcategories/:categoryId', subcategoryController.renderSubcategoriesPage); // Render subcategory page
-
 
   } catch (error) {
     res.status(500).send('Internal Error')
@@ -113,7 +108,7 @@ const subcategoryAvailable = async (req, res) => {
     const categoryId = req.query.CatID;
     const subcategoryId = req.query.SubCatID;
 
-    // Your logic to make the subcategory available goes here
+    
 
     res.redirect(`/admin/subcategories/${categoryId}`);
   } catch (error) {

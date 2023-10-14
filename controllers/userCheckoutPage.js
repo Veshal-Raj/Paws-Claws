@@ -21,26 +21,24 @@ const generateOrderNumber = () => {
 
 const checkout = async (req, res) => {
     try {
-        const userId = req.session.userId
+        const userId = req.session.userId;
 
         // Fetch the user data with the populated 'address' field
-        const user = await User.User.findById(userId).populate('address');
+        const user = await User.User.findById(userId).populate('address').lean();
 
         // Finding the user with their cart data populated
-        const userCart = await User.User.findById(userId).populate('cart.product_id');
+        const userCart = await User.User.findById(userId).populate('cart.product_id').lean();
 
         if (!userCart) {
             return res.status(404).render('error', { message: 'User is not found' });
         }
 
-        let total = 0;
         const cartDetailsWithProduct = [];
-
-        
+        let total = 0;
 
         for (const cartItem of userCart.cart) {
             const product = await Product.findById(cartItem.product_id);
-            const productImage = product.productImages[0]; //  productImages is an array of image paths
+            const productImage = product.productImages[0]; // productImages is an array of image paths
 
             cartDetailsWithProduct.push({
                 product_id: cartItem.product_id,
@@ -57,9 +55,6 @@ const checkout = async (req, res) => {
         // Generate the order ID (you can use your logic here)
         const orderId = generateOrderNumber(); // Replace with your logic to generate the order ID
 
-        // const orderDetails = await Order.findById(orderId)
-        // console.log(orderDetails)
-
         res.render('users/checkoutpage', {
             userId,
             user,
@@ -71,7 +66,8 @@ const checkout = async (req, res) => {
         console.error(error);
         res.render('error');
     }
-}
+};
+
 
 
 const saveAddress = async (req, res) => {
@@ -102,14 +98,15 @@ const saveAddress = async (req, res) => {
         // Push the new address to the address array
         let index = user.address.length
         user.address.push(newAddress)
+
         // Save the user document with the updated address
         await user.save()
-        let id = user.address[index]._id
-        console.log(id, 'index',index)
 
-       
+        let id = user.address[index]._id
+              
         // Address added successfully
         return res.status(200).json({ message: 'Address added successfully', newAddress,index ,id})
+    
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })
@@ -201,44 +198,51 @@ const deleteOrder = async (req,res) => {
     }
 }
 
-
+// COD
 const proceedToPay = async (req, res) => {
     console.log('hiello')
     try {
+        // Extract the selected address from the request body
         const { selectedAddress } = req.body
-        // console.log("userCheckout.js ---> line 71 ",selectedAddress)
-
-
+        
+        // Get the user's ID from the session        
         const  userId = req.session.userId
+
+        // Find the user by their ID
         const UserFound = await User.User.findById(userId)
        
+        // Retrieve the user's cart
         const cart = UserFound.cart
+       
+        // Calculate the total price by summing up the total prices of items in the cart
         const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+
+        
 
         // generating order number
         const orderId = generateOrderNumber()
 
-        const paymentMethod = 'Online Payment'; //
+        // Define the payment method (in this case, Cash on Delivery - COD)
+        const paymentMethod = 'COD'; //
 
         // Create a new order using the Order model
-        const order = new Order({
+        const Neworder = new Order({
             orderNumber: orderId,
             customer: userId,
             products: cart,
             shippingAddress: selectedAddress,
             totalAmount: totalPrice,
-            paymentMethod: paymentMethod, // Set the payment method to 'Online Payment'
+            paymentMethod: paymentMethod, // Set the payment method to 'COD'
 
         })
 
-        console.log("order ==",order)
-        // Save the order to the database
-        let newOrderSave = await order.save()
-
-        console.log('new Order ',newOrderSave)
-
         
+        // Save the order to the database
+        let newOrderSave = await Neworder.save()
+
+        // Send a response indicating a successful order creation
         res.json({ status: 'success', message: 'Order created successful' });
+   
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })
@@ -246,45 +250,57 @@ const proceedToPay = async (req, res) => {
 }
 
 
+// Onlilne payment
 const onlinePayment = async (req,res) => {
     try {
+        // Extract the total price and selected address from the request body
         const totalPrice = req.body.total
         const  selectedAddress  = req.body.selectedAddress
-        // console.log("userCheckout.js ---> line 71 ",selectedAddress)
+        
 
-
+        // Get the user's ID from the session
         const  userId = req.session.userId
+
+        // Find the user by their ID
         const UserFound = await User.User.findById(userId)
-       
+        
+        // Retrieve the user's cart
         const cart = UserFound.cart
+
+        // Calculate the total sum of prices in the cart
         const totalSumPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
 
 
         // generating order number
         const orderId = generateOrderNumber()
 
-        const paymentMethod = 'Online Payment'; //
+        // Define the payment method (in this case, Online Payment)
+        const paymentMethod = 'Online Payment'; 
 
         // Create a new order using the Order model
         const Neworder = new Order({
             orderNumber: orderId,
             customer: userId,
-            products: req.session.cart,
+            products: cart,
             shippingAddress: selectedAddress,
             totalAmount: totalPrice,
             paymentMethod: paymentMethod, // Set the payment method to 'COD'
 
         })
 
+        // Save the order to the database
          await Neworder.save()
 
-
+        // Prepare payment options for Razorpay
         const options = {
             amount: totalSumPrice*100, // converting paisa to ruppes
             currency: 'INR',
         }
 
+        // Create a new payment order using Razorpay
         const order = await razorpay.orders.create(options)
+
+        // Send the Razorpay order ID in the response
         res.json({orderId: order.id})
 
     } catch (error) {
@@ -296,22 +312,25 @@ const onlinePayment = async (req,res) => {
 
 const clearCart = async (req,res) => {
     try {
+        // Get the user's ID from the session
         const userId = req.session.userId
 
     // find the user by userId
     const user = await User.User.findById(userId)
 
+    // Check if the user exists
     if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
-      // Storing the cart items in the session temporary
-      const order = await Order.findById()
-      // Clear the user's cart by setting it to an empty array
+
+     
+    // Clear the user's cart by setting it to an empty array
     user.cart = [];
-      console.log("user cart",user.cart)
-    // Save the updated user document
+     
+    // Save the updated user document to clear the cart
     await user.save();
 
+    // Return a success message indicating that the cart has been cleared
     return res.json({ success: true, message: 'Cart cleared successfully' });
 
     } catch (error) {
