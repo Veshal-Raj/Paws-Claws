@@ -19,7 +19,13 @@ const showCoupons = async (req, res) => {
         // Find coupons in the database
         const coupons = await Coupon.find();
 
-        res.render('admin/coupon', { coupons, user });
+        // Create an array of objects with both index and coupon data
+        const couponsWithIndex = coupons.map((coupon, index) => ({
+            index,
+            coupon
+        }));
+        
+        res.render('admin/coupon', {  user, coupons: couponsWithIndex });
     } catch (error) {
         console.error('Error in showCoupons:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -64,29 +70,56 @@ const createCoupon = async (req, res) => {
     }
 }
 
+const getCoupon = async(req,res) => {
 
-
-
-
-const deleteCoupon = async (req,res) => {
     try {
-        const couponId = req.params.id 
-        const deletedCoupon = await Coupon.findByIdAndRemove(couponId)
 
-        if (!deletedCoupon) {
-            return res.status(404).json({ message: 'Coupon not found'})
+        const couponId = req.params.couponId;
+        // Query the database to retrieve the coupon data by ID
+        const coupon = await Coupon.findById(couponId);
+        if (!coupon) {
+          return res.status(404).json({ error: 'Coupon not found' });
         }
+        // Send the coupon data as JSON response
+        res.json(coupon);
 
-        res.json({ message: 'Coupon deleted successfully'})
     } catch (error) {
-        console.error('Error in delete coupon',error);
-        res.status(500).json({ error: 'Internal server error '})
+        console.error('Error in getting coupon ', error)
+        res.status(500).json({error: 'Internal server error'})
     }
 }
 
+const updateCouponStatus = async (req,res) => {
+ 
+        const couponId = req.params.couponId;
+        const { currentStatus } = req.body;
+      
+        try {
+          // Find the coupon by ID
+          const coupon = await Coupon.findById(couponId);
+      
+          if (!coupon) {
+            return res.status(404).json({ error: 'Coupon not found' });
+          }
+      
+          // Update the coupon's status based on the current status
+          coupon.isActive = currentStatus === 'active' ? false : true;
+          
+          // Save the updated coupon in the database
+          await coupon.save();
+      
+          // Return the new status as a JSON response
+          res.json({ newStatus: coupon.isActive ? 'active' : 'inactive' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
 
 module.exports = {
     showCoupons,
     createCoupon,
-    deleteCoupon
+    getCoupon,
+    updateCouponStatus
 };

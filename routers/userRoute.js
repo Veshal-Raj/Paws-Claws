@@ -58,6 +58,7 @@ router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.re
 // ============================= User Wallet===================================== //
 
 router.get('/wallet', userAuth.noSession, userWallet.wallet)
+router.post('/wallet',userAuth.noSession,userCheckoutpage.wallet)
 
 // ========================= Checkout page ================================== //
 router.post('/checkout', userAuth.noSession, userCheckoutpage.checkout)

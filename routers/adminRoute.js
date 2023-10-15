@@ -107,7 +107,8 @@ adminRoute.post('/cancelOrder',adminAuth.noSession, orderController.cancelOrder)
 adminRoute.get('/Offer',adminAuth.noSession,couponController.showCoupons )
 adminRoute.post('/createCoupon',adminAuth.noSession, couponController.createCoupon)
 
-adminRoute.delete('/deleteCoupon/:id', adminAuth.noSession,couponController.deleteCoupon)
+adminRoute.get('/getCoupon/:couponId',adminAuth.noSession,couponController.getCoupon)
+adminRoute.post('/updateCouponStatus/:couponId', adminAuth.noSession,couponController.updateCouponStatus)
 
 
 module.exports = adminRoute

@@ -23,6 +23,17 @@ const checkout = async (req, res) => {
     try {
         const userId = req.session.userId;
 
+        // Taking the count of products in the cart
+        const userForCartQuantity = await User.User.findById(userId);
+        
+
+           let cartQuantity
+        if (userForCartQuantity){
+            cartQuantity = userForCartQuantity.cart.length;
+
+        }
+
+
         // Fetch the user data with the populated 'address' field
         const user = await User.User.findById(userId).populate('address').lean();
 
@@ -61,6 +72,7 @@ const checkout = async (req, res) => {
             orderId,
             total,
             cartdetails: cartDetailsWithProduct,
+            cartQuantity
         });
     } catch (error) {
         console.error(error);
@@ -129,7 +141,7 @@ const getAddress = async (req,res) => {
         }
 
         const address = user.address.id(addressId);
-        // console.log(address)
+        
 
         if (!address) {
             // Handle case when the address is not found
@@ -200,7 +212,7 @@ const deleteOrder = async (req,res) => {
 
 // COD
 const proceedToPay = async (req, res) => {
-    console.log('hiello')
+    
     try {
         // Extract the selected address from the request body
         const { selectedAddress } = req.body
@@ -236,6 +248,24 @@ const proceedToPay = async (req, res) => {
 
         })
 
+             // Reduce the quantity of ordered products in the database
+  for (const cartItem of cart) {
+    const product = await Product.findById(cartItem.product_id);
+    console.log('before',product.quantityInStock)
+
+    if (product) {
+      if (product.quantityInStock >= cartItem.quantity) {
+        product.quantityInStock -= cartItem.quantity; // Reduce the stock
+      } else {
+        return res.status(400).json({ error: 'Insufficient stock for one or more products' });
+      }
+    console.log('after',product.quantityInStock)
+      // Save the updated product
+      await product.save();
+    } else {
+      return res.status(400).json({ error: 'Product not found' });
+    }
+  }
         
         // Save the order to the database
         let newOrderSave = await Neworder.save()
@@ -288,6 +318,25 @@ const onlinePayment = async (req,res) => {
 
         })
 
+             // Reduce the quantity of ordered products in the database
+  for (const cartItem of cart) {
+    const product = await Product.findById(cartItem.product_id);
+    console.log('before',product.quantityInStock)
+
+    if (product) {
+      if (product.quantityInStock >= cartItem.quantity) {
+        product.quantityInStock -= cartItem.quantity; // Reduce the stock
+      } else {
+        return res.status(400).json({ error: 'Insufficient stock for one or more products' });
+      }
+    console.log('after',product.quantityInStock)
+      // Save the updated product
+      await product.save();
+    } else {
+      return res.status(400).json({ error: 'Product not found' });
+    }
+  }
+
         // Save the order to the database
          await Neworder.save()
 
@@ -306,6 +355,98 @@ const onlinePayment = async (req,res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' })
+    }
+}
+
+
+// Wallet
+const wallet = async (req,res) => {
+    try {
+        
+        // Extract the selected address and payment method from the request body
+        const selectedAddress = req.body.selectedAddress;
+        
+        const paymentMethod  = req.body.paymentMethod;
+        
+
+        // Get the user's ID from the session
+        const userId = req.session.userId;    
+        
+        
+        // Find the user by their ID
+        const user = await User.User.findById(userId)
+        
+
+        // Retrieve the user's cart
+        const cart = user.cart;
+        
+
+        // Calculate the total price by summing up to total prices of items in the cart
+        const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0)
+        
+
+        if (paymentMethod === 'wallet') {
+            // Check if ther's enough balance in the user's wallet for the purchase
+            if (user.wallet.balance < totalPrice ) {
+                return res.status(400).json({ error: 'Insufficient wallet balance '})
+            }
+
+            // Deduct the purchase amount from the user's wallet balance
+            
+
+            user.wallet.balance  -= totalPrice
+            
+            // Generate an order number
+            const orderNumber = generateOrderNumber()
+
+           // Create a new order
+           const newOrder = new Order({
+            orderNumber,
+            customer: userId,
+            products: cart,
+            shippingAddress: selectedAddress,
+            totalAmount: totalPrice,
+            paymentMethod: paymentMethod,
+        });
+
+
+        // Reduce the quantity of ordered products in the database
+  for (const cartItem of cart) {
+    const product = await Product.findById(cartItem.product_id);
+    console.log('before',product.quantityInStock)
+
+    if (product) {
+      if (product.quantityInStock >= cartItem.quantity) {
+        product.quantityInStock -= cartItem.quantity; // Reduce the stock
+      } else {
+        return res.status(400).json({ error: 'Insufficient stock for one or more products' });
+      }
+    console.log('after',product.quantityInStock)
+      // Save the updated product
+      await product.save();
+    } else {
+      return res.status(400).json({ error: 'Product not found' });
+    }
+  }
+
+
+
+            // Clear the user's cart
+            user.cart = []
+
+
+
+            // Save changes to the database
+            await Promise.all([newOrder.save(), user.save()])
+
+        }
+
+        // Respond with a success message or any other necessary response
+        res.status(200).json({ message: 'Purchase successful' })  
+    
+    } catch (error) {
+        console.error(error);
+        res.status(500).json( {error: 'Internal Server Error'} )
     }
 }
 
@@ -344,6 +485,7 @@ module.exports = {
     saveAddress,
     proceedToPay,
     onlinePayment,
+    wallet,
     deleteOrder,
     getAddress,
     deletingAddressWhileEditing,

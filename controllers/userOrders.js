@@ -5,6 +5,16 @@ const showOrders = async (req, res) => {
     try {
         const userId = req.session.userId;
 
+        
+        const userCartQuantity = await User.User.findById(userId);
+    
+
+           let cartQuantity
+        if (userCartQuantity){
+            cartQuantity = userCartQuantity.cart.length;
+
+        }
+
         // Find the user by ID and project the cart and orders
         const user = await User.User.findById(userId).select('cart').lean();
         const orders = await Order.find({ customer: userId }).populate('products').lean();
@@ -59,7 +69,7 @@ const cancelOrder = async (req, res) => {
         // Save the order
         await Order.findOneAndUpdate({ orderNumber: orderNumber }, { status: 'Cancelled' }).lean();
 
-        return res.json({ success: true, message: 'Order cancelled successfully', totalAmount, customer: user });
+        return res.json({ success: true, message: 'Order cancelled successfully', totalAmount, customer: user, cartQuantity});
 
     } catch (error) {
         console.error(error);

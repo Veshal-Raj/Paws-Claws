@@ -109,7 +109,7 @@
                         <th>Id</th>
                         <th>Image</th>
                         <th>Name</th>
-                        <th>Description</th>
+                        <!-- <th>Description</th> -->
                         <th>Stock</th>
                         <th>Last Updated</th>
                         <th>Status</th>
@@ -156,14 +156,17 @@
                             <td>
                                 <%= product.productName %>
                             </td>
-                            <td>
-                                <%= product.productDescription %>
-                            </td>
+                           
                             <td>
                                 <%= product.quantityInStock %>
                             </td>
                             <td>
-                                <%= product.updatedAt %>
+                                <%= (new Date(product.updatedAt)).toLocaleDateString('en-US', {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  }) %>
                             </td>
                             <td>
 

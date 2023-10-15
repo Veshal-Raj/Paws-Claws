@@ -1,9 +1,22 @@
 const Product = require('../models/productsModel')
 const Category = require('../models/categoriesModel')
 const Subcategory = require('../models/subcategoriesModel')
+const User = require('../models/userModel')
+
 
 const cats = async (req, res) => {
     try {
+         // Taking the count of products in the cart
+         const userId = req.session.userId;
+         const user = await User.User.findById(userId);
+
+
+            let cartQuantity
+         if (user){
+             cartQuantity = user.cart.length;
+
+         }
+
         const productsPerPage = 8;
 
         // Find the "Cat" category
@@ -46,6 +59,7 @@ const cats = async (req, res) => {
             userId: req.session.userId,
             totalPages,
             currentPage,
+            cartQuantity
         });
     } catch (error) {
         console.error(error);

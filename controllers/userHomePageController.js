@@ -1,10 +1,25 @@
 const Product = require('../models/productsModel')
 const Category = require('../models/categoriesModel')
 const Subcategory = require('../models/subcategoriesModel')
+const User = require('../models/userModel')
 
 // Function to retrieve a list of products based on block status
 const showHomepageProducts = async (req, res) => {
     try {
+
+         // Taking the count of products in the cart
+         const userId = req.session.userId;
+         const user = await User.User.findById(userId);
+         console.log(user)
+
+            let cartQuantity
+         if (user){
+             cartQuantity = user.cart.length;
+
+         }
+        // Calculate the cart quantity by counting the number of items in the cart array
+        console.log('cart quantity: ',cartQuantity)
+
         // Number of products to display per page
         const productsPerPage = 8;
 
@@ -29,6 +44,7 @@ const showHomepageProducts = async (req, res) => {
         // Count the total number of available products in the database
         const totalProducts = await Product.countDocuments({ isAvailable: true });
 
+        
         // Calculate the total number of pages required for pagination
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
@@ -37,7 +53,8 @@ const showHomepageProducts = async (req, res) => {
             products: filteredProducts,
             userId: req.session.userId, // Pass the user ID if available
             totalPages, // Total number of pages for pagination
-            currentPage // Current page number
+            currentPage, // Current page number
+            cartQuantity
         });
     } catch (error) {
         // In case of an error, render an 'error' view and log the error

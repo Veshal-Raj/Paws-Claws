@@ -69,6 +69,14 @@ const showCart = async (req, res) => {
         // Get the user ID from the session
         const userId = req.session.userId
 
+        const userCart = await User.User.findById(userId)
+        
+        let cartQuantity
+        if (userCart){
+            cartQuantity = userCart.cart.length;
+
+        }
+
         // Finding the user with their cart data populated
         const user = await User.User.findById(userId).populate('cart.product_id')
 
@@ -84,7 +92,7 @@ const showCart = async (req, res) => {
         }, 0)
 
         // Render the cart page and pass the user's cart data to the cart page
-        res.render('users/cart', { user, userId: req.session.userId, totalSum })
+        res.render('users/cart', { user, userId: req.session.userId, totalSum , cartQuantity})
    
     } catch (error) {
         console.error(error)

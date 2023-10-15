@@ -33,8 +33,13 @@
                                 <%= order.totalAmount %>
                             </td>
                             <td>
-                                <%= order.orderDate %>
-                            </td>
+                                <%= (new Date(order.orderDate)).toLocaleDateString('en-US', {
+                                  weekday: 'short',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                }) %>
+                              </td>
                             <td>
                                 <select class="custom-select" id="inputGroupSelect01-<%= order._id %>"
                                     data-order-id="<%= order._id %>"  data-order-number="<%= order.orderNumber %>">

@@ -1,9 +1,22 @@
 const Product = require('../models/productsModel')
 const mongoose = require('mongoose'); // Import Mongoose
+const User = require('../models/userModel')
 
 
 const productSinglePageView = async (req, res) => {
     try {
+        
+
+        const userId = req.session.userId;
+         const user = await User.User.findById(userId);
+         console.log(user)
+
+            let cartQuantity
+         if (user){
+             cartQuantity = user.cart.length;
+
+         }
+
         // Get the product ID from the query parameter
         const productId = req.query.productId;
 
@@ -20,7 +33,7 @@ const productSinglePageView = async (req, res) => {
         }
 
         // Render the product details page with the product data
-        res.render('users/productSingleViewpage', { product, userId: req.session.userId });
+        res.render('users/productSingleViewpage', { product, userId: req.session.userId ,cartQuantity});
     } catch (error) {
         console.error(error);
         res.render('error');
