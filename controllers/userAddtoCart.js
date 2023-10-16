@@ -91,8 +91,26 @@ const showCart = async (req, res) => {
             return sum + cartItem.totalPrice
         }, 0)
 
+        // Fetch the product stock quantity from the database for products in the cart
+const productIdsInCart = user.cart.map(cartItem => cartItem.product_id._id);
+const productStockQuantities = await Product.find(
+    { _id: { $in: productIdsInCart } },
+    'quantityInStock'
+).lean();
+
+// Create an object to store the product stock quantities by product ID
+const productStockMap = {};
+
+productStockQuantities.forEach(product => {
+    productStockMap[product._id.toString()] = product.quantityInStock;
+});
+
+
+        console.log("Stock ----------> ",productStockMap)
+
+
         // Render the cart page and pass the user's cart data to the cart page
-        res.render('users/cart', { user, userId: req.session.userId, totalSum , cartQuantity})
+        res.render('users/cart', { user, userId: req.session.userId, totalSum , cartQuantity, productStockMap })
    
     } catch (error) {
         console.error(error)

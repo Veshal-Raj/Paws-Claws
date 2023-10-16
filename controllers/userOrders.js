@@ -69,6 +69,9 @@ const cancelOrder = async (req, res) => {
         // Save the order
         await Order.findOneAndUpdate({ orderNumber: orderNumber }, { status: 'Cancelled' }).lean();
 
+        // Define cartQuantity or retrieve it from somewhere if needed
+        const cartQuantity = 0; // Replace with the actual value
+
         return res.json({ success: true, message: 'Order cancelled successfully', totalAmount, customer: user, cartQuantity});
 
     } catch (error) {

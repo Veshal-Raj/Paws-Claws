@@ -19,7 +19,14 @@
       /* Adjust the margin as needed */
     }
   </style>
- 
+  <!-- <div class="row">
+    <div class="bg-info" >
+
+    </div>
+    <div class="bg-warning" style="height: 200px;">
+
+    </div>
+  </div> -->
  <div class="row">
   <div class="col-md-8 col-sm-12">
     <div class="container">
@@ -27,8 +34,56 @@
     
         <h1>Checkout </h1>
       </div>
+      <div class="row">
+      <div class="col-md-8 col-sm-12" style="margin-top: 0px; ">
+        <div class="cart-table-container " style="text-align: center; justify-content: center;">
+          <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% cartdetails.forEach(function(cartItem, index) { %>
+                <tr>
+                    <th scope="row">
+                        <%= index + 1 %>
+                    </th>
+                    <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>"
+                            class="cart-image" style="height: 100px; width: auto;"></td>
+                    <td>
+                        <%= cartItem.product_name %>
+                    </td>
+                    <td>
+                        <%= cartItem.quantity %>
+                    </td>
+                    <td>₹<%= cartItem.price %>
+                    </td>
+                </tr>
+                <% }); %>
+                <td colspan="5" class="text-end"><b>Total: ₹ <span id="totalValue"><%= total %></span></b></td>
+            </tbody>
+        </table>
+        <div class="form-outline d-flex flex-fill  text-end justify-content-end">
+          <div class="input-group mb-3 w-50 ">
+              <input type="text" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2">Apply</button>
+          </div>
+         
+        </div>
+        </div>
+        
+      
+      
+    </div>
+   
+    </div>
      
-      <div class="row" id="addressContainer">
+      <div class="row mx-0" id="addressContainer" >
         <% user.address.forEach(function(address, index) { %>
           <div class="card bg-light mb-3 col-md-4 m-3" style="max-width: 18rem;">
     
@@ -280,49 +335,34 @@
     </div> <!-- end -->
   
   </div>
-  <div class="col-md-4 col-sm-12" style="margin-top: 120px; ">
-    <div class="cart-table-container " style="text-align: center; justify-content: center;">
-      <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% cartdetails.forEach(function(cartItem, index) { %>
-            <tr>
-                <th scope="row">
-                    <%= index + 1 %>
-                </th>
-                <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>"
-                        class="cart-image" style="height: 100px; width: auto;"></td>
-                <td>
-                    <%= cartItem.product_name %>
-                </td>
-                <td>
-                    <%= cartItem.quantity %>
-                </td>
-                <td>₹<%= cartItem.price %>
-                </td>
-            </tr>
-            <% }); %>
-            <td colspan="5" class="text-end"><b>Total: ₹ <span id="totalValue"><%= total %></span></b></td>
-        </tbody>
-    </table>
-    <div class="form-outline flex-fill">
-    
-     
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Apply</button>
-          </div>
-  </div>
-</div>
-  </div> 
+  <div class="col-md-4  col-sm-12" style="margin-top: 120px; ">
+    <% couponDetails.forEach(function(coupon, index) { %> 
+    <div class="card text-dark bg-light mb-3" style="max-width: 18rem; ">
+      
+      <div class="card-body" >
+        <% if ( coupon.discountType === 'FixedAmount') {  %> 
+        <h5 class="card-header"><%= coupon.code %>  
+          <img src="https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
+        </h5>
+        <% } else { %>
+       
+          <img src"https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
+          <h5 class="card-header"><%= coupon.code %>  
+          </h5>
+        <% } %>
+        <p class="card-text">Discount money: <%= coupon.discountValue %></p>
+        <p class="card-text"><small><%= coupon.description %></small></p>
+        <p class="card-text"><small>Discount Type: <%= coupon.discountType %></small></p>
+        <p class="card-text"><small>Minimun purchase: <%= coupon.minimumPurchase %></small></p>
+        <p class="card-text">Valid Until: <%= coupon.validUntil.toLocaleString() %></p>
+
+
+
+
+      </div>
+    </div>
+    <% }) %>
+    </div> 
     
   
   </div>

@@ -1,10 +1,14 @@
 <%- include('../layouts/userHeader') %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
 
+<style>
+    .body {
+        min-height: 90vh;
+    }
+</style>
 
 
-
-    <section class="h-100" style="background-color: #eee;">
+    <section class="h-100" style="background-color: #dfd5d5;  min-height:75vh;">
         <div class="container h-100 py-5">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-10">
@@ -48,13 +52,16 @@
                                                         <i class="fas fa-plus"></i>
                                                     </button>
                                                 </div>
-
+                                                <!-- testing  -->
+                                                
+                                                <!-- testing end  -->
                                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                                     <!-- Display the total price for this item (use cartItem.totalPrice) -->
                                                     <h5 class="mb-0" id="totalPrice<%= cartItem.product_id._id %>">
-                                                        $<%= cartItem.totalPrice.toFixed(2) %>
+                                                        ₹<%= cartItem.totalPrice.toFixed(2) %>
                                                     </h5>
                                                 </div>
+                                                
                                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                     <!-- Add a button to remove the item from the cart -->
                                                     <button class="btn btn-link px-2 delete-button"
@@ -65,6 +72,14 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                   
+
+                                    <!-- In your 'users/cart' template -->
+                                    <input type="hidden" value="<%= productStockMap[cartItem.product_id._id.toString()] %>" id="stockQuantityInput<%= cartItem.product_id._id %>">
+                                    
+
+
                                     <% } else { %>
                                         <!-- Handle the case where product_id or _id is missing or null -->
                                         <div class="card rounded-3 mb-4">
@@ -78,14 +93,14 @@
                                                 <!-- Display the total sum of the cart -->
                                                 <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%=
                                                             totalSum.toFixed(2) %></span></h4>
-                                                <% } %>
+                                                
 
                                                     <div class="card mb-4">
                                                         <div class="card-body p-4 d-flex flex-row">
                                                             
                                                            
                                                     </div>
-
+                                                    
                                                     <div class="card">
                                                         <div class="card-body text-center">
                                                             <form action="/checkout" method="post">
@@ -95,6 +110,8 @@
                                                             </form>
                                                         </div>
                                                     </div>
+                                                    <% } %>
+                                                
                 </div>
             </div>
         </div>
@@ -198,7 +215,11 @@
                 const quantityInput = document.querySelector(`#quantityInput${productId}`)
                 let newQuantity = parseInt(quantityInput.value) || 0
 
-                if (newQuantity < 5) {
+                const stockInput = document.querySelector(`#stockQuantityInput${productId}`);
+        const stockQuantity = parseInt(stockInput.value);
+           
+
+                if (newQuantity < stockQuantity && newQuantity <5) {
 
                     newQuantity += 1
 

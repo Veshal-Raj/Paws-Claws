@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const Order = require('../models/ordersModel')
 const Product = require('../models/productsModel')
 const Razorpay = require('razorpay')
+const Coupon = require('../models/couponModel')
 
 // Initialize the Razorpay instance with the key_id and key_secret
 const razorpay = new Razorpay({
@@ -63,6 +64,12 @@ const checkout = async (req, res) => {
             total += cartItem.totalPrice;
         }
 
+
+        // Fetching the coupon data from the database
+        const couponDetails = await Coupon.find()
+        // console.log(couponDetails)
+
+
         // Generate the order ID (you can use your logic here)
         const orderId = generateOrderNumber(); // Replace with your logic to generate the order ID
 
@@ -72,7 +79,8 @@ const checkout = async (req, res) => {
             orderId,
             total,
             cartdetails: cartDetailsWithProduct,
-            cartQuantity
+            cartQuantity,
+            couponDetails
         });
     } catch (error) {
         console.error(error);
