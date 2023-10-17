@@ -1,13 +1,73 @@
 <%- include('../layouts/userHeader') %>
+<!-- Add these links to include Bootstrap CSS and JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <!-- Header-->
-<header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Home Page is under Construction</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Please visit after some time</p>
+<header class=" ">   
+
+    
+
+
+    <!-- <div class="container px-4 px-lg-5 my-5"> -->
+        <!-- <div class="text-center text-white"> -->
+            <% if (banners.length > 0) { %>
+                <!-- Display Banners -->
+               
+                <div id="bannerCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                      <% for (let i = 0; i < banners.length; i++) { %>
+                        <li data-target="#bannerCarousel" data-slide-to="<%= i %>" class="<%= i === 0 ? 'active' : '' %>"></li>
+                      <% } %>
+                    </ol>
+                    <div class="carousel-inner">
+                      <% banners.forEach((banner, index) => { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                          <img src="http://localhost:3000/uploads/<%= banner.imageUrl %>"
+                            class="d-block w-100" alt="<%= banner.category %>" style="height: 100%; width: 100vw;">
+                          <div class="carousel-caption">
+                            <!-- You can add a caption here if needed -->
+                          </div>
+                        </div>
+                      <% }); %>
+                    </div>
+                    <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#bannerCarousel" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                  
+                  
+                  <script>
+                    // Initialize the carousel
+                    $('#bannerCarousel').carousel();
+                  
+                    // Click event for "Next" button
+                    $('.carousel-control-next').click(function() {
+                      $('#bannerCarousel').carousel('next');
+                    });
+                  
+                    // Click event for "Previous" button
+                    $('.carousel-control-prev').click(function() {
+                      $('#bannerCarousel').carousel('prev');
+                    });
+                  </script>
+                  
+                  
+            <% } else { %>
+                <!-- No Banners Present -->
+                <h1 class="display-4 fw-bolder">Home Page is under Construction</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Please visit after some time</p>
+            <% } %>
         </div>
     </div>
 </header>
+
 
 <!-- Section-->
 <div id="main-content-container">

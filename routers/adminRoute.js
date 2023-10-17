@@ -37,6 +37,7 @@ const productController = require('../controllers/productController')
 const orderController = require('../controllers/orderController')
 const adminAuth = require('../middlewares/adminAuth')
 const couponController = require('../controllers/couponController')
+const bannerController = require('../controllers/bannerController')
 
 
 
@@ -110,5 +111,9 @@ adminRoute.post('/createCoupon',adminAuth.noSession, couponController.createCoup
 adminRoute.get('/getCoupon/:couponId',adminAuth.noSession,couponController.getCoupon)
 adminRoute.post('/updateCouponStatus/:couponId', adminAuth.noSession,couponController.updateCouponStatus)
 
+
+// =========================== Banner route ==================================== //
+adminRoute.get('/banner', adminAuth.noSession, bannerController.showBanner)
+adminRoute.post('/saveBanner',adminAuth.noSession,upload.single('bannerImage'),bannerController.saveBanner)
 
 module.exports = adminRoute

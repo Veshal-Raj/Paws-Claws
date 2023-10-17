@@ -2,6 +2,7 @@ const Product = require('../models/productsModel')
 const Category = require('../models/categoriesModel')
 const Subcategory = require('../models/subcategoriesModel')
 const User = require('../models/userModel')
+const Banner = require('../models/bannerModel')
 
 // Function to retrieve a list of products based on block status
 const showHomepageProducts = async (req, res) => {
@@ -48,13 +49,18 @@ const showHomepageProducts = async (req, res) => {
         // Calculate the total number of pages required for pagination
         const totalPages = Math.ceil(totalProducts / productsPerPage);
 
+        // Fetch all the available banners from the database
+        const banners = await Banner.find({ isAvailable: true }).lean() 
+            console.log(banners)
+
         // Render the 'users/home' view with the filtered products and pagination data
         res.render('users/home', {
             products: filteredProducts,
             userId: req.session.userId, // Pass the user ID if available
             totalPages, // Total number of pages for pagination
             currentPage, // Current page number
-            cartQuantity
+            cartQuantity,
+            banners
         });
     } catch (error) {
         // In case of an error, render an 'error' view and log the error
