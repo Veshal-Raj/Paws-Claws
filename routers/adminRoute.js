@@ -115,5 +115,6 @@ adminRoute.post('/updateCouponStatus/:couponId', adminAuth.noSession,couponContr
 // =========================== Banner route ==================================== //
 adminRoute.get('/banner', adminAuth.noSession, bannerController.showBanner)
 adminRoute.post('/saveBanner',adminAuth.noSession,upload.single('bannerImage'),bannerController.saveBanner)
+adminRoute.delete('/deleteBanner/:bannerId',adminAuth.noSession,bannerController.deleteBanner)
 
 module.exports = adminRoute

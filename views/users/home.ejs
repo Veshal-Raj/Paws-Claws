@@ -24,8 +24,12 @@
                     <div class="carousel-inner">
                       <% banners.forEach((banner, index) => { %>
                         <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                          <img src="http://localhost:3000/uploads/<%= banner.imageUrl %>"
+                          
+                          <a href="/cats">
+                            <img src="http://localhost:3000/uploads/<%= banner.imageUrl %>"
                             class="d-block w-100" alt="<%= banner.category %>" style="height: 100%; width: 100vw;">
+                          </a>
+                          
                           <div class="carousel-caption">
                             <!-- You can add a caption here if needed -->
                           </div>

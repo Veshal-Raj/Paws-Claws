@@ -9,8 +9,13 @@ const showBanner = async (req,res) => {
         // Fetching all the categories
         const categories = await Category.Category.find()
 
+        
+        // Fetch all the available banners from the database
+        const bannersCategory = await Banner.find({ isAvailable: true}).populate('category').lean() 
+        // console.log('banner category ',bannersCategory)
+
         //  Render the banner page
-        res.render('admin/banner', {categories})
+        res.render('admin/banner', {categories,bannersCategory})
     } catch (error) {
         console.error(error);
         res.render('somethingwentwrong')
@@ -36,7 +41,9 @@ const saveBanner = async (req,res) => {
         await newBanner.save()
 
         // Respond with a success message or redirect to a success page
-        res.status(201).json({message:'Banner added successfully'})
+        res.redirect('/admin/banner')
+     
+      
     } catch (error) {
         // Handle errors
         res.status(500).json({ error: 'Internal Server Error'})
@@ -44,7 +51,24 @@ const saveBanner = async (req,res) => {
 }
 
 
+const deleteBanner = async (req,res) => {
+    const bannerId = req.params.bannerId;
+  
+    try {
+      // Find the banner by ID and remove it from the database
+      const result = await Banner.findByIdAndRemove(bannerId);
+      if (result) {
+        res.sendStatus(204); // No Content - successful deletion
+      } else {
+        res.status(404).json({ error: 'Banner not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 module.exports = {
     showBanner,
-    saveBanner
+    saveBanner,
+    deleteBanner
 }
