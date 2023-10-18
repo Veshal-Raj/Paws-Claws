@@ -274,7 +274,7 @@
                         </thead>
                         <tbody>
                             <% if (orders && orders.length> 0) { %>
-                                <% orders.forEach((order)=> { %>
+                                <%  orders.forEach((order,i)=> { %>
                                     <% order.products.forEach((product) => {  %>
                             <tr>
                                 <td>
@@ -289,7 +289,7 @@
                                 <td>
                                     <%= product.quantity %>
                                 </td>
-                                <td>₹<%= product.totalPrice %></td>
+                                <td>₹<%= orders[i].totalAmount %></td>
                                 <td>
                                      <!-- Use if-else conditions to determine the class -->
                                      <% let statusClass='' ; %>

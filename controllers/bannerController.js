@@ -12,7 +12,7 @@ const showBanner = async (req,res) => {
         
         // Fetch all the available banners from the database
         const bannersCategory = await Banner.find({ isAvailable: true}).populate('category').lean() 
-        // console.log('banner category ',bannersCategory)
+       
 
         //  Render the banner page
         res.render('admin/banner', {categories,bannersCategory})
@@ -27,10 +27,9 @@ const saveBanner = async (req,res) => {
     try {
         const category = req.body.category; // Access other form data
         const bannerImage = req.file; // Access the uploaded image file
-        console.log(bannerImage)
+       
         const bannerImg = req.file.filename; // Access the uploaded image file
-        console.log(bannerImg)
-
+        
         // Create a new Banner instance with the data
         const newBanner = new Banner({
             category: category,

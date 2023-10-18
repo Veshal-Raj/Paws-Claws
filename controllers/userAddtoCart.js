@@ -106,7 +106,7 @@ productStockQuantities.forEach(product => {
 });
 
 
-        console.log("Stock ----------> ",productStockMap)
+      
 
 
         // Render the cart page and pass the user's cart data to the cart page

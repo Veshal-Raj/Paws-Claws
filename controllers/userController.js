@@ -227,10 +227,9 @@ const forgotpasswordOTP = async (req, res) => {
         // Store data in session
         req.session.forgotpasswordOTP = otp
         req.session.save()
-        // req.session.abcd=123
-        console.log("req append", req.session.forgotpasswordOTP)
-        // console.log("req session",req.session)
-
+      
+        
+        
     } catch (error) {
         res.render('error')
         console.error(error)
@@ -260,7 +259,7 @@ const confirmforgotpasswordotp = async (req, res) => {
 // ================================== newPasswordUpdate =========================================== //
 const newPasswordUpdate = async (req, res) => {
     try {
-        console.log("inside update")
+        
         const { email, newPassword, repeatPassword } = req.body
 
         // Check if the email exists in the database
@@ -350,8 +349,8 @@ const userlogin = async (req, res) => {
 const home = async (req, res) => {
     try {
         if (req.session.userId) {
-            console.log('hi')
-            console.log("checking session on new update: ", req.session.userId)
+           
+           
             res.render('users/home', {
                 userId: req.session.userId
             })

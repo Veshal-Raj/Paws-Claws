@@ -67,7 +67,7 @@ const checkout = async (req, res) => {
 
         // Fetching the coupon data from the database
         const couponDetails = await Coupon.find()
-        // console.log(couponDetails)
+      
 
 
         // Generate the order ID (you can use your logic here)
@@ -259,7 +259,7 @@ const proceedToPay = async (req, res) => {
              // Reduce the quantity of ordered products in the database
   for (const cartItem of cart) {
     const product = await Product.findById(cartItem.product_id);
-    console.log('before',product.quantityInStock)
+   
 
     if (product) {
       if (product.quantityInStock >= cartItem.quantity) {
@@ -267,7 +267,7 @@ const proceedToPay = async (req, res) => {
       } else {
         return res.status(400).json({ error: 'Insufficient stock for one or more products' });
       }
-    console.log('after',product.quantityInStock)
+    
       // Save the updated product
       await product.save();
     } else {
@@ -294,6 +294,8 @@ const onlinePayment = async (req,res) => {
         // Extract the total price and selected address from the request body
         const totalPrice = req.body.total
         const  selectedAddress  = req.body.selectedAddress
+        const couponCode = req.body.couponCode
+        console.log(couponCode)
         
 
         // Get the user's ID from the session
@@ -306,7 +308,8 @@ const onlinePayment = async (req,res) => {
         const cart = UserFound.cart
 
         // Calculate the total sum of prices in the cart
-        const totalSumPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+        // const totalSumPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+        const totalSumPrice = totalPrice
 
 
         // generating order number
@@ -329,7 +332,7 @@ const onlinePayment = async (req,res) => {
              // Reduce the quantity of ordered products in the database
   for (const cartItem of cart) {
     const product = await Product.findById(cartItem.product_id);
-    console.log('before',product.quantityInStock)
+    
 
     if (product) {
       if (product.quantityInStock >= cartItem.quantity) {
@@ -337,7 +340,7 @@ const onlinePayment = async (req,res) => {
       } else {
         return res.status(400).json({ error: 'Insufficient stock for one or more products' });
       }
-    console.log('after',product.quantityInStock)
+   
       // Save the updated product
       await product.save();
     } else {
@@ -347,6 +350,18 @@ const onlinePayment = async (req,res) => {
 
         // Save the order to the database
          await Neworder.save()
+
+         // Update the usesLeft for the coupon
+          if (couponCode) {
+            const coupon = await Coupon.findOne({ code: couponCode });
+
+            if (coupon) {
+              if (coupon.usesLeft > 0) {
+                coupon.usesLeft -= 1;
+                await coupon.save();
+              }
+            }
+          }
 
         // Prepare payment options for Razorpay
         const options = {
@@ -421,7 +436,7 @@ const wallet = async (req,res) => {
         // Reduce the quantity of ordered products in the database
   for (const cartItem of cart) {
     const product = await Product.findById(cartItem.product_id);
-    console.log('before',product.quantityInStock)
+    
 
     if (product) {
       if (product.quantityInStock >= cartItem.quantity) {
@@ -429,7 +444,7 @@ const wallet = async (req,res) => {
       } else {
         return res.status(400).json({ error: 'Insufficient stock for one or more products' });
       }
-    console.log('after',product.quantityInStock)
+    
       // Save the updated product
       await product.save();
     } else {

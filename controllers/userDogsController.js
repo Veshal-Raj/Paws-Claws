@@ -9,8 +9,7 @@ const dogs = async (req, res) => {
          // Taking the count of products in the cart
          const userId = req.session.userId;
          const user = await User.User.findById(userId);
-         console.log(user)
-
+        
             let cartQuantity
          if (user){
              cartQuantity = user.cart.length;

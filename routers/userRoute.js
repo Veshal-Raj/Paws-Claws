@@ -16,6 +16,7 @@ const userCats = require('../controllers/userCatsController')
 const userDogs = require('../controllers/userDogsController')
 const userSearch = require('../controllers/userSearchController')
 const userWallet = require('../controllers/userWallet')
+const userCoupon = require('../controllers/userCouponController')
 
 router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
 router.get('/login', userAuth.yesSession, userController.loginpage)
@@ -82,6 +83,15 @@ router.get('/showOrders', userAuth.noSession, userOrders.showOrders)
 
 // ======================== Cancel Order =========================== //
 router.post('/cancelOrder/:orderId',userAuth.noSession,userOrders.cancelOrder)
+
+// ========================= Coupon ============================== //
+router.post('/couponUsing', userAuth.noSession, userCoupon.couponUsing) 
+// router.post('/couponUsing', async (req,res) => {
+//     console.log('chekkingggggg')
+// }) 
+
+// router.post('/couponUsing',userAuth.noSession, userController.loginpage)   
+
 
 
 // ========================= Cats =================================== //

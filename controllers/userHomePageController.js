@@ -11,15 +11,14 @@ const showHomepageProducts = async (req, res) => {
          // Taking the count of products in the cart
          const userId = req.session.userId;
          const user = await User.User.findById(userId);
-         console.log(user)
+        
 
             let cartQuantity
          if (user){
              cartQuantity = user.cart.length;
 
          }
-        // Calculate the cart quantity by counting the number of items in the cart array
-        console.log('cart quantity: ',cartQuantity)
+        
 
         // Number of products to display per page
         const productsPerPage = 8;
@@ -51,7 +50,7 @@ const showHomepageProducts = async (req, res) => {
 
         // Fetch all the available banners from the database
         const banners = await Banner.find({ isAvailable: true }).lean() 
-            console.log(banners)
+            
 
         // Render the 'users/home' view with the filtered products and pagination data
         res.render('users/home', {

@@ -9,8 +9,7 @@ const productSinglePageView = async (req, res) => {
 
         const userId = req.session.userId;
          const user = await User.User.findById(userId);
-         console.log(user)
-
+         
             let cartQuantity
          if (user){
              cartQuantity = user.cart.length;

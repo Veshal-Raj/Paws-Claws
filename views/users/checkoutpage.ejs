@@ -65,13 +65,25 @@
                     </td>
                 </tr>
                 <% }); %>
-                <td colspan="5" class="text-end"><b>Total: ₹ <span id="totalValue"><%= total %></span></b></td>
+                <tr>
+
+                  <td colspan="5" class="text-end"><b>Sub Total: ₹ <span id="subTotal"><%= total %></span></b></td>
+                </tr>
+                
+                <tr>
+
+                  <td colspan="5" class="text-end"><b>Discount : ₹ <span id="discount">0</span></b></td>
+                </tr>
+                
+                  <td colspan="5" class="text-end"><b>Total: ₹ <span id="totalValue"><%= total %></span></b></td>
+                 
             </tbody>
         </table>
         <div class="form-outline d-flex flex-fill  text-end justify-content-end">
           <div class="input-group mb-3 w-50 ">
-              <input type="text" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
-              <button class="btn btn-outline-secondary" type="button" id="button-addon2">Apply</button>
+              <input type="text" id="couponInput" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" 
+              onclick='getCouponValue()'>Apply</button>
           </div>
          
         </div>
@@ -336,21 +348,21 @@
   
   </div>
   <div class="col-md-4  col-sm-12" style="margin-top: 120px; ">
-    <% couponDetails.forEach(function(coupon, index) { %> 
-    <div class="card text-dark bg-light mb-3" style="max-width: 18rem; ">
+    <%let i = 0; couponDetails.forEach(function(coupon, index) { %> 
+    <div class="card text-dark bg-light mb-3" style="max-width: 18rem; " onclick="loadCoupon('<%= i %>')">
       
       <div class="card-body" >
         <% if ( coupon.discountType === 'FixedAmount') {  %> 
-        <h5 class="card-header"><%= coupon.code %>  
+        <h5 class="card-header"><span class="couponCode"><%= coupon.code %></span>   
           <img src="https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
         </h5>
         <% } else { %>
        
           <img src"https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
-          <h5 class="card-header"><%= coupon.code %>  
+          <h5 class="card-header"><span class="couponCode"><%= coupon.code %></span>  
           </h5>
         <% } %>
-        <p class="card-text">Discount money: <%= coupon.discountValue %></p>
+        <p class="card-text ">Discount money: <span class="couponDiscountMoney"><%= coupon.discountValue %></span></p>
         <p class="card-text"><small><%= coupon.description %></small></p>
         <p class="card-text"><small>Discount Type: <%= coupon.discountType %></small></p>
         <p class="card-text"><small>Minimun purchase: <%= coupon.minimumPurchase %></small></p>
@@ -383,6 +395,94 @@
     toggleBillingButton.addEventListener('click', function () {
       billingForm.style.display = billingForm.style.display === 'none' ? 'block' : 'none';   // instead of if else condition,  i changed my code using terinay orperator
     });
+
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    const subTotal = document.getElementById('subTotal').innerHTML
+    const discount = document.getElementById('discount').innerHTML
+    document.getElementById('totalValue').innerHTML = subTotal-discount
+
+    function loadCoupon(i) {
+      let code = document.getElementsByClassName("couponCode")[i].innerHTML;
+      // console.log(code)
+    document.getElementById('couponInput').value = code
+    
+    
+  }
+  async function getCouponValue() {
+    console.log('Getting coupon');
+    const couponCodeValue = document.getElementById('couponInput').value;
+    console.log(couponCodeValue);
+    console.log(typeof(couponCodeValue))
+
+    try {
+        const response = await fetch('/couponUsing', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({couponCodeValue}),
+        });
+      console.log(response)
+        if (response.ok) {
+            console.log('Response is OK');
+            const data = await response.json();
+            console.log('Coupon Value:', data);
+            // Handle the data received from the server (e.g., update the UI)
+            // console.log(data[0].isValid)
+
+            if (data[0].isActive) {
+                if (data[0].code !== couponCodeValue) {
+                Swal.fire('Error', 'Invalid coupon code', 'error');
+                return;
+              }
+
+                if (!data[0].isActive) {
+                Swal.fire('Error', 'This Coupon has been deactivated', 'error');
+                return;
+              }
+
+                if (data[0].usesLeft <= 0) {
+                Swal.fire('Error', 'No more uses left for this coupon', 'error');
+                return; 
+              }
+
+                if (subTotal < data[0].minimumPurchase) {
+                Swal.fire('Error', `You need to spend at least ${data.minimumPurchase}`, 'error')
+                return;
+              }
+
+                if (data[0].discountValue <= 0) {
+                Swal.fire('Error', 'Discount value should be greater than zero', 'error')
+                return;
+              }
+
+              // If all validation checks pass
+              console.log('subTotal: ',subTotal)
+              console.log('discount value: ',data[0].discountValue)
+              console.log('total',total.value)
+
+              document.getElementById('discount').innerHTML = data[0].discountValue
+              total = subTotal - data[0].discountValue;
+
+              console.log('final total',total)
+              document.getElementById('totalValue').innerHTML = total
+              Swal.fire('Success','Coupon applied successfully!', 'success');
+            } else {
+              Swal.fire('Error', 'Something wrong with coupon', 'error');
+              console.log(error)
+            }
+       
+          } else {
+            console.log('Response is not OK');
+            throw new Error('Failed to get coupon value');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
 
   </script>
 
@@ -696,16 +796,20 @@
         return;
       }
   
-      let total = document.getElementById("total").value;
+      let total = document.getElementById("totalValue").innerHTML
+      console.log('razorpay total: ', total);
       const selectedAddressIndex = selectedAddressRadio.id.replace('addressRadio', '');
       const selectedAddress = userData.address[selectedAddressIndex];
-  
+      
+      // Get the coupon code from the input element
+      const couponCode = document.getElementById('couponInput').value;
+
       if (selectedPaymentMethod.value === 'razorpay') {
         try {
           const res = await fetch('/onlinepayment', {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ total, selectedAddress }),
+            body: JSON.stringify({ total, selectedAddress, couponCode }),
           });
   
           if (res.ok) {

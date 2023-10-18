@@ -17,7 +17,8 @@ const showOrders = async (req, res) => {
 
         // Find the user by ID and project the cart and orders
         const user = await User.User.findById(userId).select('cart').lean();
-        const orders = await Order.find({ customer: userId }).populate('products').lean();
+        const orders = await Order.find({ customer: userId })
+        console.log('orders',orders)
 
         res.render('users/orders', { userId, user, orders });
     } catch (error) {
