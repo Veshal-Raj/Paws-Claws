@@ -401,14 +401,20 @@
 
   <script>
     const subTotal = document.getElementById('subTotal').innerHTML
+    console.log('subtotal: ', subTotal)
     const discount = document.getElementById('discount').innerHTML
+    console.log('discount: ', discount)
     document.getElementById('totalValue').innerHTML = subTotal-discount
-
+    let a = document.getElementById('totalValue').innerHTML
+    console.log('a: ', a)
+    
     function loadCoupon(i) {
       let code = document.getElementsByClassName("couponCode")[i].innerHTML;
-      // console.log(code)
+      console.log('coupon code: ',code)
+      let discountMoney = document.getElementsByClassName('couponDiscountMoney')[i].innerHTML
+      console.log('discount money: ', discountMoney)
     document.getElementById('couponInput').value = code
-    
+    document.getElementById('discount').innerHTML = discountMoney
     
   }
   async function getCouponValue() {
@@ -824,13 +830,16 @@
         }
       } else if (selectedPaymentMethod.value === 'COD') {
         const result = await showConfirmationPopup();
+
+        // Get the coupon code from the input element
+        const couponCode = document.getElementById('couponInput').value;
   
         if (result.isConfirmed) {
           try {
             const response = await fetch('/proceedToPay', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ selectedAddress }),
+              body: JSON.stringify({ selectedAddress, couponCode, total }),
             });
   
             const data = await response.json();
@@ -869,6 +878,9 @@
         walletRadio.checked = false;
         return;
       }
+
+        // Get the coupon code from the input element
+        const couponCode = document.getElementById('couponInput').value;
   
       try {
         const response = await fetch('/wallet', {
@@ -876,7 +888,7 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userID, selectedAddress, paymentMethod: 'wallet' }),
+          body: JSON.stringify({ userID, selectedAddress, paymentMethod: 'wallet', couponCode, total }),
         });
   
         if (response.ok) {

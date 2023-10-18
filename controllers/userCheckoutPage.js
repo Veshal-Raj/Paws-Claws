@@ -218,12 +218,15 @@ const deleteOrder = async (req,res) => {
     }
 }
 
-// COD
+// ========================== COD ======================================= //
 const proceedToPay = async (req, res) => {
     
     try {
         // Extract the selected address from the request body
-        const { selectedAddress } = req.body
+        const  selectedAddress  = req.body.selectedAddress
+        const total = req.body.total
+        const couponCode = req.body.couponCode
+        console.log(couponCode)
         
         // Get the user's ID from the session        
         const  userId = req.session.userId
@@ -234,8 +237,9 @@ const proceedToPay = async (req, res) => {
         // Retrieve the user's cart
         const cart = UserFound.cart
        
-        // Calculate the total price by summing up the total prices of items in the cart
-        const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0);
+        // taking the total price form the request
+        const totalPrice = total
+        console.log('total price',totalPrice)
 
         
 
@@ -278,6 +282,18 @@ const proceedToPay = async (req, res) => {
         // Save the order to the database
         let newOrderSave = await Neworder.save()
 
+        // Update the usesLeft for the coupon
+        if (couponCode) {
+          const coupon = await Coupon.findOne({ code: couponCode });
+
+          if (coupon) {
+            if (coupon.usesLeft > 0) {
+              coupon.usesLeft -= 1;
+              await coupon.save();
+            }
+          }
+        }
+
         // Send a response indicating a successful order creation
         res.json({ status: 'success', message: 'Order created successful' });
    
@@ -288,7 +304,7 @@ const proceedToPay = async (req, res) => {
 }
 
 
-// Onlilne payment
+// =========================== Onilne payment ======================================== //
 const onlinePayment = async (req,res) => {
     try {
         // Extract the total price and selected address from the request body
@@ -348,6 +364,7 @@ const onlinePayment = async (req,res) => {
     }
   }
 
+
         // Save the order to the database
          await Neworder.save()
 
@@ -382,7 +399,7 @@ const onlinePayment = async (req,res) => {
 }
 
 
-// Wallet
+// =========================== Wallet ============================== //
 const wallet = async (req,res) => {
     try {
         
@@ -390,6 +407,9 @@ const wallet = async (req,res) => {
         const selectedAddress = req.body.selectedAddress;
         
         const paymentMethod  = req.body.paymentMethod;
+
+        const total = req.body.total
+        const couponCode = req.body.couponCode
         
 
         // Get the user's ID from the session
@@ -404,8 +424,8 @@ const wallet = async (req,res) => {
         const cart = user.cart;
         
 
-        // Calculate the total price by summing up to total prices of items in the cart
-        const totalPrice = cart.reduce((total, item) => total + item.totalPrice, 0)
+        // passing the total amount
+        const totalPrice = total
         
 
         if (paymentMethod === 'wallet') {
@@ -461,6 +481,18 @@ const wallet = async (req,res) => {
 
             // Save changes to the database
             await Promise.all([newOrder.save(), user.save()])
+
+            // Update the usesLeft for the coupon
+          if (couponCode) {
+            const coupon = await Coupon.findOne({ code: couponCode });
+
+            if (coupon) {
+              if (coupon.usesLeft > 0) {
+                coupon.usesLeft -= 1;
+                await coupon.save();
+              }
+            }
+          }
 
         }
 
