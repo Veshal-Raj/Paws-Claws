@@ -17,6 +17,7 @@ const userDogs = require('../controllers/userDogsController')
 const userSearch = require('../controllers/userSearchController')
 const userWallet = require('../controllers/userWallet')
 const userCoupon = require('../controllers/userCouponController')
+const userProfile = require('../controllers/userProfile')
 
 router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
 router.get('/login', userAuth.yesSession, userController.loginpage)
@@ -56,7 +57,10 @@ router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession, userAd
 // Delete from cart also in userAddtoCart controller
 router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.removeFromCart)
 
-// ============================= User Wallet===================================== //
+// ============================= User Account ==================================== //
+router.get('/account', userAuth.noSession, userProfile.showUserProfile)
+
+// ============================= User Wallet ===================================== //
 
 router.get('/wallet', userAuth.noSession, userWallet.wallet)
 router.post('/wallet',userAuth.noSession,userCheckoutpage.wallet)
@@ -80,6 +84,8 @@ router.delete('/clearCart', userAuth.noSession, userCheckoutpage.clearCart)
 
 // ========================= Orders ============================ //
 router.get('/showOrders', userAuth.noSession, userOrders.showOrders)
+// invoice
+router.get('/viewInvoice', userAuth.noSession, userOrders.viewInvoice)
 
 // ======================== Cancel Order =========================== //
 router.post('/cancelOrder/:orderId',userAuth.noSession,userOrders.cancelOrder)

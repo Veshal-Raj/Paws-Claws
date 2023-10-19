@@ -50,7 +50,7 @@
             <tbody>
                 <% cartdetails.forEach(function(cartItem, index) { %>
                 <tr>
-                    <th scope="row">
+                    <th scope="row" id="tableId">
                         <%= index + 1 %>
                     </th>
                     <td><img src="/uploads/<%= cartItem.productImage %>" alt="<%= cartItem.product_name %>"
@@ -82,6 +82,7 @@
         <div class="form-outline d-flex flex-fill  text-end justify-content-end">
           <div class="input-group mb-3 w-50 ">
               <input type="text" id="couponInput" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <p ></p>
               <button class="btn btn-outline-secondary" type="button" id="button-addon2" 
               onclick='getCouponValue()'>Apply</button>
           </div>
@@ -348,27 +349,27 @@
   
   </div>
   <div class="col-md-4  col-sm-12" style="margin-top: 120px; ">
-    <%let i = 0; couponDetails.forEach(function(coupon, index) { %> 
-    <div class="card text-dark bg-light mb-3" style="max-width: 18rem; " onclick="loadCoupon('<%= i %>')">
+    <% couponDetails.forEach(function(coupon, index) { %> 
+    <div class="card text-dark bg-light mb-3" style="max-width: 18rem; " onclick="loadCoupon('<%= index %>')">
+     
       
       <div class="card-body" >
-        <% if ( coupon.discountType === 'FixedAmount') {  %> 
-        <h5 class="card-header"><span class="couponCode"><%= coupon.code %></span>   
-          <img src="https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
-        </h5>
-        <% } else { %>
        
-          <img src"https://th.bing.com/th/id/OIP.sk0rI2vXxjctDOWWwnoiRgHaFD?pid=ImgDet&w=820&h=560&rs=1" alt="" style="height: 30px;">
-          <h5 class="card-header"><span class="couponCode"><%= coupon.code %></span>  
-          </h5>
-        <% } %>
+        <h5 class="card-header">
+          <span class="couponCode"><%= coupon.code %></span>   
+        </h5>
+       
+       
+       
+ 
+         
         <p class="card-text ">Discount money: <span class="couponDiscountMoney"><%= coupon.discountValue %></span></p>
         <p class="card-text"><small><%= coupon.description %></small></p>
-        <p class="card-text"><small>Discount Type: <%= coupon.discountType %></small></p>
+        <p class="card-text"><small>Discount Type: <span class="couponType"><%= coupon.discountType %></span> </small></p>
         <p class="card-text"><small>Minimun purchase: <%= coupon.minimumPurchase %></small></p>
         <p class="card-text">Valid Until: <%= coupon.validUntil.toLocaleString() %></p>
 
-
+   
 
 
       </div>
@@ -401,14 +402,14 @@
 
   <script>
     const subTotal = document.getElementById('subTotal').innerHTML
-    console.log('subtotal: ', subTotal)
     const discount = document.getElementById('discount').innerHTML
-    console.log('discount: ', discount)
-    document.getElementById('totalValue').innerHTML = subTotal-discount
-    let a = document.getElementById('totalValue').innerHTML
-    console.log('a: ', a)
+    let totalValue = subTotal;
+
+    
+  
     
     function loadCoupon(i) {
+     
       let code = document.getElementsByClassName("couponCode")[i].innerHTML;
       console.log('coupon code: ',code)
       let discountMoney = document.getElementsByClassName('couponDiscountMoney')[i].innerHTML
@@ -416,7 +417,10 @@
     document.getElementById('couponInput').value = code
     document.getElementById('discount').innerHTML = discountMoney
     
+              let discountType = document.getElementsByClassName('couponType')[i].innerHTML
+    
   }
+
   async function getCouponValue() {
     console.log('Getting coupon');
     const couponCodeValue = document.getElementById('couponInput').value;
@@ -438,8 +442,11 @@
             console.log('Coupon Value:', data);
             // Handle the data received from the server (e.g., update the UI)
             // console.log(data[0].isValid)
+            console.log(data[0])
 
             if (data[0].isActive) {
+
+              
                 if (data[0].code !== couponCodeValue) {
                 Swal.fire('Error', 'Invalid coupon code', 'error');
                 return;
@@ -471,9 +478,30 @@
               console.log('total',total.value)
 
               document.getElementById('discount').innerHTML = data[0].discountValue
-              total = subTotal - data[0].discountValue;
+              let discountType = data[0].discountType
+              console.log(discountType)
+              console.log('hello')
 
-              console.log('final total',total)
+              
+              console.log('discount type: ', discountType)
+             
+              if (discountType === 'Percentage') {
+                  
+                    console.log('shs')
+                
+                    if (data[0].discountValue >= 0 && data[0].discountValue <= 100) {
+                  
+                      total = subTotal - (subTotal * Math.floor(data[0].discountValue) / 100);
+                      console.log('toa=tal ', total)
+                    
+                    } else {
+                         Swal.fire('Error', 'Invalid discount percentage', 'error');
+                    }
+              } else if (discountType === 'FixedAmount') {
+                total = subTotal - data[0].discountValue;
+              }
+
+              console.log('final total',total.value)
               document.getElementById('totalValue').innerHTML = total
               Swal.fire('Success','Coupon applied successfully!', 'success');
             } else {

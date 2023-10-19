@@ -82,8 +82,36 @@ const cancelOrder = async (req, res) => {
 };
 
 
+const viewInvoice = async (req,res) => {
+    try {
+        const orderNumber = req.query.orderNumber
+        const userId = req.session.userId;
+        console.log(orderNumber)
+
+        const userCartQuantity = await User.User.findById(userId);
+        const userName = await User.User.findById(userId);
+console.log(userName.fullname)
+           let cartQuantity
+        if (userCartQuantity){
+            cartQuantity = userCartQuantity.cart.length;
+
+        }
+
+
+        const user = await User.User.findById(userId).select('cart').lean();
+
+        const order = await Order.findOne({ orderNumber:orderNumber})
+        console.log('orders: ', order)
+        
+        res.render('users/invoice', {user,userId,cartQuantity, order, userName})
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports = {
     showOrders,
-    cancelOrder
+    cancelOrder,
+    viewInvoice
 }

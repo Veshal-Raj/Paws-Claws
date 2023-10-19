@@ -312,7 +312,12 @@
                                                                                          <button
                                                                                              class="btn <%= statusClass %> btn-outline-dark" id="statusButton">
                                                                                              <%= order.status %>
+                                                                                            
+                                                                                    
                                                                                          </button>
+                                                                                         <% if (order.status==='Delivered' ) { %>
+                                                                                            <a class="btn btn-dark" href="/viewInvoice?orderNumber=<%= order.orderNumber %>">View Invoice</a>
+                                                                                            <%} %>
                                 </td>
                                 <td>
                                     <% if (order.status !=='Cancelled' ) { %> 

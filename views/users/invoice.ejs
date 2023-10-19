@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Claws</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/invoice.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="invoice-title">
+                                <div class="row">
+                                    <!-- Left Column -->
+                                    <div class="col-md-6">
+                                        <div class="mb-4">
+                                            <!-- <img src="/images/shoes-store-logo.png" alt="" style="width: 100px; height: 100px;"> -->
+                                        </div>
+                                        <div class="text-muted">
+                                            <h1>Paws & Claws</h1>
+                                            <p class="mb-1 fs-4 fst-italic">Everything your fury friend needs.</p>
+                                            
+                                            <p class="mb-1 fs-6 fst-italic">pawsandclaws@gmail.com</p>
+                                            <p>012-345-6789</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Right Column -->
+                                    <div class="col-md-6 text-end">
+                                        <h4 class="font-size-15">InvoiceID#690204 <span class="badge bg-success font-size-12 ms-2">Paid</span></h4>
+                                        <div>
+                                            <!-- <img src="/images/Screenshot 2023-10-18 235659.png" class="mt-4" alt="" style="width: 120px; height: 120px;"> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                                  
+        
+                            <hr class="my-4">
+        
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="text-muted">
+                                        <h4 class="font-size-16 mb-3">Billed To:</h3>
+                                        <h5 class="font-size-15 mb-2">Name : <%= userName.fullname %> <%= user.lastName %></h5>
+                                        
+                                        <h5 class="mb-1">Address details </h5>
+
+                                        <p class="mb-1"><span class="fw-bolder">Order Id:</span> <%= order.orderNumber %></p>
+                                        <p class="mb-1"><span class="fw-bolder">City:</span> <%= order.shippingAddress.city %></p>
+                                        <p class="mb-1"><span class="fw-bolder">State: </span><%= order.shippingAddress.state %></p>
+                                        <p class="mb-1"><span class="fw-bolder">Country: </span><%= order.shippingAddress.country %></p>
+                                        <p class="mb-1"><span class="fw-bolder">Phone Number: </span><%= userName.phone %></p>
+
+                                        <p class=" mb-1"><span class="fw-bolder">Payment Method: </span> <%= order.paymentMethod %></p>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                                <div class="col-sm-6">
+                                    <div class="text-muted text-sm-end">
+                                        <div>
+                                            <h5 class="font-size-15 mb-1">InvoiceID<span class="colon">:</span>#690204</h5>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5 class="font-size-15 mb-1">Invoice Date<span class="colon">:</span> <%= order.orderDate.toLocaleString() %></h5>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h5 class="font-size-15 mb-1">OrdeID<span class="colon">:</span># <%= order.orderNumber %></h5>                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                            
+                            <div class="py-2">
+                                <h5 class="font-size-15">Order Summary</h5>
+        
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-nowrap table-centered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th class="text-end" style="width: 120px;">Total</th>
+                                            </tr>
+                                        </thead><!-- end thead -->
+                                        <tbody>
+                                           
+                                            <% order.products.forEach((product)=> { %> 
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <!-- <h5 class="text-truncate font-size-14 mb-1">something</h5> -->
+                                                            <p class="text-muted mb-0"><%= product.product_name %></p>
+                                                        </div>
+                                                    </td>
+                                                    <td>₹ <%= product.price %></td>
+                                                    <td><%= product.quantity %> </td>
+                                                    <td class="text-end">₹ <%= product.totalPrice %></td>
+                                                </tr>
+                                                <%}) %>
+                                           
+                                        </tbody>
+                                    </table>                                                                                                                                                 
+                                </div>
+                                <div class="text-end mt-3">
+                                    <% order.products.forEach((product)=> { %> 
+
+                                    <h4>Sub Total <span class="colon">:</span> ₹ <%= product.totalPrice %></h4>
+                                    <!-- <h4>Discount <span class="colon">:</span> ₹3333.00</h4> -->
+                                    <!-- <h4>Delivery charge <span class="colon">:</span> ₹0.00</h4> -->
+                                    <h3>Total <span class="colon">:</span> ₹ <%= order.totalAmount %></h3>
+                                    <%}) %>
+
+                                </div>          
+                                <div class="d-print-none mt-4">
+                                    <div class="text-center">
+                                        <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-print"> Print</i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
