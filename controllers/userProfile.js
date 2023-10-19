@@ -29,6 +29,23 @@ const showUserProfile = async (req,res) => {
     }
 }
 
+const updateFullName = async (req,res) => {
+    try {
+        console.log('reached')
+        const { userId, newFullName } = req.body;
+
+        // Find the user by ID and update the full name
+        await User.User.findByIdAndUpdate(userId, { fullname: newFullName })
+
+        // Respond with a success message or data if needed
+        res.json({ success: true, message: 'Full name updated successfully '})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to update full name' })
+    }
+}
+
 module.exports = {
-    showUserProfile
+    showUserProfile,
+    updateFullName
 }

@@ -65,8 +65,9 @@
             },
             showCancelButton: true,
             confirmButtonText: 'Save',
-            perConfirm: async (newFullName) => {
+            preConfirm: async (newFullName) => { // <-- Fix the typo here
                 // Send the new full name to the backend
+                console.log('reached')
                 const userId = '<%= user._id %>'; 
                 const response = await fetch('/updateFullName', {
                     method: 'POST',
@@ -83,13 +84,16 @@
                 const data = await response.json()
 
                 if (data.success) {
-                    // Update the display name in the DOM
-                    document.getElementById('fullNameSection').textContent = newFullName;
-                    return data; // Return data for further processing if needed
-                } else {
+                        // Update the display name in the DOM
+                        const fullNameSection = document.getElementById('fullNameSection');
+                        fullNameSection.textContent = newFullName;
+                        fullNameSection.innerHTML += '<span class="mx-2"><a href="#" id="editFullName"><i class="fas fa-edit"></i></a></span>';
+                        return data; // Return data for further processing if needed
+                    }
+                    else {
                     throw new Error(data.message);
                 }
             }
         })
     })
-  </script>
+</script>

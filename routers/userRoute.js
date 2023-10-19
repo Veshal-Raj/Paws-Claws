@@ -59,7 +59,7 @@ router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.re
 
 // ============================= User Account ==================================== //
 router.get('/account', userAuth.noSession, userProfile.showUserProfile)
-
+router.post('/updateFullName', userAuth.noSession,userProfile.updateFullName)
 // ============================= User Wallet ===================================== //
 
 router.get('/wallet', userAuth.noSession, userWallet.wallet)
