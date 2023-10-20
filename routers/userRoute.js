@@ -19,6 +19,7 @@ const userWallet = require('../controllers/userWallet')
 const userCoupon = require('../controllers/userCouponController')
 const userProfile = require('../controllers/userProfile')
 
+
 router.get('/', userAuth.yesSession, userHomePageController.showHomepageProducts)
 router.get('/login', userAuth.yesSession, userController.loginpage)
 router.get('/signup', userAuth.yesSession, userController.signupPage)

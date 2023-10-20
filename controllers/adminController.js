@@ -1,6 +1,8 @@
 const User = require('../models/userModel')
 const mongodb = require('mongodb')
 const mongoose = require('mongoose')
+const Order = require('../models/ordersModel')
+
 const bcrypt = require('bcrypt')
 
 
@@ -17,7 +19,10 @@ const loginPage = async (req, res) => {
 // ================== Render Dashboard ==================== //
 const dashboard = async (req, res) => {
     try {
-        res.render('admin/dashboard')
+        const order = await Order.find()
+        const user = await User.User.find()
+        const numberOfOrders = order.length
+        res.render('admin/dashboard',{ order, user, numberOfOrders})
 
     } catch (error) {
         res.render('error')

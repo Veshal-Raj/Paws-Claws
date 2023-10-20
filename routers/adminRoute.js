@@ -38,17 +38,26 @@ const orderController = require('../controllers/orderController')
 const adminAuth = require('../middlewares/adminAuth')
 const couponController = require('../controllers/couponController')
 const bannerController = require('../controllers/bannerController')
+const dashboardController = require('../controllers/adminDashboard')
 
 
 
 
 adminRoute.get('/', adminAuth.yesSession, adminController.loginPage)
 adminRoute.get('/signout', adminController.signout)
-adminRoute.get('/dashboard', adminAuth.noSession, adminController.dashboard)
+// adminRoute.get('/dashboard', adminAuth.noSession, adminController.dashboard)
 adminRoute.get('/users', adminAuth.noSession, adminController.listUsers)
 
+// ======================= dashboard =============================== //
+adminRoute.get('/dashboard', adminAuth.noSession, dashboardController.dashboard)
+adminRoute.get('/ChartPaymentMethod',adminAuth.noSession,dashboardController.ChartPaymentMethod)
+adminRoute.get('/ChartRevenueBasedOnMonth',adminAuth.noSession, dashboardController.ChartRevenueBasedOnMonth)
+
+// Sales report
+adminRout.get('/salesreport',adminAuth.noSession, dashboardController.salesreport)
 
 
+// ====================
 adminRoute.post('/login', adminController.verifyAdmin)
 adminRoute.post('/userBlocked/:userId', adminController.userBlocked)
 adminRoute.post('/userActive/:userId', adminController.userActive)
