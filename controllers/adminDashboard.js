@@ -85,11 +85,23 @@ const ChartRevenueBasedOnMonth = async (req,res) => {
 
 const salesreport = async (req,res) => {
     try {
-        
+
+        const order = await Order.find()    
+
+        // Calculate the total amount of all orders
+        const totalAmount = order.reduce((total, order) => total + order.totalAmount, 0);
+
+
+        // Calculate the profit (80% of total amount)
+        const profit = totalAmount * 0.8;
+
+        res.render('admin/salesReport', { order, totalAmount, profit})
     } catch (error) {
         
     }
 }
+
+
 
 
 module.exports = {

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        th:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            text-decoration: none;
+            color: #008CBA;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container ">
+        <div class="m-5">
+            <h2 >Sales Report</h2>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="fromDate" class="form-label">From Date:</label>
+                    <input type="date" class="form-control" id="fromDate">
+                </div>
+                <div class="col">
+                    <label for="toDate" class="form-label">To Date:</label>
+                    <input type="date" class="form-control" id="toDate">
+                </div>
+                <div class="col ">
+                    <button class="btn btn-primary mt-4" id="filterButton">Apply Filter</button>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Order Number</th>
+                    <th>Customer Id</th>
+                    <th>Product Name</th>
+                    <th>Quantity Sold</th>
+                    <th>Total Amount</th>
+                </tr>
+                <% order.forEach((order) => { %>
+                    <% order.products.forEach((product) => { %>
+                        <tr>
+                            <td><%= order.orderDate ? order.orderDate.toLocaleString() : '' %></td>
+                            <td><%= order.orderNumber %></td>
+                            <td><%= order.customer %></td>
+                            <td><%= product.product_name %></td>
+                            <td><%= product.quantity %></td>
+                            <td>₹ <%= product.totalPrice %></td>
+                        </tr>
+                    <% }) %>
+                <% }) %>
+            
+        </table>
+        </div>
+</div>
+
+<script>
+    document.getElementById("filterButton").addEventListener("click", function() {
+        // Get the selected 'From Date' and 'To Date'
+        const fromDate = document.getElementById("fromDate").value;
+        const toDate = document.getElementById("toDate").value;
+
+        // Send a Fetch request to the server to get filtered data
+        fetch(`/admin/sales-report?fromDate=${fromDate}&toDate=${toDate}`)
+            .then(response => response.json())
+            .then(data => {
+                // Handle the filtered data
+                const tableBody = document.querySelector("table tbody");
+                tableBody.innerHTML = ""; // Clear the existing table rows
+
+                data.forEach(order => {
+                    order.products.forEach(product => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${order.orderDate ? new Date(order.orderDate).toLocaleString() : ''}</td>
+                            <td>${order.orderNumber}</td>
+                            <td>${order.customer}</td>
+                            <td>${product.product_name}</td>
+                            <td>${product.quantity}</td>
+                            <td>₹ ${product.totalPrice}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                });
+            })
+            .catch(error => console.error("Error fetching data: " + error));
+    });
+</script>
+
+
+
+</body>
+</html>
