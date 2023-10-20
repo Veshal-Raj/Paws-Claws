@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Claws</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/address.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css1/userlogin.css">
+</head>
+<body>
+
+
+
+    <div class="container-xl px-4 mt-4">
+       
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <span class="font-weight-bolder">Saved Addresses</span>
+                        <button class="btn btn-primary float-right" type="button" data-toggle="modal" data-target="#addAddress">+ New Address</button>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                            <% user.address.forEach((address, index)=> { %>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>#<%= index+1 %></h5>
+                                            <input type="hidden" name="" id="idOfTheAddress" value="<%= address._id %>">
+                                            <p><strong>Full Name:</strong> <%= address.fullname %></p>
+                                            <p><strong>Address:</strong> <%= address.first_address %></p>
+                                            <p><strong>Country:</strong> <%= address.country %></p>
+                                            <p><strong>State:</strong> <%= address.state %></p>
+                                            <p><strong>City:</strong> <%= address.city %></p>
+                                            <p><strong>Pincode:</strong> <%= address.pincode %></p>
+                                            <p><strong>Landmark:</strong> <%= address.landmark %></p>
+                                            <p><strong>Mobile Number:</strong> <%= address.mobileNumber %></p>
+                                                                                                                                                                  
+                                            <div class="btn-group" role="group">
+                                                <button type="button" id="edit-address-button-<%= index %>" data-target="#edit-address-modal-<%= index %>" class="btn btn-primary">Edit Address</button>
+                                            </div>
+
+                                            <div class="btn-group" role="group">
+                                                <button type="button" id="delete-address-button<%= index %>"  class="btn btn-danger" >Delete Address</button>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <%}) %>
+                               
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--create address modal-->
+    <div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="editDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDetailsModalLabel">Create New Address</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Duplicate the user details form here -->
+                    <form action="/address" method="POST">
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="address">Address</label>
+                                <input name="address" class="form-control" id="address" type="text" placeholder="" value="" required>
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="town">Town</label>
+                                <input name="town" class="form-control" id="town" type="text" placeholder="" value="" required>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="pincode">Pin Code/Zip Code</label>
+                                <input name="pincode" class="form-control" id="pincode" type="number" placeholder="" value="" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="district">District</label>
+                                <input name="district" class="form-control" id="district" type="text" placeholder="" value="" required>
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="state">State</label>
+                                <input name="state" class="form-control" id="state" type="text" placeholder="" value="" required>
+                            </div>                            
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="country">Country</label>
+                                <input name="country" class="form-control" id="country" type="text" placeholder="" value="" required>
+                            </div>                     
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Create Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Add this JavaScript code just before the closing </body> tag -->
+
+    <script>
+        // Add an event listener to the "Edit Address" buttons
+        document.addEventListener('DOMContentLoaded', function () {
+          const editAddressButtons = document.querySelectorAll('[id^="edit-address-button-"]');
+      
+          editAddressButtons.forEach(function (button, index) {
+            button.addEventListener('click', function () {
+                 console.log('checking ------ 66676767687766868876876786788877')
+              // Make an AJAX request to the backend to fetch the address
+              fetch(`/getAddress?index=${index}` ) // Replace with your actual API endpoint
+                .then(function (response) {
+                    console.log('sdfsfjslkjfsdjf')
+                  if (response.ok) {
+                    console.log('checkinglksdfjfsjfsfj')
+                    return response.json();
+                  } else {
+                    throw new Error('Failed to fetch address');
+                  }
+                })
+                .then(function (addressData) {
+                    console.log('checking........')
+
+                    console.log(addressData)
+                  // Create a SweetAlert to display the fetched data
+                  Swal.fire({
+                    title: 'Edit Address',
+                    html: `
+                    <form id="edit-address-form">
+                        <input type="hidden" id="addressId" name="addressId" value="${addressData._id}">
+                        <div class="form-group">
+                            <label for="editFullname">Full Name:</label>
+                            <input type="text" class="form-control" id="editFullname" name="editFullname" value="${addressData.fullname}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAddress">Address:</label>
+                            <input type="text" class="form-control" id="editAddress" name="editAddress" value="${addressData.first_address}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCountry">Country:</label>
+                            <input type="text" class="form-control" id="editCountry" name="editCountry" value="${addressData.country}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editState">State:</label>
+                            <input type="text" class="form-control" id="editState" name="editState" value="${addressData.state}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCity">City:</label>
+                            <input type="text" class="form-control" id="editCity" name="editCity" value="${addressData.city}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editPincode">Pincode:</label>
+                            <input type="number" class="form-control" id="editPincode" name="editPincode" value="${addressData.pincode}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLandmark">Landmark:</label>
+                            <input type="text" class="form-control" id="editLandmark" name="editLandmark" value="${addressData.landmark}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editMobileNumber">Mobile Number:</label>
+                            <input type="text" class="form-control" id="editMobileNumber" name="editMobileNumber" value="${addressData.mobileNumber}">
+                        </div>
+                        </form>
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'OK',
+                    preConfirm: () => {
+                        // Handle the ok button click here
+                        const updateData = {
+                            addressId: document.getElementById("addressId").value,
+                            fullName: document.getElementById("editFullname").value,
+                            address: document.getElementById("editAddress").value,
+                            country: document.getElementById("editCountry").value,
+                            state: document.getElementById("editState").value,
+                            city: document.getElementById("editCity").value,
+                            pincode: document.getElementById("editPincode").value,
+                            landmark: document.getElementById("editLandmark").value,
+                            mobileNumber: document.getElementById("editMobileNumber").value,
+
+                        }
+
+
+                        // Make a request to updte the address
+                        return fetch(`/updateAddress?index=${index}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(updateData),
+                        })
+                        .then((response) => {
+                            console.log('reahced in response')
+                            if (response.ok) {
+                            console.log('reahced in response.ok')
+
+                                return response.json()
+                            } else {
+                                throw new Error('Error!')
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            Swal.showValidationMessage('Update failed. Please try again.')
+                        });
+                    },
+                  }).then((result) => {
+                    if (result.isConfirmed) { 
+                        Swal.fire('Address Updated!', '' , 'success')
+                        .then(() => {
+                            // Reload the page
+                            location.reload();
+                        });
+                    }
+                  })
+                })
+                .catch(function (error) {
+                  console.error(error);
+                  Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to fetch address. Please try again later.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                  });
+                });
+            });
+          });
+        });
+      </script>
+      
+      <script>
+        // Add a click event handler to the "Delete Address" buttons
+        document.querySelectorAll(".btn-danger").forEach(function(button, index) {
+            const idOfTheAddress = document.getElementById('idOfTheAddress').value
+            console.log(idOfTheAddress)
+            button.addEventListener("click", function() {
+        // Show a confirmation dialog using SweetAlert
+              Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you really want to delete this address?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it'
+            }).then((result) => {
+                 if (result.isConfirmed) {
+                // User confirmed, proceed with the deletion
+
+                // Extract the address ID from the button's ID
+                var buttonId = button.id;
+                var addressId = buttonId.replace('delete-address-button', '');
+
+                // Perform an AJAX request to delete the address
+                // Replace 'your_backend_url' with the actual URL for deleting the address
+                fetch(`/deleteAddress?index=${idOfTheAddress}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Address successfully deleted
+                        Swal.fire('Address Deleted', '', 'success')
+                        .then(() => {
+                            // Reload the page
+                            location.reload();
+                        });
+                        // Optionally, remove the address card from the DOM
+                        // For example, you can use the index variable to identify the specific address card
+
+                        // Example: Remove the parent card of the clicked button
+                        // button.closest(".card").remove();
+                    } else {
+                        // Handle error in the deletion process
+                        Swal.fire('Error', 'Failed to delete the address', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    });
+});
+
+      </script>
+      
+    
+
+    
+</body>
+</html>

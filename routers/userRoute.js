@@ -60,6 +60,16 @@ router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.re
 // ============================= User Account ==================================== //
 router.get('/account', userAuth.noSession, userProfile.showUserProfile)
 router.post('/updateFullName', userAuth.noSession,userProfile.updateFullName)
+router.post('/updateEmail', userAuth.noSession, userProfile.updateEmail)
+router.post('/updatePhone', userAuth.noSession, userProfile.updatePhone)
+router.post('/updatePasssword', userAuth.noSession, userProfile.updatePassword)
+router.get('/userAddress', userAuth.noSession, userProfile.userAddress)
+router.get('/modifyAddress',userAuth.noSession,userProfile.modifyAddress)
+router.put('/updateAddress', userAuth.noSession, userProfile.updateAddress)
+router.get('/getAddress', userAuth.noSession, userProfile.getAddress)
+router.delete('/deleteAddress',userAuth.noSession, userProfile.deleteAddress)
+
+
 // ============================= User Wallet ===================================== //
 
 router.get('/wallet', userAuth.noSession, userWallet.wallet)

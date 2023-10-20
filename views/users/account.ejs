@@ -23,15 +23,24 @@
                 </span>
               </h4>
               
-              <p class="text-muted mb-4"><%= user.email %> <span class="mx-2"><a href="/">
+              <p class="text-muted mb-4" id="emailSection"> 
+                <%= user.email %> 
+                <span class="mx-2">
+                  <a href="#" id="editEmail">
                 <i class="fas fa-edit"></i> 
             </a></span></p>
-                  <p class="text-muted mb-4"><%= user.phone %> <span class="mx-2"><a href="/">
+
+                  <p class="text-muted mb-4" id="phoneSection">
+                    <%= user.phone %>
+                     <span class="mx-2">
+                      <a href="#" id="editPhone">
                     <i class="fas fa-edit"></i> 
                 </a></span> </p>
-              <button type="button" class="btn btn-primary btn-rounded btn-lg">
-                Change Password
-              </button>
+
+                <button type="button" class="btn btn-primary btn-rounded btn-lg" id="changePasswordButton">
+                  Change Password
+                </button>
+                
               <div class="d-flex justify-content-between text-center mt-5 mb-2">
                 <div>
                   <p class="mb-2 h5">₹ <%= user.wallet.balance %></p>
@@ -41,6 +50,12 @@
                   <p class="mb-2 h5"> <%= numberOfOrders %></p>
                   <p class="text-muted mb-0"><a href="/showOrders" style="text-decoration: none;">Orders</a></p>
                 </div>
+                <div class="px-3">
+                  <button class="btn btn-warning btn-outline-dark" id="showAddressesButton">
+                    Address
+                  </button>
+                </div>
+                
                
               </div>
             </div>
@@ -96,4 +111,189 @@
             }
         })
     })
+</script>
+
+
+<script>
+  // Add a click event listener to the edit icon
+  document.getElementById('editEmail').addEventListener('click', async () => {
+    // Show SweetAlert with an input field
+    const { value: newEmail } = await Swal.fire({
+      title: 'Edit Email Address',
+      input: 'email',
+      inputLabel: 'New Email Address',
+      inputPlaceholder: 'Enter your new email address',
+      inputAttributes: {
+        autocapitalize: 'off',
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      preConfirm: async (newEmail) => {
+        // Send the new email to the backend
+        const userId = '<%= user._id %>';
+        const response = await fetch('/updateEmail', { 
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, newEmail }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update email')
+        }
+
+        const data = await response.json()
+
+        if (data.success) {
+          // Update the email address in the DOM
+          const emailSection = document.getElementById('emailSection');
+          emailSection.textContent = newEmail;
+          emailSection.innerHTML += `<span class="mx-2"><a href="#" id="editEmail"><i class="fas fa-edit"></i></a></span>`;
+          return data; // Return data for further processing if needed
+        } else {
+          throw new Error(data.message);
+        }
+
+      }
+    })
+  })
+</script>
+
+<script>
+    // Add a click event listener to the edit icon
+    document.getElementById('editPhone').addEventListener('click', async () => {
+      // Show SweetAlert with an input field
+      const { value: newPhoneNumber } = await Swal.fire({ 
+        title: 'Edit Phone Number',
+        input: 'tel',
+        inputLabel: 'New Phone Number',
+        inputPlaceholder: 'Enter your new phone number',
+        inputAttributes: {
+          autocapitalize: 'off',
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Save',
+          preConfirm: async (newPhoneNumber) => {
+            // Send the new phone number to the backend
+            const userId = '<%= user._id %>';
+            const response = await fetch('/updatePhone', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ userId, newPhoneNumber }),
+            })
+
+            if (!response.ok) {
+              throw new Error('Failed to update phone number')
+            }
+
+            const data = await response.json()
+
+            if (data.success) {
+              // Update the phone number in the DOM
+              const phoneSection = document.getElementById('phoneSection');
+              phoneSection.textContent = newPhoneNumber;
+              phoneSection.innerHTML += `<span class="mx-2"><a href="#" id="editPhone"><i class="fas fa-edit"></i></a></span>`;
+              return data; // Return data for further processing if needed
+            } else {
+              throw new Error(data.message);
+            }
+          }
+      })
+    })
+</script>
+
+
+<script>
+  document.getElementById('changePasswordButton').addEventListener('click', async () => {
+    
+    const { value: newPassword } = await Swal.fire({
+      title: 'Change Password',
+      html: 
+      '<input id="newPassword" class="swal2-input" type="password" placeholder="New Password">' +
+      '<input id="confirmPassword" class="swal2-input" type="password" placeholder="Confirm Password">',
+      confirmButtonText: 'Save',
+      showCancelButton: true,
+      preConfirm: async () => {
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const newPassword = newPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (newPassword === '' || confirmPassword === '') {
+          Swal.showValidationMessage('Please enter both passwords.')
+        } else if (newPassword !== confirmPassword) {
+          Swal.showValidationMessage('Passwords do not match. Please try again.')
+        }
+
+        return { newPassword, confirmPassword }
+      } 
+    })
+
+    if (newPassword) {
+      // Send the new password to the server for updating
+      const response = await fetch('/updatePasssword', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json'},
+        body: JSON.stringify({ newPassword, confirmPassword })
+      })
+
+      if (response.ok) {
+        Swal.fire('Success', 'Password updated successfully', 'success');
+      } else {
+        const data = await response.json()
+        Swal.fire('Error', data.message,'error')
+      }
+    }
+
+  })
+</script>
+
+
+<script>
+  document.getElementById('showAddressesButton').addEventListener('click', async () => {
+    // Send a fetch request to get user addresses
+    const response = await fetch('/userAddress');
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success) {
+        const addresses = data.addresses;
+
+        // Prepare an HTML message to display all addresses
+        const addressHtml = addresses.map((address) => `
+          <b>Full Name:</b> ${address.fullname}<br>
+          <b>Address:</b> ${address.first_address}<br>
+          <b>Country:</b> ${address.country}<br>
+          <b>State:</b> ${address.state}<br>
+          <b>City:</b> ${address.city}<br>
+          <b>Pincode:</b> ${address.pincode}<br>
+          <b>Landmark:</b> ${address.landmark}<br>
+          <b>Mobile Number:</b> ${address.mobileNumber}<br><br>
+        `).join('');
+
+        // Create the Swal dialog with "OK" and "Modify" buttons
+      Swal.fire({
+        title: 'Your Addresses',
+        html: addressHtml, // Use html property to display HTML content
+        showCancelButton: true, // Display the "Modify" button
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Modify', // Text for the "Modify" button
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // User clicked "OK," you can handle this action here.
+        } else if (result.isDismissed && result.dismiss === Swal.DismissReason.cancel) {
+          // User clicked "Modify," change the route to `/modifyAddress`
+          window.location.href = '/modifyAddress';
+        }
+      });
+      } else {
+        Swal.fire('Failed!', data.message, 'warning');
+      }
+    } else {
+      Swal.fire('Failed!', 'Could not retrieve your addresses.', 'warning');
+    }
+  });
 </script>
