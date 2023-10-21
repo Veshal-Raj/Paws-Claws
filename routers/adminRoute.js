@@ -54,8 +54,10 @@ adminRoute.get('/ChartPaymentMethod',adminAuth.noSession,dashboardController.Cha
 adminRoute.get('/ChartRevenueBasedOnMonth',adminAuth.noSession, dashboardController.ChartRevenueBasedOnMonth)
 
 // Sales report
-adminRoute.get('/salesreport',adminAuth.noSession, dashboardController.salesreport)
-// adminRoute.get('/sales-report',adminAuth.noSession, dashboardController.salesreport)
+// adminRoute.get('/salesreport',adminAuth.noSession, dashboardController.salesreport)
+adminRoute.get('/sales-report',adminAuth.noSession, dashboardController.salesreport)
+adminRoute.get('/sales-report-download',adminAuth.noSession, dashboardController.salesreportDownload)
+
 
 // ====================
 adminRoute.post('/login', adminController.verifyAdmin)
