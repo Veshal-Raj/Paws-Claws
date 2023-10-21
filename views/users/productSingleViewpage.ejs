@@ -2,6 +2,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <!-- Include jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <!-- Include ElevateZoom library from CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.css">
@@ -87,6 +88,21 @@
     .cart i {
       margin-right: 10px
     }
+
+    .star {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.star.active {
+    color: #ffac00;
+}
+
+
+
+
   </style>
 
 
@@ -120,6 +136,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                 </div>
                 <div class="mt-4 mb-3">
+                  <input type="hidden" id="singleProductId" value="<%= product._id %>">
                   <h3 class="text-uppercase">
                     <%= product.productName %>
                   </h3>
@@ -169,7 +186,64 @@
                       </form>
                     </div>
                     <% } %>
-              </div>
+                     <!-- Review and Rating -->
+                     
+                     
+                    </div>
+                    <div class="mt-2">
+                      <button type="button" class="btn btn-warning btn-outline-dark" id="addReviewBtn">Add review & rating</button>
+                  </div>
+                  
+                  
+                  <div id="reviewSection" class="mt-2" style="display: none;">
+                    <form class="needs-validation" id="reviewForm"  onsubmit=" handleSubmit(event)">
+                      <textarea id="reviewTextarea" rows="4" cols="50" placeholder="Write your review"></textarea>
+                      <div id="starRating">
+                        <!-- Add star icons here -->
+                          <div id="starRating">
+                            <span class="star" data-rating="1">&#9733;</span>
+                            <span class="star" data-rating="2">&#9733;</span>
+                            <span class="star" data-rating="3">&#9733;</span>
+                            <span class="star" data-rating="4">&#9733;</span>
+                            <span class="star" data-rating="5">&#9733;</span>
+                            <button type="submit" id="submitReviewBtn" class="btn btn-outline-light" style="font-size: 16px;">🚀</button>
+                          </div>
+
+                        </div>
+                      </form>
+                    </div>
+                  
+
+                    <div class="p-3 mt-2 bg-dark text-light">
+                      <div id="client-testimonial-carousel" class="carousel slide" data-ride="carousel"  style="height:200px;">
+                        <div class="carousel-inner" role="listbox">
+                          <% product.rating.forEach((productRating) => { %> 
+                            <div class="carousel-item active text-center p-4">
+                              <blockquote class="blockquote text-center">
+                                
+                                <p class="mb-0"><i class="fa fa-quote-left"></i> 
+                                  <%= productRating.review %>
+                                  <i class="fa fa-quote-right"></i> </p>
+                                <br>
+                                <footer class="blockquote-footer">Albert Einstein <cite title="Source Title">genius</cite></footer>
+                                <!-- Client review stars -->
+                                <!-- "fas fa-star" for a full star, "far fa-star" for an empty star, "far fa-star-half-alt" for a half star. -->
+                                
+                                  <p class="client-review-stars">
+                                    <% for (let i=1; i<=5;i++) { %> 
+                                      
+                                      <i class="<% if (i <= productRating.rate) { %>fas fa-star<% } else { %>far fa-star<% } %>"></i>
+                                      <% } %>
+                                   
+                                  </p>
+                                 
+                              </blockquote> 
+                            </div>
+                              <%}) %>
+                           
+                        </div>
+                      </div>
+                  </div>
             </div>
           </div>
         </div>
@@ -177,6 +251,8 @@
     </div>
   </div>
 
+
+ 
   <script>
     function change_image(image) {
 
@@ -189,6 +265,84 @@
       $("#main-image").elevateZoom();
     });
   </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  // Review and Rating
+  document.addEventListener("DOMContentLoaded", function() {
+      const addReviewBtn = document.getElementById("addReviewBtn");
+      const reviewSection = document.getElementById("reviewSection");
+      const stars = document.querySelectorAll(".star");
+      const reviewTextarea = document.getElementById("reviewTextarea");
+      const reviewForm = document.getElementById("reviewForm");
+  
+      // Function to toggle the review section
+      function toggleReviewSection() {
+          if (reviewSection.style.display === "block") {
+              reviewSection.style.display = "none";
+          } else {
+              reviewSection.style.display = "block";
+          }
+      }
+  
+      // Toggle review section when the button is clicked
+      addReviewBtn.addEventListener("click", function() {
+          toggleReviewSection();
+      });
+      
+     let  rating 
+      stars.forEach(star => {
+          star.addEventListener("click", function() {
+      rating = parseInt(star.getAttribute("data-rating"));
+
+              stars.forEach(s => s.classList.remove("active"));
+              for (let i = 0; i < rating; i++) {
+                  stars[i].classList.add("active");
+              }
+              console.log('rating', rating)
+          });
+      });
+  
+
+
+  // Handle form submission
+  reviewForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const productId = document.getElementById("singleProductId").value
+            // const rating = document.querySelector(".star.active").getAttribute("data-rating");
+            const reviewText = reviewTextarea.value;
+
+            // Prepare the data to send
+            const data = {
+                rating: rating,
+                review: reviewText,
+                product_id: productId
+            };
+
+            console.log(data)
+            // Send the data to the backend using Fetch API
+            fetch("/add-review", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    // Handle the response from the server as needed
+                    console.log(result);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+      });
+  </script>
+  
+
 
   <script>
     // Select the 'Add to Cart' button
@@ -238,7 +392,7 @@
   </script>
 
 
-  <footer class="py-5 bg-dark footer fixed-bottom ">
+  <footer class="py-5 bg-dark footer  ">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; Paws&Claws 2023</p>
     </div>

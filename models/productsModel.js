@@ -40,7 +40,23 @@ const productSchema = new mongoose.Schema({
     isAvailable: {
         type: Boolean,
         default: true,
-    }
+    },
+    rating : [{
+        rate : {
+            type : Number,
+        },
+        review : {
+            type : String
+        },
+        customer : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'users',
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now,
+        }
+    }]
 },
     { timestamps: true }
 )

@@ -30,7 +30,7 @@ router.get('/resend-otp', userAuth.yesSession, userController.resendOTP)
 router.get('/home', userHomePageController.showHomepageProducts)
 router.get('/product', userProductController.productSinglePageView);
 
-
+router.post('/add-review', userProductController.addReview)
 
 
 router.get('/userBlockedByAdmin', userAuth.userBlockedByAdmin)

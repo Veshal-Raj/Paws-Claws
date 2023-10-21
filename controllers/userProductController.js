@@ -39,6 +39,46 @@ const productSinglePageView = async (req, res) => {
     }
 };
 
+
+const addReview = async (req,res) => {
+    try {
+        const userId = req.session.userId
+        const data = req.body
+        console.log(data)
+        const review = data.review
+        const rating = data.rating
+        const productId = data.product_id
+
+        const newReview = {
+            rate: rating,
+            review: review,
+            customer: userId, // Assuming you have a reference to the customer's ID
+        };
+
+        const product = await Product.findByIdAndUpdate(
+                {_id: productId},
+                { $push: { rating: newReview }},
+                { new: true }
+            );
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        return res.status(201).json({ message: 'Review added successfully ', product})
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+
+
+
 module.exports = {
-    productSinglePageView
+    productSinglePageView,
+    addReview
 }
