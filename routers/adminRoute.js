@@ -55,7 +55,7 @@ adminRoute.get('/ChartRevenueBasedOnMonth',adminAuth.noSession, dashboardControl
 
 // Sales report
 adminRoute.get('/salesreport',adminAuth.noSession, dashboardController.salesreport)
-adminRoute.get('/sales-report',adminAuth.noSession, dashboardController.salesreport)
+// adminRoute.get('/sales-report',adminAuth.noSession, dashboardController.salesreport)
 
 // ====================
 adminRoute.post('/login', adminController.verifyAdmin)

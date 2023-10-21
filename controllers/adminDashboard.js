@@ -83,23 +83,36 @@ const ChartRevenueBasedOnMonth = async (req,res) => {
 
 // ================================== Sales report ======================================== //
 
-const salesreport = async (req,res) => {
+const salesreport = async (req, res) => {
     try {
+        console.log('hello')
+        const { fromDate, toDate } = req.query;
+        console.log(req.query)
+        let order = await Order.find();  // Use let here to allow reassignment
+        console.log('order;',order)
+        if (fromDate && toDate) {
+            // Convert fromDate and toDate to Date objects
+            const fromDateObj = new Date(fromDate);
+            const toDateObj = new Date(toDate);
 
-        const order = await Order.find()    
-
-        // Calculate the total amount of all orders
+            // Filter orders based on date range
+            order = order.filter((order) => {
+                return order.orderDate >= fromDateObj && order.orderDate <= toDateObj;
+            });
+        }
+        console.log('order after filtering ',order)
+        // Calculate the total amount of all filtered orders
         const totalAmount = order.reduce((total, order) => total + order.totalAmount, 0);
-
-
+        console.log('total amount ',totalAmount)
         // Calculate the profit (80% of total amount)
         const profit = totalAmount * 0.8;
-
-        res.render('admin/salesReport', { order, totalAmount, profit})
+        console.log('profit ', profit)
+        res.render('admin/salesReport', { order, totalAmount, profit });
     } catch (error) {
-        
+        // Handle errors here
     }
 }
+
 
 
 
