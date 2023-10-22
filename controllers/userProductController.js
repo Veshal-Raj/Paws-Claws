@@ -1,20 +1,14 @@
 const Product = require('../models/productsModel')
 const mongoose = require('mongoose'); // Import Mongoose
 const User = require('../models/userModel')
+const Order = require('../models/ordersModel')
 
 
 const productSinglePageView = async (req, res) => {
     try {
-        
-
         const userId = req.session.userId;
-         const user = await User.User.findById(userId);
-         
-            let cartQuantity
-         if (user){
-             cartQuantity = user.cart.length;
-
-         }
+        const user = await User.User.findById(userId);
+        let cartQuantity = user ? user.cart.length : 0;
 
         // Get the product ID from the query parameter
         const productId = req.query.productId;
@@ -31,8 +25,29 @@ const productSinglePageView = async (req, res) => {
             return res.status(404).send('Product not found');
         }
 
-        // Render the product details page with the product data
-        res.render('users/productSingleViewpage', { product, userId: req.session.userId ,cartQuantity});
+        // Query the user's orders
+        const orders = await Order.find({ customer: userId });
+
+        let hasPurchased = false;
+        let orderStatus = null;
+
+        // Iterate through the user's orders
+        for (const order of orders) {
+            // Check if the order contains the product with the specific productId
+            const productInOrder = order.products.find(product => product.product_id.toString() === productId);
+
+            if (productInOrder) {
+                // Product is found in this order
+                orderStatus = order.status;
+                if (orderStatus === 'Delivered') {
+                    hasPurchased = true;
+                }
+                break; // No need to continue checking other orders
+            }
+        }
+
+        // Render the product details page with the product data and purchase information
+        res.render('users/productSingleViewpage', { product, userId, cartQuantity, hasPurchased, orderStatus });
     } catch (error) {
         console.error(error);
         res.render('error');
