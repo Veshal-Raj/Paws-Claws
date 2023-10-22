@@ -148,7 +148,7 @@
                   <%= product.productDescription %>
                 </p>
                 <% if(!userId){ %>
-                  <div class="cart mt-4 align-items-center">
+                  <div class="cart mt-4 align-items-center d-flex p-2">
                     <form class="d-flex p-2 ">
                       <a href="/login">
 
@@ -157,29 +157,28 @@
                           Cart
 
                         </button>
-                        <button class="btn btn-outline-dark ms-2" type="submit">
+                      </form>
+                        <button class="btn btn-outline-dark ms-2" type="button">
                           <i class="bi bi-heart-fill me-1"></i>
                           Wishlist
 
                         </button>
                       </a>
-                    </form>
                   </div>
 
                   <%}else{ %>
-                    <div class="cart mt-4 align-items-center">
+                    <div class="cart mt-4 align-items-center d-flex p-2">
                       <form class="d-flex p-2 ">
                         <button class="btn btn-outline-dark" type="button" data-productid="<%= product._id %>">
                           <i class="bi-cart-fill me-1"></i>
                           Cart
 
                         </button>
-                        <button class="btn btn-outline-dark ms-2" type="submit">
-                          <i class="bi bi-heart-fill me-1"></i>
-                          Wishlist
-
-                        </button>
                       </form>
+                      <button class="btn btn-outline-dark ms-2 wishlist-button" data-wishlistProductid="<%= product._id %>">
+                        <i class="bi bi-heart-fill me-1"></i>
+                        Wishlist
+                      </button>
                     </div>
                     <% } %>
                   </div>
@@ -424,6 +423,57 @@
     }
   </script>
 
+  <script>
+     // Wishlist
+     document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('wishlist-button')) {
+      const productId = event.target.dataset.wishlistproductid;
+      
+      console.log(productId)
+      // Send a Fetch request to the backend
+      fetch('/addToWishlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+      })
+      
+      // console.log(response)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data.success) {
+            // Product added to the wishlist
+            Swal.fire({
+              icon: 'success',
+              title: 'Product added to wishlist',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            // Product is already in the wishlist
+            Swal.fire({
+              icon: 'info',
+              title: 'Product is already in the wishlist',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error(error);
+          // Show an error message with SweetAlert
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while adding the product to the wishlist',
+          });
+        });
+    }
+  });
+  </script>
 
   <footer class="py-5 bg-dark footer  ">
     <div class="container">

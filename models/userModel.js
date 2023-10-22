@@ -51,6 +51,14 @@ const userSchema = new mongoose.Schema({
         },
         totalPrice: { type: Number }
     }],
+    wishlist: [{
+        product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        },
+        product_name: { type: String },
+        price: { type: String },
+    }],
     order: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order"

@@ -1,0 +1,110 @@
+<%- include('../layouts/userHeader') %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+
+
+    <style>
+        .body {
+            min-height: 90vh;
+        }
+    </style>
+
+<section class="h-100" style="background-color: #dfd5d5;  min-height:75vh;">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0 text-black">Wishlist</h3>
+                </div>
+
+                <% if (user.wishlist.length === 0) { %>
+                    <p>Your wishlist is empty.</p>
+                <% } else { %>
+                    <% userWishlist.wishlist.forEach((wishlistItem) => { %>
+                        <div id="item" class="card rounded-3 mb-4">
+                            <div class="card-body p-4">
+                                <div class="row d-flex justify-content-between align-items-center">
+                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                        <img src="/uploads/<%= wishlistItem.product_id.productImages[0] %>"
+                                            class="img-fluid rounded-3" alt="<%= wishlistItem.product_name %>">
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                        <p class="lead fw-normal mb-2">
+                                            <%= wishlistItem.product_name %>
+                                        </p>
+                                        <!-- Display other product details like size and color if available -->
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                        <!-- Additional content or actions for the item -->
+                                        <p class="lead fw-normal mb-2">
+                                            ₹ <%= wishlistItem.price %>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                        <!-- Add a button to remove the item from the wishlist -->
+                                        <button class="btn btn-link px-2 delete-button"
+                                                onclick="confirmDelete('<%= wishlistItem._id %>')">
+                                            <i class="fas fa-trash fa-lg"></i>
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    function confirmDelete(wishlistItemId) {
+        Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to remove this item from your wishlist?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User confirmed, proceed with the deletion
+                removeFromWishlist(wishlistItemId);
+            }
+        });
+    }
+
+    function removeFromWishlist(wishlistItemId) {
+        fetch('/removeFromWishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ wishlistItemId }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                // Product removed successfully, update the UI
+                Swal.fire('Success', 'Product removed from wishlist', 'success');
+                // Remove the item from the DOM
+                const wishlistItem = document.getElementById(wishlistItemId);
+                if (wishlistItem) {
+                    wishlistItem.remove();
+                }
+            } else {
+                Swal.fire('Error', 'Failed to remove the product', 'error');
+            }
+        })
+        .catch((error) => {
+            Swal.fire('Error', 'An error occurred while removing the product', 'error');
+            console.error(error);
+        });
+    }
+</script>
+
+
+
+
+<%- include('../layouts/userFooter') %>

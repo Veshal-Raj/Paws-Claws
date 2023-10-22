@@ -10,6 +10,7 @@ const userHomePageController = require('../controllers/userHomePageController')
 const userProductController = require('../controllers/userProductController')
 const userAuth = require('../middlewares/userAuth')
 const userAddtoCart = require('../controllers/userAddtoCart')
+const userAddtoWishlist = require('../controllers/userAddtoWishlist')
 const userCheckoutpage = require('../controllers/userCheckoutPage')
 const userOrders = require('../controllers/userOrders')
 const userCats = require('../controllers/userCatsController')
@@ -57,6 +58,11 @@ router.put('/updateQuantity/:productId/:newQuantity', userAuth.noSession, userAd
 
 // Delete from cart also in userAddtoCart controller
 router.delete('/removeFromCart/:productId', userAuth.noSession, userAddtoCart.removeFromCart)
+
+// =========================== Add to wishlist ============================== //
+router.post('/showWishlist', userAuth.noSession, userAddtoWishlist.showWishlist)
+router.post('/addToWishlist', userAuth.noSession, userAddtoWishlist.addToWishlist)
+router.post('/removeFromWishlist',userAuth.noSession, userAddtoWishlist.removeFromWishlist)
 
 // ============================= User Account ==================================== //
 router.get('/account', userAuth.noSession, userProfile.showUserProfile)
