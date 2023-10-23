@@ -189,6 +189,49 @@
         .bullet-point {
             list-style: none;
         }
+
+
+        .marquee-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+marquee {
+    width: 100%;
+    white-space: nowrap; /* Prevent line breaks */
+}
+
+.marquee-image {
+    width: 1=70%; /* Default image width for larger screens */
+}
+
+
+
+@media (max-width: 768px) {
+    /* Adjust image size for screens up to 768px width (typical mobile screens) */
+    .marquee-image {
+        width: 100%; /* You can adjust the percentage as needed */
+        
+    }
+    
+}
+
+/* Add styles for mobile screens (max-width: 767px) */
+@media (max-width: 767px) {
+    .navbar-brand {
+        font-size: 15px; /* Adjust the font size for mobile */
+    }
+    .navbar-nav {
+        text-align: right;
+        margin-right: 0;
+        padding-right: 10px; /* Add some right padding for better alignment */
+        margin-left: 0;
+    }
+    .navbar-brand {
+        margin-right: auto; /* Push the brand/logo to the left */
+    }
+}
+
     </style>
 
 
@@ -216,17 +259,16 @@
 
         </div>
     </div>
-    <marquee behavior="scroll" direction="right" scrollamount="45">
-        <img src="https://i.pinimg.com/originals/19/58/38/19583866f2c33d855fd2be99b47cddfe.gif" alt="Running Cat">
-        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat"> -->
-        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
-        <!-- <img src="https://media.giphy.com/media/7FyJRiFXdMggdT3Y8y/giphy.gif" alt="Running Cat">    -->
-        <!-- <img src="https://th.bing.com/th/id/R.422042080fd9f30151664609604fc352?rik=eo%2bn0PkX3pPHFg&riu=http%3a%2f%2fnetanimations.net%2fMoving-picture-spotted-dog-running-animated-gif.gif&ehk=vFqrRrFtJNY37GIdfYwwDEpAhPqSabeAl4M2mMmHD%2bs%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat">    -->
+  
 
-
-        <!-- <img src="https://th.bing.com/th/id/R.87b13e0d366f75300d6298c6ce4fc812?rik=0fJ4g9Ts02zBeg&riu=http%3a%2f%2f25.media.tumblr.com%2ftumblr_m1oxnf9BYb1qm69mso1_1280.gif&ehk=z2Lhn12LJB2LzMsOGhFjhSpX8RXcUESBWgYTec9kwMk%3d&risl=&pid=ImgRaw&r=0" alt="Running Cat"> -->
-
-    </marquee>
+    <div class="marquee-container">
+        <marquee behavior="scroll" direction="right" scrollamount="45">
+            <img class="marquee-image" src="https://i.pinimg.com/originals/19/58/38/19583866f2c33d855fd2be99b47cddfe.gif" alt="Running Cat">
+        </marquee>
+    </div>
+    
+    
+    
 
     <div id="message" style="display: none;" class="container-fluid " style="height: 100vh;">
 
@@ -240,13 +282,14 @@
         </nav>
         
         
+        
 
         <div class="container-fluid my-5  d-flex  justify-content-center " >
             <div class="card card-1">
                 <div class="card-header bg-white">
                     <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
                         <div class="col my-auto">
-                            <h4 class="mb-0">Thanks for your Order, <span class="change-color">
+                            <h4 class="mb-0">Thanks for your Order <span class="change-color">
                                     <%= user.fullname %>
                                 </span> !</h4>
                                 
@@ -257,6 +300,12 @@
                                 width="115" height="115">
                             <!-- <p class="mb-4 pt-0 Glasses">Your Orders</p> -->
                         </div>
+                       
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="text-center">
+                        <a href="mailto:veshalbrototype@gmail.com" class="btn btn-primary">Contact Admin</a>
                     </div>
                 </div>
                 <div class="card-body ">

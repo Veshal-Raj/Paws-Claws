@@ -425,7 +425,9 @@ const wallet = async (req,res) => {
         
 
         // passing the total amount
-        const totalPrice = total
+        const totalPrice = parseFloat(total);
+
+
         
 
         if (paymentMethod === 'wallet') {

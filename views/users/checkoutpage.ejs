@@ -874,8 +874,12 @@
   
             if (data.status === 'success') {
               showOrderSuccessPopup(() => {
+                 // Clear the cart on the backend
+                
+                  clearCartOnBackend();
                 window.location.href = '/showOrders';
               });
+
             } else {
               showErrorPopup('Order Failed', 'There was a problem creating your order');
             }
@@ -889,12 +893,41 @@
   
     async function handleWalletPayment() {
       const userID = walletRadio.getAttribute('data-userID');
-      const walletBalance = walletRadio.getAttribute('data-walletBalance');
+      const walletBalance = parseInt(walletRadio.getAttribute('data-walletBalance'), 10);
       const selectedAddressIndex = document.querySelector('input[name="addressRadio"]:checked').id.replace('addressRadio', '');
-      const totalValue = document.getElementById('totalValue').innerText;
+      const totalValue = parseFloat(document.getElementById('totalValue').innerText);
+
       const userData = JSON.parse(document.getElementById('USER').value);
       const selectedAddress = userData.address[selectedAddressIndex];
       const totalAmount = totalValue; // total amount in the purchase
+
+
+
+// console.log('total amount', totalAmount);
+// console.log('walletBalance', walletBalance);
+// console.log('checking', walletBalance < totalAmount);
+// console.log(typeof totalAmount, 'tt');
+// console.log(typeof walletBalance, 'dfdf');
+
+
+      // console.log('total amount', totalAmount)
+      // console.log('walletBalance, ', walletBalance)
+      // console.log('cheking', walletBalance<totalAmount)
+      // console.log(typeof(totalAmount), 'tt')
+      // console.log(typeof(walletBalance), 'dfdf')
+
+
+
+      console.log('userID:', userID);
+console.log('walletBalance:', walletBalance);
+console.log('selectedAddressIndex:', selectedAddressIndex);
+console.log('totalValue:', totalValue);
+console.log('userData:', userData);
+console.log('selectedAddress:', selectedAddress);
+console.log('totalAmount:', totalAmount);
+
+
+
   
       if (walletBalance < totalAmount) {
         Swal.fire({
@@ -909,7 +942,9 @@
 
         // Get the coupon code from the input element
         const couponCode = document.getElementById('couponInput').value;
-  
+
+        console.log('couponCode:', couponCode);
+        console.log('tuype of coupon ', typeof(couponCode))
       try {
         const response = await fetch('/wallet', {
           method: 'POST',
