@@ -1,6 +1,12 @@
 <%- include('../layouts/header') %>
 
     <main id="main" class="main">
+        <% if (error) { %>
+            <div class="alert alert-danger text-center">
+                <%= error %>
+            </div>
+        <% } %>
+        
 
         <div class="pagetitle">
             <h1>Products</h1>
@@ -16,7 +22,8 @@
                     Add Product
                 </button>
             </div>
-
+           
+                
             <!-- Modal for Adding a Product -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
                 aria-hidden="true">

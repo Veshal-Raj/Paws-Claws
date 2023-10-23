@@ -86,13 +86,10 @@
         })
         .then((response) => {
             if (response.ok) {
-                // Product removed successfully, update the UI
-                Swal.fire('Success', 'Product removed from wishlist', 'success');
-                // Remove the item from the DOM
-                const wishlistItem = document.getElementById(wishlistItemId);
-                if (wishlistItem) {
-                    wishlistItem.remove();
-                }
+                // Product removed successfully, reload the page
+                Swal.fire('Success', 'Product removed from wishlist', 'success').then(() => {
+                    location.reload(); // Reload the page
+                });
             } else {
                 Swal.fire('Error', 'Failed to remove the product', 'error');
             }
@@ -103,6 +100,7 @@
         });
     }
 </script>
+
 
 
 

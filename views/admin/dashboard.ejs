@@ -7,42 +7,12 @@
           <div class="my-5">
             <a href="/admin/sales-report" class="btn btn-warning btn-outline-dark">View Sales Report</a>
           </div>
-          <form method="post" action="/sellers/salesReport">
-              <div class="form-row row">
-                  <div class="form-group col-md-5 col-lg-5">
-                      <label for="start_date">Start Date:</label>
-                      <input type="date" class="form-control" id="start_date" name="start_date" required>
-                  </div>
-                  <div class="form-group col-md-5 col-lg-5">
-                      <label for="end_date">End Date:</label>
-                      <input type="date" class="form-control" id="end_date" name="end_date" required>
-                  </div>
-              </div>
-              <button type="submit" class="btn btn-danger col-4 m-3">Generate PDF Report</button>
-          </form>
-  
           
-          <a href="#" class="col-12 m-3" download="sales_report.pdf">
-              <button class="btn btn-success ">Download Report</button>
-          </a>
          
       </div>
   
       <div class="container mt-3">
-          <div class="row">
-              <form action="/sellers/changeDate/start" class="col-md-5 m-3" id="sDate" method="post">
-                  <div class="form-group">
-                      <input type="date" class="form-control" name="sDate" placeholder="Start Date" value="01-01-2022"
-                          id="order_start" required onchange="document.getElementById('sDate').submit();">
-                  </div>
-              </form>
-              <form action="/sellers/changeDate/end" class="col-md-5 m-3" id="eDate" method="post">
-                  <div class="form-group">
-                      <input type="date" name="eDate" class="form-control" placeholder="End Date" value="01-01-2022"
-                          id="order_end" required onchange="console.log(document.getElementById('order_end').value); document.getElementById('eDate').submit();">
-                  </div>
-              </form>
-          </div>
+          
           <div class="row">
               <div class="col-md-3 mb-3">
                   <div class="card">

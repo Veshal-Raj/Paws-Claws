@@ -13,10 +13,13 @@ const renderProductpage = async (req, res) => {
     
     // Fetch all subcategories
     const subcategories = await Subcategory.find();
+    
 
+  // Check if there's an error query parameter
+        const error = req.query.error;
 
         // render the product page with products
-        res.render('admin/products', { products, categories, subcategories })
+        res.render('admin/products', { products, categories, subcategories, error })
     } catch (error) {
         res.status(500).send('Internal Error')
         console.error(error);
@@ -53,15 +56,16 @@ const addproduct = async (req, res) => {
             !categoryId ||
             !subcategoryId
         ) {
-            return res.status(400).json({ error: 'All fields are required.' });
+            return res.redirect('/admin/products?error=All fields are required.');
+
         }
 
-        // Validate price and quantityInStock to be non-negative numbers
+        // Validate price and quantityInStock to be non-negative number s
         if (
             isNaN(price) || isNaN(quantityInStock) ||
             price < 0 || quantityInStock < 0
         ) {
-            return res.status(400).json({ error: 'Price and quantity must be non-negative numbers.' });
+            return res.redirect('/admin/products?error=Price and quantity must be non-negative numbers.');
         }
 
         // Trim product name and product description
@@ -98,7 +102,8 @@ const fetchSucategories = async (req, res) => {
         res.json(subcategories)
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'An error occured while fetching subcategories' })
+        return res.redirect('/admin/products?error=An error occured while fetching subcategories.');
+
     }
 }
 
@@ -113,7 +118,9 @@ const productAvailability = async (req, res) => {
         const product = await Product.findById(productId)
 
         if (!product) {
-            return res.status(404).json({ fail: 'Product not found' })
+        return res.redirect('/admin/products?error=Product not found.');
+
+            
         }
 
         // Toggle the availability
@@ -151,7 +158,8 @@ const deleteImage = async (req, res) => {
         const product = await Product.findById(productId)
 
         if (!product) {
-            return res.status(404).json({ message: 'Product not found' })
+        return res.redirect('/admin/products?error=Product not found.');
+
         }
 
  
@@ -167,7 +175,9 @@ const deleteImage = async (req, res) => {
 
     
         if (indexToDelete === -1) {
-            return res.status(404).json({ message: 'Image is not found' })
+        return res.redirect('/admin/products?error=Image is not found.');
+
+            
         }
 
         // Construct the path to the image file
@@ -182,7 +192,8 @@ const deleteImage = async (req, res) => {
         // Save the updated product document
         await product.save();
 
-        return res.status(200).json({ message: 'Image delete successfully' })
+        return res.redirect('/admin/products?error=Image delete successfully!');
+
 
     } catch (error) {
         console.error(error);
@@ -198,7 +209,9 @@ const editproductsave = async (req, res) => {
         const existingProduct = await Product.findById(productId);
 
         if (!existingProduct) {
-            return res.status(404).json({ error: 'Product not found' });
+            // return res.status(404).json({ error: '' });
+            return res.redirect('/admin/products?error=Product not found');
+
         }
 
       
@@ -220,7 +233,8 @@ const editproductsave = async (req, res) => {
             existingProduct.quantityInStock < 0 ||
             existingProduct.price < 0
         ) {
-            return res.status(400).json({ error: 'Invalid data or required fields are missing' });
+            return res.redirect('/admin/addproduct?error=Product already exist!');
+
         }
       
 
