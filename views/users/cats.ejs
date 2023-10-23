@@ -224,7 +224,7 @@
 
     
     <section class="py-5" >
-        <div class="col-2 col-sm-2 col-lg-2  " id="default-price-sort">
+        <div class="col-12 col-sm-6 col-lg-2  " id="default-price-sort">
             <div class="d-flex justify-content-center">
                 <div class="card  " style="max-width: 18rem;">
                     <div class="card-body">
@@ -246,17 +246,17 @@
                 </div>
             </div>
         </div>
-        <div class="container px-4 px-lg-5 mt-5" >
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <div class="container px-2 px-md-4 px-lg-5 mt-5">
+            <div class="row gx-2 gx-md-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center">
 
                 <% products.forEach((product)=> { %>
-                    <div class="col mb-5">
+                    <div class="col mb-3">
                         <div class="card card-square" >
                             <!-- Product image -->
                             <img src="/uploads/<%= product.productImages[0] %>" alt="<%= product.productName %> Image"
                                 class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
                             <!-- Product details -->
-                            <div class="card-body p-4 card-body-fixed-height">
+                            <div class="card-body p-2 card-body-fixed-height">
                                 <div class="text-center">
                                     <!-- Product name -->
                                     <h5 class="fw-bolder">
@@ -271,7 +271,7 @@
                                 </div>
                             </div>
                             <!-- Product actions -->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="card-footer p-2 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
                                     <a href="/product?productId=<%= product._id %>"
                                         class="btn btn-outline-dark mt-auto">View
@@ -290,7 +290,7 @@
 
     <section class="py-5" id="main-content">
 
-        <div class="col-2 col-sm-2 col-lg-2  " id="price-sort" style="display: none;">
+        <div class="col-12 col-sm-6 col-lg-2  " id="price-sort" style="display: none;">
             <div class="d-flex justify-content-center">
                 <div class="card  " style="max-width: 18rem;">
                     <div class="card-body">
@@ -313,9 +313,9 @@
             </div>
         </div>
 
-        <div class="container px-4 px-lg-5 mt-5">
+        <div class="container px-2 px-md-4 px-lg-5 mt-5">
             <div id="search-results" 
-                class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            class="row gx-2 gx-md-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center">
             </div>
         </div>
 

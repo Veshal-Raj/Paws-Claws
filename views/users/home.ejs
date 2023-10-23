@@ -3,7 +3,34 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+    /* Add this CSS for mobile responsiveness */
+@media (max-width: 768px) {
+    .col.mb-5 {
+        flex: 0 0 100%; /* Make the column full width on mobile screens */
+        max-width: 100%;
+    }
 
+    .card.card-square {
+        width: 100%; /* Make the card full width on mobile screens */
+        max-width: 100%;
+    }
+
+    .card-img-top {
+        height: auto; /* Let the image height adjust automatically */
+        width: 100%; /* Make the image full width on mobile screens */
+    }
+
+    .card-body.card-body-fixed-height {
+        padding: 15px; /* Increase the padding for better spacing on mobile screens */
+    }
+
+    .btn.btn-outline-dark {
+        width: 100%; /* Make the button full width on mobile screens */
+    }
+}
+
+</style>
 <!-- Header-->
 <header class=" ">   
 
@@ -93,10 +120,7 @@
                                     <h5 class="fw-bolder">
                                         <%= products[i].productName %>
                                     </h5>
-                                    <p>Category: <%= products[i].category.categoryName %>
-                                    </p>
-                                    <p>Subcategory: <%= products[i].subcategory.subcategoryName %>
-                                    </p>
+                                    
                                     <!-- product price  -->
                                     ₹<%= products[i].price.toFixed(2) %>
                                 </div>

@@ -77,12 +77,27 @@
             color: #6868AC; /* Change to the desired text color */
             transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition effect */
         }
+
+        /* Media query for mobile screens */
+@media (max-width: 768px) {
+    .wallet-card {
+        width: 90%; /* Adjust the width for smaller screens */
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .wallet-container {
+        font-size: 2rem; /* Further reduce the font size for smaller screens */
+        text-shadow: -2px 2px 5px #0865f0; /* Reduce the text shadow */
+    }
+}
     </style>
 
 <body>
     <div class="wallet-card">
         
-        <div class="wallet-container"><img src="https://media.giphy.com/media/elMvNaZf7XamNvrqBZ/giphy.gif" alt="catwithmoneygif" style="height: 200px;">Wallet !</div>
+        <div class="wallet-container"><img src="https://media.giphy.com/media/elMvNaZf7XamNvrqBZ/giphy.gif" alt="catwithmoneygif" style="height: 200px;">
+            Wallet !
+        </div>
     </div>
 
     <div class="wallet-table">
