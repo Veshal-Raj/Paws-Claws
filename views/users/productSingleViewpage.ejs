@@ -137,9 +137,9 @@
                     <%= product.productName %>
                   </h3>
                   <div class="price d-flex flex-row align-items-center">
-                    <span class="act-price">$<%= product.price.toFixed(2) %></span>
+                    <span class="act-price">₹<%= product.price.toFixed(2) %></span>
                     <div class="ml-2">
-                      <small class="dis-price">$59</small>
+                      <small class="dis-price">₹59</small>
                       <span>40% OFF</span>
                     </div>
                   </div>
@@ -408,7 +408,16 @@
                 },
 
               })
-            } else {
+            } else if (response.status === 201) {
+                    // Product is already in the cart, show SweetAlert warning message
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Product is already in the cart',
+                        customClass: {
+                            title: 'text-warning'
+                        },
+                    });
+                } else {
               // Product could not be added to cart, show SweetAlert error message
               Swal.fire('Error', 'Product could not be added to cart', 'error')
             }

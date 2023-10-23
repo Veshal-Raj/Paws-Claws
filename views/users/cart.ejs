@@ -91,7 +91,7 @@
                                         <% } %>
                                             <% }); %>
                                                 <!-- Display the total sum of the cart -->
-                                                <h4 class="text-end">Total Sum: <span id="newTotalSumejs">$<%=
+                                                <h4 class="text-end">Total Sum: <span id="newTotalSumejs">₹<%=
                                                             totalSum.toFixed(2) %></span></h4>
                                                 
 
@@ -178,7 +178,7 @@
         const updateTotalSum = (newTotalSum) => {
             const totalSumElement = document.getElementById('newTotalSumejs')
             if (totalSumElement) {
-                totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`
+                totalSumElement.textContent = `₹${newTotalSum.toFixed(2)}`
             }
         }
 
@@ -195,12 +195,12 @@
 
 
             quantityInput.value = newQuantity;
-            totalPriceElement.innerHTML = `$${newTotalPrice.toFixed(2)}`;
+            totalPriceElement.innerHTML = `₹${newTotalPrice.toFixed(2)}`;
 
 
 
             if (newTotalSum !== undefined) {
-                totalSumElement.textContent = `$${newTotalSum.toFixed(2)}`; // Update total sum
+                totalSumElement.textContent = `₹${newTotalSum.toFixed(2)}`; // Update total sum
 
             }
 

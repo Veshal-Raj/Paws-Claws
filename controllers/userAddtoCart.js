@@ -35,9 +35,8 @@ const addToCart = async (req, res) => {
 
 
         if (existingCartItem) {
-            // If the product is already in the cart, increase the quantity
-            existingCartItem.quantity += 1;
-            existingCartItem.totalPrice = existingCartItem.price * existingCartItem.quantity
+           // If the product is already in the cart, return a message
+           return res.status(201).json({ success: false, message: 'Product is already in the cart' });
         } else {
             // If the product is not in the cart, add it 
             const cartItem = {
