@@ -13,6 +13,11 @@
             <div class="card-body">
               <h5 class="card-title">Subcategories of <%= categoryName %>
               </h5>
+              <% if (error) { %>
+                <div class="alert alert-danger text-center">
+                    <%= error %>
+                </div>
+            <% } %>
 
               <table id="example" class="table datatable" style="width:100%">
                 <thead>

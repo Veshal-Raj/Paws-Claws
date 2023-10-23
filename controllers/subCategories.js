@@ -10,13 +10,15 @@ const createSubCategory = async (req, res) => {
 
     // Validation: Check if subcategoryName is provided and not empty
     if (!subcategoryName || subcategoryName.trim() === "") {
-      return res.status(400).json({ error: 'Subcategory name is required' });
+      // return res.status(400).json({ error: 'Subcategory name is required' });
+      return res.redirect('/admin/categories?error=Subcategory name is required!');
     }
 
     // Validation: Check if category is a valid category ID
     const existingCategory = await Category.Category.findById(category);
     if (!existingCategory) {
-      return res.status(404).json({ error: 'Category not found' });
+      // return res.status(404).json({ error: 'Category not found' });
+      return res.redirect('/admin/categories?error=Category not found!');
     }
 
     // Validation: Check if subcategoryName is unique within the category (case-insensitive)
@@ -28,7 +30,8 @@ const createSubCategory = async (req, res) => {
     });
 
     if (isDuplicateSubcategory) {
-      return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+      // return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+      return res.redirect('/admin/categories?error=Subcategory name must be unique within the category!');
     }
 
     // Create a new subcategory
@@ -36,7 +39,8 @@ const createSubCategory = async (req, res) => {
 
     // Check if the subcategory was successfully added to the category
     if (existingCategory.subcategories.indexOf(subcategory._id) === -1) {
-      return res.status(500).json({ error: 'Failed to add subcategory to the category' });
+      // return res.status(500).json({ error: 'Failed to add subcategory to the category' });
+      return res.redirect('/admin/categories?error=Failed to add subcategory to the category!');
     }
 
     // Redirect to the admin categories page after successful creation
@@ -59,7 +63,9 @@ const getAllCategoriesWithSubcategories = async (req, res) => {
       Subcategory.find(),
     ]);
 
-    res.render('admin/category', { categories, subcategories });
+    const error = req.query.error;
+
+    res.render('admin/category', { categories, subcategories, error });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error!' });
@@ -77,8 +83,10 @@ const renderSubcategoriesPage = async (req, res) => {
     // Fetch the category name based on categoryId (You need to implement this logic)
     const categoryName = await getCategoryNameByCategoryId(categoryId);
 
+    const error = req.query.error;
+
     // Render the subcategories.ejs template with subcategories data
-    res.render('admin/subcategories', { subcategories, categoryName, categoryId })
+    res.render('admin/subcategories', { subcategories, categoryName, categoryId, error })
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error!' });
     console.error(error);
@@ -109,14 +117,16 @@ const subcategoryEdit = async (req, res) => {
 
     // Validation: Check if subcategoryID and updatedSubcategoryName are provided and not empty
     if (!subcategoryID || !updatedSubcategoryName || updatedSubcategoryName.trim() === "") {
-      return res.status(400).json({ error: 'Subcategory ID and name are required' });
+      // return res.status(400).json({ error: 'Subcategory ID and name are required' });
+      return res.redirect('/admin/subcategories?error=Subcategory ID and name are required!');
     }
 
   
     // Validation: Check if the subcategory with the provided subcategoryID exists
     const existingSubcategory = await Subcategory.findById(subcategoryID);
     if (!existingSubcategory) {
-      return res.status(404).json({ error: 'Subcategory not found' });
+      // return res.status(404).json({ error: 'Subcategory not found' });
+      return res.redirect('/admin/subcategories?error=Subcategory not found!');
     }
 
     // Validation: Check if the subcategory name already exists within the category (case-insensitive)
@@ -127,7 +137,9 @@ const subcategoryEdit = async (req, res) => {
     });
 
     if (isDuplicateSubcategory) {
-      return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+      // return res.status(400).json({ error: 'Subcategory name must be unique within the category' });
+      return res.redirect('/admin/subcategories?error=Subcategory name must be unique within the category!');
+
     }
 
     // Update the subcategory name
@@ -138,7 +150,8 @@ const subcategoryEdit = async (req, res) => {
 
     // Check if no documents were modified during the update
     if (updatedSubcategory.nModified === 0) {
-      return res.status(404).send('Subcategory not found');
+      // return res.status(404).send('Subcategory not found');
+      return res.redirect('/admin/subcategories?error=Subcategory not found!');
     }
 
     // Redirect to the subcategories page within the specified category
@@ -177,7 +190,8 @@ const subcategoryNA = async (req, res) => {
 
     if (!category) {
       // Handle the case where the category is not found
-      return res.status(404).json({ message: 'Category not found' });
+      // return res.status(404).json({ message: 'Category not found' });
+      return res.redirect('/admin/subcategories?error=Category not found!');
     }
 
     const categoryName = category.name;
@@ -188,10 +202,13 @@ const subcategoryNA = async (req, res) => {
     );
 
     if (!subCategoryFind) {
-      return res.status(400).json({ message: 'No Subcategory Found' });
+      // return res.status(400).json({ message: 'No Subcategory Found' });
+      return res.redirect('/admin/subcategories?error=No Subcategory Found!');
     }
 
-    res.render('admin/subcategories', { subCategoryFind, categoryID, categoryName });
+    const error = req.query.error;
+
+    res.render('admin/subcategories', { subCategoryFind, categoryID, categoryName, error });
   } catch (error) {
     res.status(500).send('Internal Error');
     console.error('Error', error);

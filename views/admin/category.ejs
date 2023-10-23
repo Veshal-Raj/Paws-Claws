@@ -6,6 +6,11 @@
     <div class="pagetitle">
       <h1>Categories</h1>
     </div><!-- End Page Title -->
+    <% if (error) { %>
+      <div class="alert alert-danger text-center">
+          <%= error %>
+      </div>
+  <% } %>
     <section class="section d-flex justify-content-end ">
       <!-- Button to trigger the modal -->
       <div class="col-auto px-2 py-2">

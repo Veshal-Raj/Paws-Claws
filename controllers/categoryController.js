@@ -16,7 +16,9 @@ const CreateCategory = async (req, res) => {
         });
 
         if (existingCategory) {
-            return res.status(400).json({ error: 'Category name already exists' });
+            
+            return res.redirect('/admin/categories?error=Category name already exists!');
+           
         }
 
         // Create a new category
@@ -39,8 +41,10 @@ const getAllCategories = async (req, res) => {
         // Fetch all categories from the database and populate their subcategories
         const categories = await Category.Category.find().populate('subcategories');
 
+        const error = req.query.error;
+
         // Render the 'admin/category' page with the retrieved categories data
-        res.render('admin/category', { categories });
+        res.render('admin/category', { categories, error });
     } catch (error) {
         // Handle any errors, log them, and render an error page
         console.error(error);
@@ -61,7 +65,8 @@ const categoryAvailable = async (req, res) => {
 
         // Check if the category was not found
         if (!category) {
-            return res.status(400).json({ message: 'Category not found' });
+           
+            return res.redirect('/admin/categories?error=Category not found!');
         }
 
         // Redirect to the admin categories page after successful update
@@ -85,7 +90,8 @@ const categoryNA = async (req, res) => {
 
         // Check if the category was not found
         if (!category) {
-            return res.status(400).json({ message: 'Category not found' });
+            
+            return res.redirect('/admin/categories?error=Category not found!');
         }
 
         // Redirect to the admin categories page after successful update
@@ -109,7 +115,7 @@ const categoryEdit = async (req, res) => {
 
         // Validation: Check if categoryId and updatedCategoryName are provided and not empty
         if (!categoryId || !updatedCategoryName || updatedCategoryName.trim() === "") {
-            return res.status(400).json({ error: 'Category ID and name are required' });
+            return res.redirect('/admin/categories?error=Category ID and name are required!');
         }
   
         // Validation: Check if the category with the provided categoryId exists (case-insensitive)
@@ -119,7 +125,8 @@ const categoryEdit = async (req, res) => {
         });
 
         if (existingCategory) {
-            return res.status(400).json({ error: 'Category name already exists' });
+    
+            return res.redirect('/admin/categories?error=Category name already exists!');
         }
 
         // Update the category with the new name
@@ -131,7 +138,8 @@ const categoryEdit = async (req, res) => {
         // Check if no documents were modified during the update
         if (updatedCategory.nModified === 0) {
             // If no documents were modified, it means the category was not found.
-            return res.status(404).send('Category not found');
+          
+            return res.redirect('/admin/categories?error=Category not found!');
         }
 
         // Redirect to the admin categories page after a successful update
@@ -157,7 +165,7 @@ const getCategoryById = async (req, res) => {
 
         // Check if the category was not found
         if (!category) {
-            return res.status(404).json({ error: 'Category not found' });
+            return res.redirect('/admin/categories?error=Category not found!');
         }
 
         // Respond with the found category
