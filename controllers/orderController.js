@@ -19,7 +19,8 @@ const updateOrderStatus = async (req,res) => {
     
     try {
         const { orderId, newStatus } = req.body
-        
+            console.log('order id', orderId)
+            console.log('newstatus', newStatus)
         // Find the order by ID and update its status
         const updatedOrder = await Order.findByIdAndUpdate(
             orderId,

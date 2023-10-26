@@ -372,8 +372,9 @@ marquee {
                                     <% if (order.status !=='Cancelled' ) { %> 
                                 <div
                                     style="display: flex; justify-content: center; padding-top: 20px; padding-bottom: 20px;">
-                                    <button class="btn btn-primary btn-outline-dark "  id="cancelOrderButton"
-                                            data-order-number="<%= order.orderNumber %>">Cancel Order</button>
+                                    <button class="btn btn-primary btn-outline-dark cancel-order-button" 
+                                    data-order-number="<%= order.orderNumber %>">Cancel Order</button>
+
                                 </div>
                                 <% } else { %> 
                                     <img src="https://orig14.deviantart.net/ea10/f/2009/201/3/f/crappy_animation___dog_blink_by_darkchocaholic.gif" alt="" style="height: 50px; width: max-content;">
@@ -403,9 +404,11 @@ marquee {
         new DataTable('#example');
     </script>
     <script>
-    const cancelOrderButton = document.getElementById("cancelOrderButton");
+        const cancelOrderButtons = document.querySelectorAll(".cancel-order-button");
 
+cancelOrderButtons.forEach((cancelOrderButton) => {
     cancelOrderButton.addEventListener("click", () => {
+        console.log('cancel button triggered.')
         const orderNumber = cancelOrderButton.getAttribute("data-order-number")
         Swal.fire({
             title: "Are you sure?",
@@ -418,48 +421,47 @@ marquee {
         }).then((result) => {
             if (result.isConfirmed) {
                 console.log('hello at order ejs ')
-                        // Make an asynchronous request to the backend
-                        // sending the order number
+                // Make an asynchronous request to the backend
+                // sending the order number
                 fetch(`/cancelOrder/${orderNumber}`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            // You can include additional data in the body if needed
-                        })
-                            .then((response) => {
-                                if (response.ok) {
-                                    return response.json();
-                                }
-                                throw new Error("Network response was not ok.");
-                            })
-                            .then((data) => {
-                                console.log(data); // Handle the response from the backend
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // You can include additional data in the body if needed
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error("Network response was not ok.");
+                })
+                .then((data) => {
+                    console.log(data); // Handle the response from the backend
 
-                                // check if the cancellation was successful
-                                if (data.success) {
-                                    // Update the button text to 'Cancelled'
-                                    statusButton.innerHTML = 'Cancelled'
+                    // check if the cancellation was successful
+                    if (data.success) {
+                        // Update the button text to 'Cancelled'
+                        statusButton.innerHTML = 'Cancelled'
 
-                                    // Add a class to change the button style
-                                    statusButton.classList.add('btn-danger')
+                        // Add a class to change the button style
+                        statusButton.classList.add('btn-danger')
 
-                                    // Hide the "Cancel Order" button
-                                    cancelOrderButton.style.display = 'none';
-
-                                }
-                            })
-                            .catch((error) => {
-                                console.error("There was a problem with the fetch operation:", error);
-                            });
-
+                        // Hide the "Cancel Order" button
+                        cancelOrderButton.style.display = 'none';
+                    }
+                })
+                .catch((error) => {
+                    console.error("There was a problem with the fetch operation:", error);
+                });
 
                 // Handle the cancellation logic here
-                Swal.fire("Order Cancelled!", "Your order has been cancelled.", "success")
-                    
+                Swal.fire("Order Cancelled!", "Your order has been cancelled.", "success");
             }
         });
     });
+});
+
 </script>
 
 

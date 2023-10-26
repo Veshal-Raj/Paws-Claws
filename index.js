@@ -18,7 +18,7 @@ const app = express()
 
 
 const port = process.env.PORT || 4000
-mongoose.connect('mongodb://localhost:27017/PawsAndClaws', {
+mongoose.connect('mongodb+srv://veshalraj1307:VeshalAtlas@cluster0.itvcmvz.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
