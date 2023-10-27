@@ -133,7 +133,7 @@
                                 <%= product._id %>
                             </td>
                             <td>
-                                <img src='http://localhost:3000/uploads/<%= product.productImages[0] %>'
+                                <img src='/uploads/<%= product.productImages[0] %>'
                                     style="width:80px; height:80px;" data-bs-toggle="modal"
                                     data-bs-target="#myModal<%= product._id %>">
 
@@ -150,7 +150,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <% product.productImages.forEach(function(imageUrl, index) { %>
-                                                    <img src='http://localhost:3000/uploads/<%= imageUrl %>'
+                                                    <img src='/uploads/<%= imageUrl %>'
                                                         class="img-fluid" alt="Image <%= index + 1 %>"
                                                         style="width:1800px; height:auto">
                                                     <h3></h3>
