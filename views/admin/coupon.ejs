@@ -61,9 +61,19 @@
 
                     <!-- validUntil -->
                     <div class="form-group col-md-8 mt-3">
-                        <label for="validUntil">Valid Until</label>
-                        <input type="date" class="form-control" id="validUntil" name="validUntil" required>
-                    </div>
+                      <label for="validUntil">Valid Until</label>
+                      <input type="date" class="form-control" id="validUntil" name="validUntil" required>
+                  </div>
+                  
+                  <script>
+                      // Get the date input element
+                      const validUntilInput = document.getElementById('validUntil');
+                  
+                      // Set the minimum value to today
+                      const today = new Date().toISOString().split('T')[0];
+                      validUntilInput.min = today;
+                  </script>
+                  
                     
                    
                     <!-- usesLeft -->

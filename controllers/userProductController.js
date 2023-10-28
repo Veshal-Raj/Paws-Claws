@@ -24,6 +24,16 @@ const productSinglePageView = async (req, res) => {
         if (!product) {
             return res.status(404).send('Product not found');
         }
+        
+         // Calculate the average rating
+    let averageRating = 0;
+    if (product.rating.length > 0) {
+      const totalRatings = product.rating.length;
+      const sumOfRatings = product.rating.reduce((acc, curr) => acc + curr.rate, 0);
+      averageRating = sumOfRatings / totalRatings;
+    }
+        console.log('average RAting: ',averageRating)
+
 
         // Query the user's orders
         const orders = await Order.find({ customer: userId });
@@ -47,7 +57,7 @@ const productSinglePageView = async (req, res) => {
         }
 
         // Render the product details page with the product data and purchase information
-        res.render('users/productSingleViewpage', { product, userId, cartQuantity, hasPurchased, orderStatus });
+        res.render('users/productSingleViewpage', { product, userId, cartQuantity, hasPurchased, orderStatus, averageRating });
     } catch (error) {
         console.error(error);
         res.render('error');

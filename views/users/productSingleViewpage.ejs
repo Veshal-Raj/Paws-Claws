@@ -143,6 +143,20 @@
                       <span>40% OFF</span>
                     </div>
                   </div>
+                
+                  <% if (product.rating.length > 0) { %>
+                    <% 
+                      let displayRating = averageRating;
+                      if (isNaN(averageRating)) {
+                        displayRating = 4;
+                      }
+                    %>
+                    <small>Average Rating: <%= displayRating.toFixed(1) %><span style="color: #c3c31f">&#9733;</span></small>
+                  <% } else { %>
+                    <p>No ratings yet.</p>
+                  <% } %>
+                  
+                  </span>
                 </div>
                 <p class="about">
                   <%= product.productDescription %>
