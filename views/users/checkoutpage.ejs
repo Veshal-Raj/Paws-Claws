@@ -81,7 +81,7 @@
         </table>
         <div class="form-outline d-flex flex-fill  text-end justify-content-end">
           <div class="input-group mb-3 w-50 ">
-              <input type="text" id="couponInput" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <input type="text" id="couponInput" class="form-control" placeholder="Apply coupon" aria-label="Recipient's username" aria-describedby="button-addon2" required>
               <p ></p>
               <button class="btn btn-outline-secondary" type="button" id="button-addon2" 
               onclick='getCouponValue()'>Apply</button>
@@ -103,7 +103,7 @@
             <div class="card-header  d-flex justify-content-between " style="max-width: 100%;">
               <div>
                 <input type="radio" name="addressRadio" id="addressRadio<%= index %>"
-                  aria-label="Radio button for following text input">
+                  aria-label="Radio button for following text input" required>
                 Address
               </div>
               <div>
@@ -229,6 +229,9 @@
                 <div class="col-md-6 mb-3">
                   <label for="firstName">First name</label>
                   <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                  <div class="invalid-feedback">
+                    Valid first name is required.
+                  </div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="lastName">Last name</label>
@@ -265,18 +268,18 @@
                 <div class="select_option">
                   <label for="country">Country</label>
                   <select class="form-select country" aria-label="Default select example" id="country"
-                    onchange="loadStates()">
+                    onchange="loadStates()" required>
                     <option selected>Select Country</option>
                   </select>
     
                   <label for="state">State</label>
                   <select class="form-select state" aria-label="Default select example" id="state"
-                    onchange="loadCities()">
+                    onchange="loadCities()" required>
                     <option selected>Select State</option>
                   </select>
     
                   <label for="city">City</label>
-                  <select class="form-select city" id="city" aria-label="Default select example">
+                  <select class="form-select city" id="city" aria-label="Default select example" required>
                     <option selected>Select City</option>
                   </select>
                 </div>
@@ -285,14 +288,14 @@
               <div class="row">
                 <div class="col-md-4 mb-3">
                   <label for="zip">Pin Code</label>
-                  <input type="text" class="form-control" id="City" placeholder="Enter your City">
+                  <input type="text" class="form-control" id="City" placeholder="Enter your City" required>
                   <div class="invalid-feedback">
                     Please select a valid City.
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label for="Landmark">Landmark</label>
-                  <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark">
+                  <input type="text" class="form-control" id="Landmark" placeholder="Enter a Landmark" required>
                   <div class="invalid-feedback">
                     Please provide a valid Landmark.
                   </div>
