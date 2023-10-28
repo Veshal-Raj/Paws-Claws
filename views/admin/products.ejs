@@ -47,7 +47,8 @@
 
                                 <div class="mb-3">
                                     <label for="productPrice" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="productPrice" name="price" required>
+                                    <input type="number" class="form-control" id="productPrice" name="price" required min="1">
+                                    <div class="invalid-feedback">Please enter a valid price (minimum 1).</div>
                                 </div>
 
                                 <div class="mb-3">
@@ -78,7 +79,8 @@
                                 <div class="mb-3">
                                     <label for="productStock" class="form-label">Stock</label>
                                     <input type="number" class="form-control" id="productStock" name="quantityInStock"
-                                        required>
+                                        required min="1">
+                                        <div class="invalid-feedback">Please enter a valid Stock (minimum 1).</div>
                                 </div>
 
                                 <div class="mb-3">

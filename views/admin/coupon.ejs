@@ -33,7 +33,7 @@
                     <!-- description -->
                     <div class="form-group col-md-8 mt-3">
                         <label for="description">Description</label>
-                        <textarea type="number" class="form-control" id="description" name="description" placeholder="Write someting about Coupons..."></textarea>
+                        <textarea type="number" class="form-control" id="description" name="description" placeholder="Write someting about Coupons..." required></textarea>
                     </div>
 
                     <!-- Coupon type -->
@@ -48,13 +48,13 @@
                     <!-- Discount Amount -->
                     <div class="form-group col-md-8 mt-3">
                         <label for="discountValue">Discount Amount</label>
-                        <input type="number" class="form-control" id="discountValue" name="discountValue" placeholder="Discount Amount" required>
+                        <input type="number" class="form-control" id="discountValue" name="discountValue" placeholder="Discount Amount" required min="1">
                     </div>
 
                     <!-- minimumPurchase -->
                     <div class="form-group col-md-8 mt-3">
                         <label for="minimumPurchase">Minimum Purchase</label>
-                        <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" placeholder="Minimum Purchase">
+                        <input type="number" class="form-control" id="minimumPurchase" name="minimumPurchase" placeholder="Minimum Purchase" required min="1">
                     </div>
 
                    
@@ -79,7 +79,7 @@
                     <!-- usesLeft -->
                     <div class="form-group col-md-8 mt-3">
                         <label for="usesLeft">Uses Left</label>
-                        <input type="number" class="form-control" id="usesLeft" name="usesLeft" placeholder="Uses Left" required>
+                        <input type="number" class="form-control" id="usesLeft" name="usesLeft" placeholder="Uses Left" required min="1">
                       </div>
                       <!-- status -->
                       <div class="form-group col-md-8 mt-3">
