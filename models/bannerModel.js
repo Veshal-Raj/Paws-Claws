@@ -15,6 +15,10 @@ const bannerSchema = new mongoose.Schema({
     isAvailable: {
         type: Boolean,
         default: true,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     }
 });
 

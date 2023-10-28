@@ -12,10 +12,11 @@ const showBanner = async (req,res) => {
         
         // Fetch all the available banners from the database
         const bannersCategory = await Banner.find({ isAvailable: true}).populate('category').lean() 
-       
+        // Get the count of existing banners
+        const bannerCount = await Banner.countDocuments();
 
         //  Render the banner page
-        res.render('admin/banner', {categories,bannersCategory})
+        res.render('admin/banner', {categories,bannersCategory, bannerCount})
     } catch (error) {
         console.error(error);
         res.render('somethingwentwrong')
@@ -66,8 +67,31 @@ const deleteBanner = async (req,res) => {
     }
 }
 
+
+// ====================== Banner Status ======================== //
+const bannerStatus = async (req,res) => {
+    const bannerId = req.params.bannerId
+    try {
+            const banner = await Banner.findById(bannerId)
+
+            if (!banner) {
+                return res.status(404).json({ message: 'Banner not found' });
+            }
+
+            // Changing banenr status
+            banner.isActive = !banner.isActive
+
+            await banner.save()
+            res.status(200).json({ message: 'Banner status updated successfully' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+    }
+}
+
+
 module.exports = {
     showBanner,
     saveBanner,
-    deleteBanner
+    deleteBanner,
+    bannerStatus
 }

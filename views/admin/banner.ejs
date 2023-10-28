@@ -29,7 +29,9 @@
                         
                             </div>
                             <div class=" input-group mb-3">
+                              <% if (bannerCount <5) { %> 
                                 <button class="btn btn-primary" type="submit">Add Banner</button>
+                                <%} %>
                             </div>
                         </fieldset>
                     </form>
@@ -42,6 +44,7 @@
                                 <th>Image</th>
                                 <th>Category</th>
                                 <th>Delete</th>
+                                <th>Status</th>
 
                             </tr>
                         </thead>
@@ -60,6 +63,13 @@
                                     <td>
                                         <button class="btn btn-danger delete-btn" data-banner-id="<%= banner._id %>">Delete</button>
                                       </td>
+                                      <td>
+                                        <% if (banner.isActive) { %> 
+                                          <button class="btn btn-dark unblock-btn" data-banner-id="<%= banner._id %>"">Inactive</button>
+                                          <%} else { %> 
+                                            <button class="btn btn-primary block-btn " data-banner-id="<%= banner._id %>">Active</button>
+                                            <%} %>
+                                      </td>
                                     
                                 </tr>
                                 <%} ) %>
@@ -77,6 +87,54 @@
     new DataTable('#example');
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- ... (other HTML code) -->
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.block-btn, .unblock-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const bannerId = event.target.getAttribute('data-banner-id');
+
+                // Show a confirmation dialog
+                swal({
+                    title: 'Are you sure?',
+                    text: 'Do you want to update this banner?',
+                    icon: 'warning',
+                    buttons: ['Cancel', 'Yes, update it']
+                }).then(async (confirmUpdate) => {
+                    if (confirmUpdate) {
+                        try {
+                            const response = await fetch(`/admin/banner/${bannerId}`, {
+                                method: 'PUT'
+                            });
+
+                            if (response.ok) {
+                                // Display success message after update
+                                swal({
+                                    title: 'Success',
+                                    text: 'Banner updated successfully!',
+                                    icon: 'success'
+                                }).then(() => {
+                                    location.reload(); // Reload the page upon success
+                                });
+                            } else {
+                                // Display error message on update failure
+                                swal('Oops!', 'Banner update failed.', 'error');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            swal('Error', 'Something went wrong.', 'error');
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
