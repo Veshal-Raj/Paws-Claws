@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mongo_db:
+    container_name: database_container
+    image: mongo:latest
+    restart: always
+    volumes: 
+      - mongo_db:/data/db 
+
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      NAME: "veshalbrototype@gmail.com"
+      PASSWORD: 'wshmnfigmukcwhqy'
+      PORT: 3000
+      RAZORPAY_KEY_ID: 'rzp_test_JKK8n1hAazvvci'
+      RAZORPAY_KEY_SECRET: 'byizm5SRV41XibsQcM3wYrxp'
+      MONGODB_URI: "mongodb+srv://veshalraj1307:VeshalAtlas@cluster0.itvcmvz.mongodb.net/?retryWrites=true&w=majority"
+    depends_on:
+      - mongo_db
+
+volumes:
+  mongo_db: {}
