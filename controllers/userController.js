@@ -89,7 +89,7 @@ const registerUser = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-
+       
         // Instead of rendering the otp page, i am redirecting to the /otp
         res.redirect('/otp')
         // Render the OTP verification page
@@ -104,7 +104,8 @@ const registerUser = async (req, res) => {
 // ======================== Render OTP page ================================ //
 const otpPage = async (req, res) => {
     try {
-        res.render('users/otp')
+        let errorMessage = '';
+        res.render('users/otp',{errorMessage})
     } catch (error) {
         res.render('error')
         console.error(error);
@@ -117,10 +118,11 @@ const verifyOTP = async (req, res) => {
     try {
 
 
-        const enteredOTP = req.body.digit1 + req.body.digit2 + req.body.digit3 + req.body.digit4 + req.body.digit5 + req.body.digit6
-
+        const enteredOTP = req.body.otp;
+        console.log('entered otp',enteredOTP)
         // Get the stored OTP from the session
         const storedOTP = req.session.registrationData.otp
+        console.log('storedotp', storedOTP)
 
 
 
@@ -141,7 +143,7 @@ const verifyOTP = async (req, res) => {
             res.redirect('/')
         } else {
             // OTP verification failed
-            res.status(400).send('OTP verification failed')
+            res.render('users/otp', { errorMessage: 'OTP verification failed' });
         }
     } catch (error) {
         res.render('error')
