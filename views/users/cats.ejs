@@ -248,7 +248,7 @@
         </div>
         <div class="container px-2 px-md-4 px-lg-5 mt-5">
             <div class="row gx-2 gx-md-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center">
-
+                <input type="hidden" id="productsData" value="<%= JSON.stringify(products) %>" />
                 <% products.forEach((product)=> { %>
                     <div class="col mb-3">
                         <div class="card card-square" >
@@ -318,7 +318,11 @@
             class="row gx-2 gx-md-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center">
             </div>
         </div>
-
+        <div class="container px-2 px-md-4 px-lg-5 mt-5">
+            <div id="default-sort-results" 
+            class="row gx-2 gx-md-4 gx-lg-5 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 justify-content-center">
+            </div>
+        </div>
 
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -346,34 +350,63 @@
             const searchForm = document.getElementById('cat-search-form');
             const searchInput = document.getElementById('cat-search-input');
             const searchResultsContainer = document.getElementById('search-results');
+            const defaultSortContainer = document.getElementById('default-sort-results')
             const existingProductsContainer = document.getElementById('main-content-container');
             const defaultPriceSort = document.getElementById('default-price-sort')
+            // console.log('defaultPriceSort ',defaultPriceSort)
             const filteredPriceSort = document.getElementById('price-sort')
-
+            const productsDataString = document.getElementById('productsData').value;
+            const defaultProductsData = JSON.parse(productsDataString);
+            // console.log('productsDataa', defaultProductsData)
             // Array to store the original products data
             let productsData = []
 
             // Function to sort products based on price
             function sortProducts(products, sortOrder) {
+                console.log('sortProducts function inside products', products)
+                console.log('sortProducts function inside sortOrder', sortOrder)
                 return products.slice().sort((a,b) => {
                     if (sortOrder === 'lowToHigh'){
+                        console.log("lowToHigh",a.price - b.price)
                         return a.price - b.price;
                     } else if (sortOrder === 'highToLow') {
+                        console.log("HighToLow",b.price - a.price)
+
                         return b.price - a.price;
                     }
                 })
             }
 
-            // Function to render sorted produts
-            function renderSortedProducts(products) {
+            // Function for default sort based on price
+            function defaultProducts(products,sortOrder) {
+                // console.log('defaultProducts function inside products', products)
+                // console.log('defaultProducts function inside sortOrder', sortOrder)
+                
+                 // Check if sortOrder is 'highToLow' or 'lowToHigh'
+                if (sortOrder === 'highToLow') {
+                    // Sort products in descending order based on price
+                    products.sort((a, b) => b.price - a.price);
+                } else if (sortOrder === 'lowToHigh') {
+                    // Sort products in ascending order based on price
+                    products.sort((a, b) => a.price - b.price);
+                }
+
+                // console.log('Sorted products', products);
+                return products
+            }
+
+            // Function for default sorted products
+            function renderDefaultSortedProducts(products) {
+                // console.log('inside render Sorted produts function')
                 // Clear the previous search results
                 searchResultsContainer.innerHTML = ''
-
+                // console.log('products inside the function renderSortedProducts ',products)
                 if (products.length === 0) {
                     searchResultsContainer.textContent = 'No products found.'
                 } else {
                     // Loop through products and create product cards
                     products.forEach(product => {
+                        console.log(product)
                         const productCard = document.createElement('div')
                         productCard.classList.add('product-card')
                         productCard.innerHTML = `
@@ -402,7 +435,52 @@
                                         </div>
                                     </div>
                                     `
-                        searchResultsContainer.appendChild(productCard)
+                         defaultSortContainer.appendChild(productCard)
+                    })
+                }
+            }
+
+            // Function to render sorted produts
+            function renderSortedProducts(products) {
+                // console.log('inside render Sorted produts function')
+                // Clear the previous search results
+                searchResultsContainer.innerHTML = ''
+                // console.log('products inside the function renderSortedProducts ',products)
+                if (products.length === 0) {
+                    searchResultsContainer.textContent = 'No products found.'
+                } else {
+                    // Loop through products and create product cards
+                    products.forEach(product => {
+                        // console.log(product)
+                        const productCard = document.createElement('div')
+                        productCard.classList.add('product-card')
+                        productCard.innerHTML = `
+                                    <div class="col  mb-5">                              
+                                        <div class="card card-square">
+                                            <!-- Product image -->
+                                            <img src="/uploads/${product.productImages[0]}" alt="${product.productName} Image" 
+                                                class="card-img-top img-fluid" style="height: 300px; width: 100%; padding: 5px;">
+                                            <!-- Product details -->
+                                            <div class="card-body p-4 card-body-fixed-height">
+                                                <div class="text-center">
+                                                    <!-- Product name -->
+                                                    <h5 class="fw-bolder">${product.productName}</h5>
+                                                    <p class="mb-0">Category: ${product.category.categoryName}</p>
+                                                    <p class="mb-0">Subcategory: ${product.subcategory.subcategoryName}</p>
+                                                    <!-- Product price -->
+                                                    <p class="mb-0">$${product.price.toFixed(2)}</p>
+                                                </div>
+                                                </div>
+                                            <!-- Product actions -->
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center">
+                                                    <a href="/product?productId=${product._id}" class="btn btn-outline-dark mt-auto">View Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    `
+                        searchResultsContainer.appendChild(productCard) || defaultSortContainer.appendChild(productCard)
                     })
                 }
             }
@@ -411,9 +489,12 @@
             // Event listener for default sorting radio buttons
             defaultPriceSort.addEventListener('change', function (e) {
                 const sortOrder = e.target.value
-                if (productsData.length > 0) {
-                    const sortedProducts = sortProducts(productsData, sortOrder)
-                    renderSortedProducts(sortedProducts)
+                // console.log('sortorder ', sortOrder)
+                // console.log('productsData', defaultProductsData)
+                if (defaultProductsData.length > 0) {
+                    const sortedProducts = defaultProducts(defaultProductsData, sortOrder)
+                    // console.log('sortedProducts ', sortedProducts)
+                    renderDefaultSortedProducts(sortedProducts)
                 }
             })
 
